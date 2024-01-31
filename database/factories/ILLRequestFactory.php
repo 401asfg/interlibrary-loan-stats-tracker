@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
 
-class ILLRequestFactorFactory extends Factory {
+class ILLRequestFactory extends Factory {
     const MAX_SUB_DAYS = 365;
 
     /**
@@ -37,7 +37,7 @@ class ILLRequestFactorFactory extends Factory {
         return self::randomEnumValue($global_enum_name);
     }
 
-    private function randomEnumValueOrNullableString(string $global_enum_name): string {
+    private function randomEnumValueOrNullableString(string $global_enum_name): ?string {
         if ($this->faker->boolean) self::randomEnumValue($global_enum_name);
         return self::randomNullableString();
     }
@@ -49,7 +49,7 @@ class ILLRequestFactorFactory extends Factory {
 
     private function randomEnumValue(string $global_enum_name): string {
         $values = config('global.' . $global_enum_name);
-        $index = $this->faker->randomNumber(count($values));
+        $index = $this->faker->randomNumber() % count($values);
         return $values[$index];
     }
 }
