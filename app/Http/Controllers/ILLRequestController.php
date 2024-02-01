@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\ILLRequest;
+
+class ILLRequestController extends Controller
+{
+    public function index() {
+        return view("form");
+    }
+
+    public function store(Request $request) {
+        $requestContent = $request->getContent();
+        ILLRequest::create($requestContent)->save();
+    }
+}
