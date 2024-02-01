@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\ILLRequest;
 
 return new class extends Migration
 {
@@ -18,9 +19,9 @@ return new class extends Migration
             $table->boolean('fulfilled')->default(true);
             $table->string('unfulfilled_reason')->nullable();
             $table->string('resource');
-            $table->enum('action', config('global.actions'));
+            $table->enum('action', array_values(ILLRequest::ACTIONS));
             $table->string('library')->nullable();
-            $table->enum('requestor_type', config('global.requestor_types'));
+            $table->enum('requestor_type', array_values(ILLRequest::REQUESTOR_TYPES));
             $table->string('requestor_notes')->nullable();
         });
     }
