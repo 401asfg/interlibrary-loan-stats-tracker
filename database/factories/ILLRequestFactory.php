@@ -38,7 +38,7 @@ class ILLRequestFactory extends Factory {
     }
 
     private function randomEnumValueOrNullableString(string $global_enum_name): ?string {
-        if ($this->faker->boolean) self::randomEnumValue($global_enum_name);
+        if ($this->faker->boolean) return self::randomEnumValue($global_enum_name);
         return self::randomNullableString();
     }
 
