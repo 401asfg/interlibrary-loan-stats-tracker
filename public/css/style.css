@@ -1,21 +1,51 @@
-h1 {
-    text-align: center;
-}
-
 body {
     max-width: 1140px;
     margin-left: auto;
     margin-right: auto;
     padding-left: 30px;
     padding-right: 30px;
+    font-family: Source Sans Pro, EdmondSans, Helvetica Neue, Helvetica, Arial, sans-serif, Open Sans, Ubuntu, Roboto;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+h2, .submit-section {
+    margin-top: 60px;
+}
+
+div, button, input {
+    font-size: 20px;
 }
 
 input[type="textarea"] {
     width: 100%;
 }
 
+input[type="date"] {
+    padding: 4px 10px;
+}
+
+input[type="checkbox"], input[type="radio"] {
+    transform: scale(1.5);
+}
+
+input[type="radio"] {
+    margin-right: 5px;
+}
+
 .field-header {
     margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.radio-label {
+    margin-right: 15px;
 }
 
 .description-box {
@@ -23,8 +53,15 @@ input[type="textarea"] {
     padding-bottom: 50px;
 }
 
-.submit-button {
-    position: fixed;
+.submit-section {
+    padding-bottom: 60px;
+}
+
+.submit-section > button {
+    position: absolute;
     left: 50%;
-    margin-top: 20px;
+    transform: translateX(-50%);
+    border-radius: 5px;
+    padding: 10px 30px;
+    background-color: lightgreen;
 }

@@ -71,6 +71,8 @@
             </div>
         </div>
 
-        <button class="submit-button">Submit</button>
+        <div class="submit-section">
+            <button>Submit</button>
+        </div>
     </body>
 </html>
