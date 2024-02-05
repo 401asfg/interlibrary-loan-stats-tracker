@@ -1,5 +1,7 @@
 <?php
 
+// FIXME: should column names be stored in constants?
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,13 +41,13 @@ class ILLRequest extends Model
     protected $table = 'ill_requests';
 
     protected $fillable = [
-        'request_date',
+        'requestDate',
         'fulfilled',
-        'unfulfilled_reason',
+        'unfulfilledReason',
         'resource',
         'action',
         'library',
-        'requestor_type',
-        'requestor_notes'
+        'requestorType',
+        'requestorNotes'
     ];
 }

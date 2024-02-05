@@ -1,3 +1,5 @@
+{{-- FIXME: do we need to use layouts and sections? --}}
+
 @use('Carbon\Carbon')
 
 <!DOCTYPE html>
@@ -16,17 +18,17 @@
             <div>
                 <div>
                     <div class="field-header">Date</div>
-                    <input type="date" value={{ Carbon::today() }}>
+                    <input type="date" value={{ Carbon::today() }} name="requestDate">
                 </div>
 
                 <div>
                     <div class="field-header">Fulfilled?</div>
-                    <input type="checkbox" checked="checked">
+                    <input type="checkbox" checked="checked" name="fulfilled">
                 </div>
 
                 <div>
                     <div class="field-header">Reason</div>
-                    <x-dynamic-selector-with-other :set="$unfulfilledReasons" setName="unfulfilled-reason"></x-dynamic-selector-with-other>
+                    <x-dynamic-selector-with-other :set="$unfulfilledReasons" setName="unfulfilledReason"></x-dynamic-selector-with-other>
                 </div>
             </div>
         </div>
@@ -51,12 +53,12 @@
             <div>
                 <div>
                     <div class="field-header">Fulfilling Library</div>
-                    <input type="textarea" id="fulfilling-library" name="fulfilling-library" placeholder="Name...">
+                    <input type="textarea" name="library" placeholder="Name...">
                 </div>
 
                 <div>
                     <div class="field-header">Borrowing Library</div>
-                    <input type="textarea" id="borrowing-library" name="borrowing-library" placeholder="Name...">
+                    <input type="textarea" name="library" placeholder="Name...">
                 </div>
 
                 <div>
@@ -65,14 +67,14 @@
                     @php
                         unset($requestorTypes['library']);
                     @endphp
-                    <x-dynamic-selector :set="$requestorTypes" setName="requestor-type"></x-dynamic-selector>
-                    <input type="textarea" id="notes" name="notes" placeholder="Notes..." class="description-box">
+                    <x-dynamic-selector :set="$requestorTypes" setName="requestorType"></x-dynamic-selector>
+                    <input type="textarea" name="requestorNotes" placeholder="Notes..." class="description-box">
                 </div>
             </div>
         </div>
 
         <div class="submit-section">
-            <button>Submit</button>
+            <input type="submit" value="Submit">
         </div>
     </body>
 </html>

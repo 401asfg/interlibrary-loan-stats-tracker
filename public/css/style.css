@@ -39,6 +39,15 @@ input[type="radio"] {
     margin-right: 5px;
 }
 
+input[type="submit"] {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 5px;
+    padding: 10px 30px;
+    background-color: lightgreen;
+}
+
 .field-header {
     margin-top: 30px;
     margin-bottom: 5px;
@@ -55,13 +64,4 @@ input[type="radio"] {
 
 .submit-section {
     padding-bottom: 60px;
-}
-
-.submit-section > button {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 5px;
-    padding: 10px 30px;
-    background-color: lightgreen;
 }
