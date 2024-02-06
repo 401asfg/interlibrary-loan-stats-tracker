@@ -41,13 +41,13 @@ class ILLRequest extends Model
     protected $table = 'ill_requests';
 
     protected $fillable = [
-        'requestDate',
+        'request_date',
         'fulfilled',
-        'unfulfilledReason',
+        'unfulfilled_reason',
         'resource',
         'action',
         'library',
-        'requestorType',
-        'requestorNotes'
+        'requestor_type',
+        'requestor_notes'
     ];
 }

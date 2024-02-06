@@ -17,14 +17,14 @@ class ILLRequestFactory extends Factory {
     public function definition()
     {
         return [
-            'requestDate' => self::randomDate(),
+            'request_date' => self::randomDate(),
             'fulfilled' => $this->faker->boolean,
-            'unfulfilledReason' => self::randomSetValueOrNullableString(ILLRequest::UNFULFILLED_REASONS),
+            'unfulfilled_reason' => self::randomSetValueOrNullableString(ILLRequest::UNFULFILLED_REASONS),
             'resource' => self::randomSetValueOrString(ILLRequest::RESOURCES),
             'action' => self::randomSetValue(ILLRequest::ACTIONS),
             'library' => self::randomNullableString(),
-            'requestorType' => self::randomSetValue(ILLRequest::REQUESTOR_TYPES),
-            'requestorNotes' => self::randomNullableString()
+            'requestor_type' => self::randomSetValue(ILLRequest::REQUESTOR_TYPES),
+            'requestor_notes' => self::randomNullableString()
         ];
     }
 

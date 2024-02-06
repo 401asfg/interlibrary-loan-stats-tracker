@@ -15,7 +15,7 @@ class ILLRequestController extends Controller
     }
 
     public function store(Request $request) {
-        $requestContent = $request->getContent();
-        ILLRequest::create($requestContent)->save();
+        $fields = $request->all();
+        ILLRequest::create($fields)->save();
     }
 }
