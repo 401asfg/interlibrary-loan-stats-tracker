@@ -15,14 +15,14 @@ return new class extends Migration
         Schema::create('ill_requests', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->date('request_date');
+            $table->date('requestDate');
             $table->boolean('fulfilled')->default(true);
-            $table->string('unfulfilled_reason')->nullable();
+            $table->string('unfulfilledReason')->nullable();
             $table->string('resource');
             $table->enum('action', array_values(ILLRequest::ACTIONS));
             $table->string('library')->nullable();
-            $table->enum('requestor_type', array_values(ILLRequest::REQUESTOR_TYPES));
-            $table->string('requestor_notes')->nullable();
+            $table->enum('requestorType', array_values(ILLRequest::REQUESTOR_TYPES));
+            $table->string('requestorNotes')->nullable();
         });
     }
 

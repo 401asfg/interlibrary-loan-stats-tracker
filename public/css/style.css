@@ -15,7 +15,7 @@ h2 {
     margin-bottom: 10px;
 }
 
-h2, .submit-section {
+h2, .main-buttons-container {
     margin-top: 70px;
 }
 
@@ -40,12 +40,13 @@ input[type="radio"] {
 }
 
 input[type="submit"] {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
     border-radius: 5px;
     padding: 10px 30px;
     background-color: lightgreen;
+}
+
+label {
+    margin-right: 15px;
 }
 
 .field-header {
@@ -53,15 +54,34 @@ input[type="submit"] {
     margin-bottom: 5px;
 }
 
-.radio-label {
-    margin-right: 15px;
-}
-
 .description-box {
     margin-top: 10px;
     padding-bottom: 50px;
 }
 
-.submit-section {
-    padding-bottom: 60px;
+.main-buttons-container {
+    padding-bottom: 30px;
+    text-align: center;
+}
+
+.main-buttons-container > button {
+    margin: auto 10px 15px;
+}
+
+.report-container {
+    max-width: 500px;
+    margin: auto auto 40px;
+    word-wrap: break-word;
+}
+
+.report-container > h2 {
+    text-align: center;
+}
+
+.success {
+    color: green;
+}
+
+.destructive-button {
+    background-color: lightcoral;
 }

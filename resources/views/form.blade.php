@@ -5,17 +5,17 @@
 @section('title', 'ILL Statistics Form')
 
 @section('content')
+    <h1>ILL Statistics Form</h1>
+
     <form action="/" method="POST">
         @csrf
-
-        <h1>ILL Statistics Form</h1>
 
         <div>
             <h2>Request Fulfilled</h2>
             <div>
                 <div>
                     <div class="field-header">Date</div>
-                    <input type="date" value={{ Carbon::today() }} name="request_date">
+                    <input type="date" value={{ Carbon::today() }} name="requestDate">
                 </div>
 
                 <div>
@@ -25,7 +25,7 @@
 
                 <div>
                     <div class="field-header">Reason</div>
-                    <x-dynamic-selector-with-other :set="$unfulfilledReasons" setName="unfulfilled_reason"></x-dynamic-selector-with-other>
+                    <x-dynamic-selector-with-other :set="$unfulfilledReasons" setName="unfulfilledReason"></x-dynamic-selector-with-other>
                 </div>
             </div>
         </div>
@@ -64,13 +64,13 @@
                     @php
                         unset($requestorTypes['library']);
                     @endphp
-                    <x-dynamic-selector :set="$requestorTypes" setName="requestor_type"></x-dynamic-selector>
-                    <input type="textarea" name="requestor_notes" placeholder="Notes..." class="description-box">
+                    <x-dynamic-selector :set="$requestorTypes" setName="requestorType"></x-dynamic-selector>
+                    <input type="textarea" name="requestorNotes" placeholder="Notes..." class="description-box">
                 </div>
             </div>
         </div>
 
-        <div class="submit-section">
+        <div class="main-buttons-container">
             <input type="submit" value="Submit">
         </div>
     </form>
