@@ -59,12 +59,12 @@ button, input[type="submit"] {
 }
 
 button:hover, input[type="submit"]:hover {
-    filter: brightness(90%);
+    filter: brightness(110%);
     transition: 0.4s;
 }
 
 button:active, input[type="submit"]:active {
-    filter:brightness(100%);
+    filter: brightness(100%);
     transition: 0.0s;
 }
 
