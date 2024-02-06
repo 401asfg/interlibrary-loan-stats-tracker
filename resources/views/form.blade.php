@@ -50,12 +50,12 @@
             <div>
                 <div>
                     <div class="field-header">Fulfilling Library</div>
-                    <input type="textarea" name="library" placeholder="Name...">
+                    <input type="textarea" name="library" placeholder="Name..." required>
                 </div>
 
                 <div>
                     <div class="field-header">Borrowing Library</div>
-                    <input type="textarea" name="library" placeholder="Name...">
+                    <input type="textarea" name="library" placeholder="Name..." required>
                 </div>
 
                 <div>

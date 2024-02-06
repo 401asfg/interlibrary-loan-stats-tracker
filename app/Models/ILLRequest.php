@@ -1,7 +1,5 @@
 <?php
 
-// FIXME: should column names be stored in constants?
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;

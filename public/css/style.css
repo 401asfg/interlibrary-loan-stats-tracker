@@ -5,6 +5,7 @@ body {
     padding-left: 30px;
     padding-right: 30px;
     font-family: Source Sans Pro, EdmondSans, Helvetica Neue, Helvetica, Arial, sans-serif, Open Sans, Ubuntu, Roboto;
+    background-color: #f8fafc;
 }
 
 h1 {
@@ -21,6 +22,14 @@ h2, .main-buttons-container {
 
 div, button, input {
     font-size: 20px;
+}
+
+button {
+    background-color: lightskyblue;
+}
+
+label {
+    margin-right: 15px;
 }
 
 input[type="textarea"] {
@@ -40,13 +49,23 @@ input[type="radio"] {
 }
 
 input[type="submit"] {
-    border-radius: 5px;
-    padding: 10px 30px;
     background-color: lightgreen;
 }
 
-label {
-    margin-right: 15px;
+button, input[type="submit"] {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 30px;
+}
+
+button:hover, input[type="submit"]:hover {
+    filter: brightness(90%);
+    transition: 0.4s;
+}
+
+button:active, input[type="submit"]:active {
+    filter:brightness(100%);
+    transition: 0.0s;
 }
 
 .field-header {

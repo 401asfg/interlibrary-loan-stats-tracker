@@ -56,7 +56,7 @@
     </div>
 
     <div class="main-buttons-container">
-        <button>Create New ILL Request</button>
+        <button onclick="location.href='{{ url('/') }}'">Submit Another ILL Request</button>
         <button>View All Records</button>
         <button class="destructive-button">Delete Record</button>
     </div>

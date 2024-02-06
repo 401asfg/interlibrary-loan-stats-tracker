@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ILLRequest;
+use Validator;
 
 class ILLRequestController extends Controller
 {
@@ -15,8 +16,23 @@ class ILLRequestController extends Controller
     }
 
     public function store(Request $request) {
-        $illRequest = ILLRequest::create($request->all());
+        $fields = $request->all();
+
+        $validator = Validator::make($fields, [
+            'requestDate' => 'required',
+            'resource' => 'required',
+            'action' => 'required',
+            'requestorType' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/')->withErrors($validator)
+                                ->withInput();
+        }
+
+        $illRequest = ILLRequest::create($fields);
         $illRequest->save();
+
         return view('submission')->with('illRequest', $illRequest);
     }
 }

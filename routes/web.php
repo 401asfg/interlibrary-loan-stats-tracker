@@ -1,5 +1,13 @@
 <?php
 
+// TODO: implement view records
+// TODO: implement delete records
+// TODO: add view records button to form page
+// TODO: allow users to write on multiple rows in description box
+// TODO: sticky fields
+// TODO: add dataset for library autocompletion
+// TODO: implement library name autocompletion
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ILLRequestController;
 
