@@ -1,15 +1,10 @@
-{{-- FIXME: do we need to use layouts and sections? --}}
-
 @use('Carbon\Carbon')
 
-<!DOCTYPE html>
+@extends('layout')
 
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
-        <title>ILL Statistics Form</title>
-    </head>
+@section('title', 'ILL Statistics Form')
 
+@section('content')
     <form action="/" method="POST">
         @csrf
 
@@ -79,4 +74,4 @@
             <input type="submit" value="Submit">
         </div>
     </form>
-</html>
+@endsection
