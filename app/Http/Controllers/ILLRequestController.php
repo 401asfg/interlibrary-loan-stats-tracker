@@ -16,24 +16,9 @@ class ILLRequestController extends Controller
     }
 
     public function store(Request $request) {
-        $fields = $request->all();
-
-        $validator = Validator::make($fields, [
-            'requestDate' => 'required',
-            'resource' => 'required',
-            'action' => 'required',
-            'requestorType' => 'required'
-        ]);
-
-        // FIXME: make this display the errors
-        if ($validator->fails()) {
-            return redirect('/')->withErrors($validator)
-                                ->withInput();
-        }
-
-        $illRequest = ILLRequest::create($fields);
+        // FIXME: does this request need to have its fields validated?
+        $illRequest = ILLRequest::create($request->all());
         $illRequest->save();
-
         return view('submission')->with('illRequest', $illRequest);
     }
 

@@ -58,7 +58,6 @@
 
     <div class="main-buttons-container">
         <button onclick="window.location.href='/'">Submit Another ILL Request</button>
-        <button>View All Records</button>
         <form action="/{{ $illRequest->id }}" method="POST">
             @csrf
             @method("DELETE")

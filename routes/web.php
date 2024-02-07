@@ -1,7 +1,7 @@
 <?php
 
+// TODO: make fields disappear based on state of previous input
 // TODO: implement view records
-// TODO: add view records button to form page
 // TODO: allow users to write on multiple rows in description box
 // TODO: sticky fields
 // TODO: add dataset for library autocompletion
