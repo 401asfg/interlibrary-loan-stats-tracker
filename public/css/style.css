@@ -24,7 +24,7 @@ form {
     display: inline;
 }
 
-div, button, label, input {
+div, button, label, textarea, input {
     font-size: 20px;
 }
 
@@ -49,10 +49,6 @@ label {
     margin-right: 15px;
 }
 
-input[type="textarea"] {
-    width: 100%;
-}
-
 input[type="date"] {
     padding: 4px 10px;
 }
@@ -65,14 +61,18 @@ input[type="radio"] {
     margin-right: 5px;
 }
 
+textarea {
+    margin-top: 10px;
+    padding-bottom: 50px;
+}
+
+textarea, input[type="textarea"] {
+    width: 100%;
+}
+
 .field-header {
     margin-top: 30px;
     margin-bottom: 5px;
-}
-
-.description-box {
-    margin-top: 10px;
-    padding-bottom: 50px;
 }
 
 .main-buttons-container {

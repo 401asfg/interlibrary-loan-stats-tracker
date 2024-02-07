@@ -69,7 +69,7 @@
                         unset($requestorTypes['library']);
                     @endphp
                     <x-dynamic-selector :set="$requestorTypes" setName="requestorType"></x-dynamic-selector>
-                    <input type="textarea" name="requestorNotes" placeholder="Notes..." class="description-box">
+                    <textarea name="requestorNotes" placeholder="Notes..."></textarea>
                 </div>
             </div>
         </div>
