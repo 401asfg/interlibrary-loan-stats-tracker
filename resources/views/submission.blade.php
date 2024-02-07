@@ -3,7 +3,7 @@
 @section('title', 'Submission')
 
 @section('content')
-    <h1 class="success">Submission Successful!</h1>
+    <h1 class="success-title">Submission Successful!</h1>
 
     <div class="report-container">
         <h2>Summary</h2>
@@ -57,8 +57,12 @@
     </div>
 
     <div class="main-buttons-container">
-        <button onclick="location.href='{{ url('/') }}'">Submit Another ILL Request</button>
+        <button onclick="window.location.href='/'">Submit Another ILL Request</button>
         <button>View All Records</button>
-        <button class="destructive-button">Delete Record</button>
+        <form action="/{{ $illRequest->id }}" method="POST">
+            @csrf
+            @method("DELETE")
+            <button class="destructive-button">Delete Record</button>
+        </form>
     </div>
 @endsection

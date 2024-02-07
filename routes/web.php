@@ -1,7 +1,6 @@
 <?php
 
 // TODO: implement view records
-// TODO: implement delete records
 // TODO: add view records button to form page
 // TODO: allow users to write on multiple rows in description box
 // TODO: sticky fields
@@ -24,3 +23,4 @@ use App\Http\Controllers\ILLRequestController;
 
 Route::get('/', [ILLRequestController::class, 'index']);
 Route::post('/', [ILLRequestController::class, 'store']);
+Route::delete('/{id}', [ILLRequestController::class, 'destroy']);

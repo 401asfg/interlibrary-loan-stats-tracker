@@ -5,6 +5,10 @@
 @section('title', 'ILL Statistics Form')
 
 @section('content')
+    @if (session('status'))
+        <div class="success-banner">{{ session('status') }}</div>
+    @endif
+
     <h1>ILL Statistics Form</h1>
 
     <form action="/" method="POST">
@@ -71,7 +75,7 @@
         </div>
 
         <div class="main-buttons-container">
-            <input type="submit" value="Submit">
+            <button type="submit" class="submit-button">Submit</button>
         </div>
     </form>
 @endsection

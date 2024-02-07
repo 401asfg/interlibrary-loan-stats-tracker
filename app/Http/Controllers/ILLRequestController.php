@@ -25,6 +25,7 @@ class ILLRequestController extends Controller
             'requestorType' => 'required'
         ]);
 
+        // FIXME: make this display the errors
         if ($validator->fails()) {
             return redirect('/')->withErrors($validator)
                                 ->withInput();
@@ -34,5 +35,11 @@ class ILLRequestController extends Controller
         $illRequest->save();
 
         return view('submission')->with('illRequest', $illRequest);
+    }
+
+    public function destroy($id) {
+        $illRequest = ILLRequest::findOrFail($id);
+        $illRequest->delete();
+        return redirect('/')->with('status', 'Last submission deleted!');
     }
 }
