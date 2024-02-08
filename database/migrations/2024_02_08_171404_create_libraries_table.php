@@ -24,6 +24,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // FIXME: do we need to drop the referencing foreign key?
         Schema::dropIfExists('libraries');
     }
 

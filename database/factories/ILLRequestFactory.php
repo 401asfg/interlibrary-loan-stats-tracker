@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
 use App\Models\ILLRequest;
+use App\Models\Library;
 
 class ILLRequestFactory extends Factory {
     const MAX_SUB_DAYS = 365;
@@ -17,15 +18,20 @@ class ILLRequestFactory extends Factory {
     public function definition()
     {
         return [
-            'requestDate' => self::randomDate(),
+            'request_date' => self::randomDate(),
             'fulfilled' => $this->faker->boolean,
-            'unfulfilledReason' => self::randomSetValueOrNullableString(ILLRequest::UNFULFILLED_REASONS),
+            'unfulfilled_reason' => self::randomSetValueOrNullableString(ILLRequest::UNFULFILLED_REASONS),
             'resource' => self::randomSetValueOrString(ILLRequest::RESOURCES),
             'action' => self::randomSetValue(ILLRequest::ACTIONS),
-            'library' => self::randomNullableString(),
-            'requestorType' => self::randomSetValue(ILLRequest::REQUESTOR_TYPES),
-            'requestorNotes' => self::randomNullableString()
+            'library_id' => self::randomNullableForeignKey(Library::count()),
+            'requestor_type' => self::randomSetValue(ILLRequest::REQUESTOR_TYPES),
+            'requestor_notes' => self::randomNullableString()
         ];
+    }
+
+    private function randomNullableForeignKey(int $maxId) {
+        if ($this->faker->boolean) return null;
+        return $this->faker->numberBetween(1, $maxId);
     }
 
     private function randomDate() {

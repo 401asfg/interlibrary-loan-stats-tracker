@@ -19,7 +19,7 @@
             <div>
                 <div>
                     <div class="field-header">Date</div>
-                    <input type="date" value={{ Carbon::today() }} name="requestDate">
+                    <input type="date" value={{ Carbon::today() }} name="request_date">
                 </div>
 
                 <div>
@@ -29,7 +29,7 @@
 
                 <div>
                     <div class="field-header">Reason</div>
-                    <x-dynamic-selector-with-other :set="$unfulfilledReasons" setName="unfulfilledReason"></x-dynamic-selector-with-other>
+                    <x-dynamic-selector-with-other :set="$unfulfilledReasons" setName="unfulfilled_reason"></x-dynamic-selector-with-other>
                 </div>
             </div>
         </div>
@@ -54,12 +54,12 @@
             <div>
                 <div>
                     <div class="field-header">Fulfilling Library</div>
-                    <input type="textarea" name="library" placeholder="Name..." required>
+                    <input type="textarea" name="library_id" placeholder="Name..." required>
                 </div>
 
                 <div>
                     <div class="field-header">Borrowing Library</div>
-                    <input type="textarea" name="library" placeholder="Name..." required>
+                    <input type="textarea" name="library_id" placeholder="Name..." required>
                 </div>
 
                 <div>
@@ -68,8 +68,8 @@
                     @php
                         unset($requestorTypes['library']);
                     @endphp
-                    <x-dynamic-selector :set="$requestorTypes" setName="requestorType"></x-dynamic-selector>
-                    <textarea name="requestorNotes" placeholder="Notes..."></textarea>
+                    <x-dynamic-selector :set="$requestorTypes" setName="requestor_type"></x-dynamic-selector>
+                    <textarea name="requestor_notes" placeholder="Notes..."></textarea>
                 </div>
             </div>
         </div>

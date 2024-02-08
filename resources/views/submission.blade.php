@@ -16,13 +16,13 @@
 
                 <div>
                     <div class="field-header"><strong>Reason why Request was Unfulfilled:</strong></div>
-                    <div>{{ $illRequest->unfulfilledReason }}</div>
+                    <div>{{ $illRequest->unfulfilled_reason }}</div>
                 </div>
             @endif
 
             <div>
                 <div class="field-header"><strong>Request Date:</strong></div>
-                <div>{{ $illRequest->requestDate }}</div>
+                <div>{{ $illRequest->request_date }}</div>
             </div>
 
             <div>
@@ -35,22 +35,22 @@
                 <div>{{ $illRequest->action }}</div>
             </div>
 
-            @if (!is_null($illRequest->library))
+            @if (!is_null($illRequest->library_id))
                 <div>
                     <div class="field-header"><strong>Library:</strong></div>
-                    <div>{{ $illRequest->library }}</div>
+                    <div>{{ $illRequest->library_id }}</div>
                 </div>
             @endif
 
             <div>
                 <div class="field-header"><strong>Requestor Type:</strong></div>
-                <div>{{ $illRequest->requestorType }}</div>
+                <div>{{ $illRequest->requestor_type }}</div>
             </div>
 
-            @if (!is_null($illRequest->requestorNotes))
+            @if (!is_null($illRequest->requestor_notes))
                 <div>
                     <div class="field-header"><strong>Requestor Notes:</strong></div>
-                    <div>{{ $illRequest->requestorNotes }}</div>
+                    <div>{{ $illRequest->requestor_notes }}</div>
                 </div>
             @endif
         </div>

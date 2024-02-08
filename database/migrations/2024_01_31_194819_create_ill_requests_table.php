@@ -15,14 +15,14 @@ return new class extends Migration
         Schema::create('ill_requests', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->date('requestDate');
+            $table->date('request_date');
             $table->boolean('fulfilled')->default(true);
-            $table->string('unfulfilledReason')->nullable();
+            $table->string('unfulfilled_reason')->nullable();
             $table->string('resource');
             $table->enum('action', array_values(ILLRequest::ACTIONS));
-            $table->string('library')->nullable();
-            $table->enum('requestorType', array_values(ILLRequest::REQUESTOR_TYPES));
-            $table->string('requestorNotes')->nullable();
+            $table->foreignId('library_id')->nullable()->constrained('libraries')->onDelete('set null');
+            $table->enum('requestor_type', array_values(ILLRequest::REQUESTOR_TYPES));
+            $table->string('requestor_notes')->nullable();
         });
     }
 
@@ -31,6 +31,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // FIXME: do we need to drop the foreign key?
         Schema::dropIfExists('ill_requests');
     }
 };
