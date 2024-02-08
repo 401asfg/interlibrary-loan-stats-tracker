@@ -1,11 +1,12 @@
 <?php
 
+// TODO: make library field a nullable foreign key to static library database
+// TODO: add dataset for library autocompletion
+// TODO: implement library name autocompletion
 // TODO: make fields disappear based on state of previous input
 // TODO: implement view records
 // TODO: allow users to write on multiple rows in description box
 // TODO: sticky fields
-// TODO: add dataset for library autocompletion
-// TODO: implement library name autocompletion
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ILLRequestController;
