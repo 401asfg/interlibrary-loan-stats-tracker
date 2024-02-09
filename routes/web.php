@@ -3,6 +3,7 @@
 // TODO: make fields disappear based on state of previous input
 // TODO: implement view records
 // TODO: sticky fields
+// TODO: popup that makes sure user wants to delete the last record?
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ILLRequestController;
