@@ -19,7 +19,7 @@ class ILLRequestController extends Controller
         $libraryName = null;
 
         if ($request['library_data'] !== null) {
-            $libraryDataSplit = explode(',', $request['library_data']);
+            $libraryDataSplit = explode(',', $request['library_data'], 2);
             $request['library_id'] = $libraryDataSplit[0];
             $libraryName = $libraryDataSplit[1];
         }
