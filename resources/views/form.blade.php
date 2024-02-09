@@ -67,9 +67,6 @@
                 <div>
                     <div class="field-header">Requestor</div>
 
-                    @php
-                        unset($requestorTypes['library']);
-                    @endphp
                     <x-dynamic-selector :set="$requestorTypes" setName="requestor_type"></x-dynamic-selector>
                     <textarea name="requestor_notes" placeholder="Notes..."></textarea>
                 </div>

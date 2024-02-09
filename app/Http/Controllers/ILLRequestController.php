@@ -8,8 +8,11 @@ use App\Models\ILLRequest;
 class ILLRequestController extends Controller
 {
     public function index() {
+	$requestorTypes = ILLRequest::REQUESTOR_TYPES;
+	unset($requestorTypes['library']);
+
         return view('form')->with('actions', ILLRequest::ACTIONS)
-                           ->with('requestorTypes', ILLRequest::REQUESTOR_TYPES)
+                           ->with('requestorTypes', $requestorTypes)
                            ->with('unfulfilledReasons', ILLRequest::UNFULFILLED_REASONS)
                            ->with('resources', ILLRequest::RESOURCES);
     }
