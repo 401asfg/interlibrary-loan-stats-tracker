@@ -15,10 +15,21 @@ class ILLRequestController extends Controller
     }
 
     public function store(Request $request) {
+        $request['library_id'] = null;
+        $libraryName = null;
+
+        if ($request['library_data'] !== null) {
+            $libraryDataSplit = explode(',', $request['library_data']);
+            $request['library_id'] = $libraryDataSplit[0];
+            $libraryName = $libraryDataSplit[1];
+        }
+
         // FIXME: does this request need to have its fields validated?
         $illRequest = ILLRequest::create($request->all());
         $illRequest->save();
-        return view('submission')->with('illRequest', $illRequest);
+
+        return view('submission')->with('illRequest', $illRequest)
+                                 ->with('libraryName', $libraryName);
     }
 
     public function destroy($id) {

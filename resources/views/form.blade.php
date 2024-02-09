@@ -61,7 +61,7 @@
                 <div>
                     {{-- FIXME: Make the header display text based on the selected action --}}
                     <div class="field-header">{{ true ? "Fulfilling" : "Borrowing" }} Library</div>
-                    <select class="form-control" id="library-search" name="library_id"></select>
+                    <select class="form-control" id="library-search" name="library_data"></select>
                 </div>
 
                 <div>
@@ -92,7 +92,7 @@
                         results: $.map(data, function (library) {
                             return {
                                 text: library.name,
-                                id: library.id
+                                id: [library.id, library.name]
                             }
                         })
                     };
