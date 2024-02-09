@@ -24,4 +24,3 @@ Route::post('/', [ILLRequestController::class, 'store']);
 Route::delete('/{id}', [ILLRequestController::class, 'destroy']);
 
 Route::get('/libraries', [LibraryController::class, 'index'])->name('libraries');
-Route::get('/libraries/{id}', [LibraryController::class, 'index']);

@@ -25,7 +25,7 @@
             <div>
                 <div>
                     <div class="field-header">Date</div>
-                    <input type="date" value={{ Carbon::today() }} name="request_date">
+                    <input type="date" value={{ Carbon::today() }} name="request_date" required>
                 </div>
 
                 <div>

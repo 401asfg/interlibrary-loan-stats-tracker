@@ -20,9 +20,4 @@ class LibraryController extends Controller
         // FIXME: does the data have to be in a json reponse?
         return response()->json($data);
     }
-
-    public function show($id) {
-        $library = Library::findOrFail($id);
-        return $library->name;
-    }
 }
