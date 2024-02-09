@@ -10,6 +10,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ILLRequestController;
+use App\Http\Controllers\LibraryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,6 @@ use App\Http\Controllers\ILLRequestController;
 Route::get('/', [ILLRequestController::class, 'index']);
 Route::post('/', [ILLRequestController::class, 'store']);
 Route::delete('/{id}', [ILLRequestController::class, 'destroy']);
+
+Route::get('/libraries', [LibraryController::class, 'index'])->name('libraries');
+Route::get('/libraries/{id}', [LibraryController::class, 'index']);

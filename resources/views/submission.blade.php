@@ -38,6 +38,7 @@
             @if (!is_null($illRequest->library_id))
                 <div>
                     <div class="field-header"><strong>Library:</strong></div>
+                    {{-- FIXME: obtain library name from library database --}}
                     <div>{{ $illRequest->library_id }}</div>
                 </div>
             @endif

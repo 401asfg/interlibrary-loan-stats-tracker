@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ILLRequest;
-use Validator;
 
 class ILLRequestController extends Controller
 {

@@ -24,7 +24,7 @@ form {
     display: inline;
 }
 
-div, button, label, textarea, input {
+div, button, label, textarea, input, select {
     font-size: 20px;
 }
 
@@ -64,9 +64,11 @@ input[type="radio"] {
 textarea {
     margin-top: 10px;
     padding-bottom: 50px;
+    padding-left: 8px;
+    font-family: Source Sans Pro, EdmondSans, Helvetica Neue, Helvetica, Arial, sans-serif, Open Sans, Ubuntu, Roboto;
 }
 
-textarea, input[type="textarea"] {
+textarea, input[type="textarea"], select {
     width: 100%;
 }
 

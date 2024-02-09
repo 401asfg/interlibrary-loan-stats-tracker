@@ -2,6 +2,12 @@
 
 @extends('layout')
 
+@section('scripts')
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+@endsection
+
 @section('title', 'ILL Statistics Form')
 
 @section('content')
@@ -54,12 +60,12 @@
             <div>
                 <div>
                     <div class="field-header">Fulfilling Library</div>
-                    <input type="textarea" name="library_id" placeholder="Name..." required>
+                    <select class="form-control" id="library-search" name="library_id"></select>
                 </div>
 
                 <div>
                     <div class="field-header">Borrowing Library</div>
-                    <input type="textarea" name="library_id" placeholder="Name..." required>
+                    <select class="form-control" id="library-search" name="library_id"></select>
                 </div>
 
                 <div>
@@ -78,4 +84,25 @@
             <button type="submit" class="submit-button">Submit</button>
         </div>
     </form>
+
+    <script type="text/javascript">
+        $('#library-search').select2({
+            placeholder: 'Name...',
+            ajax: {
+                url: '/libraries',
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (library) {
+                            return {
+                                text: library.name,
+                                id: library.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+      });
+    </script>
 @endsection
