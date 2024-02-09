@@ -59,12 +59,8 @@
             <h2>Parties Involved</h2>
             <div>
                 <div>
-                    <div class="field-header">Fulfilling Library</div>
-                    <select class="form-control" id="library-search" name="library_id"></select>
-                </div>
-
-                <div>
-                    <div class="field-header">Borrowing Library</div>
+                    {{-- FIXME: Make the header display text based on the selected action --}}
+                    <div class="field-header">{{ true ? "Fulfilling" : "Borrowing" }} Library</div>
                     <select class="form-control" id="library-search" name="library_id"></select>
                 </div>
 
