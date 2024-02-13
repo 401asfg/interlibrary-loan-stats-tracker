@@ -12,7 +12,7 @@ class ILLRequest extends Model
     public const ACTIONS = [
         'borrow' => 'Borrow',
         'lend' => 'Lend',
-        'send-to-me' => 'Send to Me'
+        'ship-to-me' => 'Ship to Me'
     ];
 
     public const VCC_BORROWER_TYPES = [
