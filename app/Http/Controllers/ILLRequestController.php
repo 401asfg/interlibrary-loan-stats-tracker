@@ -8,8 +8,8 @@ use App\Models\ILLRequest;
 class ILLRequestController extends Controller
 {
     public function index() {
-	$vccBorrowerTypes = ILLRequest::VCC_BORROWER_TYPES;
-	unset($vccBorrowerTypes['library']);
+        $vccBorrowerTypes = ILLRequest::VCC_BORROWER_TYPES;
+        unset($vccBorrowerTypes['library']);
 
         return view('form')->with('actions', ILLRequest::ACTIONS)
                            ->with('vccBorrowerTypes', $vccBorrowerTypes)

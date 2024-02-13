@@ -1,5 +1,7 @@
 <?php
 
+// TODO: implement edit feature
+// TODO: ensure that filling out a field, then making that field not visible erases the given value for that field
 // TODO: write unit tests
 // TODO: make fields disappear based on state of previous input
 // TODO: implement view records
