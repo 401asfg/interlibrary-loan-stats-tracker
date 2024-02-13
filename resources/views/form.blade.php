@@ -60,7 +60,7 @@
             <div>
                 <div>
                     {{-- FIXME: Make the header display text based on the selected action --}}
-                    <div class="field-header">{{ true ? "Fulfilling" : "Borrowing" }} Library</div>
+                    <div class="field-header">{{ true ? "Lending" : "Borrowing" }} Library</div>
                     {{-- FIXME: allow user to change selection after choosing old selection --}}
                     <select class="form-control" id="library-search" name="library_data"></select>
                 </div>
