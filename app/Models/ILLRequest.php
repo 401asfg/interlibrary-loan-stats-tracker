@@ -18,7 +18,6 @@ class ILLRequest extends Model
     public const VCC_BORROWER_TYPES = [
         'student' => 'Student',
         'employee' => 'Employee',
-        'external' => 'External',
         'library' => 'Library'
     ];
 
