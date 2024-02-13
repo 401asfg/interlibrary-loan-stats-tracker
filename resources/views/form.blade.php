@@ -66,10 +66,10 @@
                 </div>
 
                 <div>
-                    <div class="field-header">Requestor</div>
+                    <div class="field-header">VCC Borrower</div>
 
-                    <x-dynamic-selector :set="$requestorTypes" setName="requestor_type"></x-dynamic-selector>
-                    <textarea name="requestor_notes" placeholder="Notes..."></textarea>
+                    <x-dynamic-selector :set="$vccBorrowerTypes" setName="vcc_borrower_type"></x-dynamic-selector>
+                    <textarea name="vcc_borrower_notes" placeholder="Notes..."></textarea>
                 </div>
             </div>
         </div>

@@ -43,14 +43,14 @@
             @endif
 
             <div>
-                <div class="field-header"><strong>Requestor Type:</strong></div>
-                <div>{{ $illRequest->requestor_type }}</div>
+                <div class="field-header"><strong>VCC Borrower Type:</strong></div>
+                <div>{{ $illRequest->vcc_borrower_type }}</div>
             </div>
 
-            @if (!is_null($illRequest->requestor_notes))
+            @if (!is_null($illRequest->vcc_borrower_notes))
                 <div>
-                    <div class="field-header"><strong>Requestor Notes:</strong></div>
-                    <div>{{ $illRequest->requestor_notes }}</div>
+                    <div class="field-header"><strong>VCC Borrower Notes:</strong></div>
+                    <div>{{ $illRequest->vcc_borrower_notes }}</div>
                 </div>
             @endif
         </div>

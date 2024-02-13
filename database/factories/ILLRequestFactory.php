@@ -24,8 +24,8 @@ class ILLRequestFactory extends Factory {
             'resource' => self::randomSetValueOrString(ILLRequest::RESOURCES),
             'action' => self::randomSetValue(ILLRequest::ACTIONS),
             'library_id' => self::randomNullableForeignKey(Library::count()),
-            'requestor_type' => self::randomSetValue(ILLRequest::REQUESTOR_TYPES),
-            'requestor_notes' => self::randomNullableString()
+            'vcc_borrower_type' => self::randomSetValue(ILLRequest::VCC_BORROWER_TYPES),
+            'vcc_borrower_notes' => self::randomNullableString()
         ];
     }
 

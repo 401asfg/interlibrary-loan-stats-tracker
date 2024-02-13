@@ -15,7 +15,7 @@ class ILLRequest extends Model
         'send-to-me' => 'Send to Me'
     ];
 
-    public const REQUESTOR_TYPES = [
+    public const VCC_BORROWER_TYPES = [
         'student' => 'Student',
         'employee' => 'Employee',
         'external' => 'External',
@@ -45,7 +45,7 @@ class ILLRequest extends Model
         'resource',
         'action',
         'library_id',
-        'requestor_type',
-        'requestor_notes'
+        'vcc_borrower_type',
+        'vcc_borrower_notes'
     ];
 }
