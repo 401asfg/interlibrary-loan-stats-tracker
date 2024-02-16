@@ -11,13 +11,14 @@ class ILLRequestController extends Controller
         $vccBorrowerTypes = ILLRequest::VCC_BORROWER_TYPES;
         unset($vccBorrowerTypes['library']);
 
-        return view('form')->with('actions', ILLRequest::ACTIONS)
-                           ->with('vccBorrowerTypes', $vccBorrowerTypes)
-                           ->with('unfulfilledReasons', ILLRequest::UNFULFILLED_REASONS)
-                           ->with('resources', ILLRequest::RESOURCES);
+        return view('index')->with('actions', ILLRequest::ACTIONS)
+                            ->with('vccBorrowerTypes', $vccBorrowerTypes)
+                            ->with('unfulfilledReasons', ILLRequest::UNFULFILLED_REASONS)
+                            ->with('resources', ILLRequest::RESOURCES);
     }
 
     public function store(Request $request) {
+        // FIXME: parse new style of request
         $request['library_id'] = null;
         $libraryName = null;
 

@@ -1,12 +1,10 @@
 <?php
 
 // TODO: implement edit feature
+// TODO: makes sure all fields are required
 // TODO: ensure that filling out a field, then making that field not visible erases the given value for that field
 // TODO: write unit tests
 // TODO: make fields disappear based on state of previous input
-// TODO: implement view records
-// TODO: sticky fields
-// TODO: popup that makes sure user wants to delete the last record?
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ILLRequestController;

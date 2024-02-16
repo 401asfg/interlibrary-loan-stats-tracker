@@ -10,14 +10,12 @@ class LibraryController extends Controller
     public function index(Request $request) {
         $data = [];
 
-        if ($request->has('q')) {
+        if ($request->has('query')) {
             $data = Library::select('id', 'name')
-                            ->where('name', 'LIKE', '%' . $request->q . '%')
+                            ->where('name', 'LIKE', '%' . $request->input('query') . '%')
                             ->get();
         }
 
-        // FIXME: does the data have to be validate before sending?
-        // FIXME: does the data have to be in a json reponse?
         return response()->json($data);
     }
 }
