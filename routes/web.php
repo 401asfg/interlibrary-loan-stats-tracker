@@ -5,6 +5,7 @@
 // TODO: ensure that filling out a field, then making that field not visible erases the given value for that field
 // TODO: write unit tests
 // TODO: make fields disappear based on state of previous input
+// TODO: add csrf protection
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ILLRequestController;

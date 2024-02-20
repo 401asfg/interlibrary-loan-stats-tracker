@@ -72,7 +72,7 @@
         data() {
             return {
                 library_id: null,
-                library_name: null
+                library_name: null,
             }
         },
         methods: {
