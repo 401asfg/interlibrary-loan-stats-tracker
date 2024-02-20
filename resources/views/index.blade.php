@@ -15,12 +15,8 @@
 
     <h1>ILL Statistics Form</h1>
 
-    <form action="/" method="POST">
-        @csrf
-
-        <ill-request-form-content :actions='{{ json_encode($actions) }}'
-                                    :vcc_borrower_types='{{ json_encode($vccBorrowerTypes) }}'
-                                    :unfulfilled_reasons='{{ json_encode($unfulfilledReasons) }}'
-                                    :resources='{{ json_encode($resources) }}' />
-    </form>
+    <ill-request-form :actions='{{ json_encode($actions) }}'
+                      :vcc_borrower_types='{{ json_encode($vccBorrowerTypes) }}'
+                      :unfulfilled_reasons='{{ json_encode($unfulfilledReasons) }}'
+                      :resources='{{ json_encode($resources) }}' />
 @endsection
