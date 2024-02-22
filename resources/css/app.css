@@ -78,7 +78,7 @@ textarea, input[type="text"] {
 }
 
 .radio-buttons-container {
-    display: inline;
+    display: flex;
 }
 
 .main-buttons-container {

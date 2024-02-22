@@ -1,21 +1,21 @@
 <template>
-    <form action="/" method="POST">
+    <form @submit.prevent="submit">
         <div>
             <h2>Request Fulfilled</h2>
             <div>
                 <div>
                     <div class="field-header">Date</div>
-                    <input type="date" :value="new Date().toISOString().split('T')[0]" name="request_date" required>
+                    <input type="date" v-model="form.request_date" required>
                 </div>
 
                 <div>
                     <div class="field-header">Fulfilled?</div>
-                    <input type="checkbox" :checked="true" name="fulfilled">
+                    <input type="checkbox" :checked="true" v-model="form.fulfilled">
                 </div>
 
-                <div>
+                <div v-if="isUnfulfilled()">
                     <div class="field-header">Reason</div>
-                    <dynamic-selector-with-other :set="unfulfilled_reasons" setName="unfulfilled_reason" />
+                    <DynamicSelectorWithOther :choices="unfulfilled_reasons" selectorName="Unfulfilled Reason" @input="onUnfulfilledReasonInput" />
                 </div>
             </div>
         </div>
@@ -25,31 +25,29 @@
             <div>
                 <div>
                     <div class="field-header">Resource</div>
-                    <dynamic-selector-with-other :set="resources" setName="resource" />
+                    <DynamicSelectorWithOther :choices="resources" selectorName="Resource" @input="onResourceInput" />
                 </div>
 
                 <div>
                     <div class="field-header">Action</div>
-                    <dynamic-selector :set="actions" setName="action" />
+                    <DynamicSelector :choices="actions" :hiddenSlugs="getHiddenActionSlugs()" selectorName="Action" @input="onActionInput" />
                 </div>
             </div>
         </div>
 
-        <div>
+        <div v-if="hasAction()">
             <h2>Parties Involved</h2>
             <div>
-                <div>
-                    <!-- FIXME: Make the header display text based on the selected action -->
-                    <div class="field-header">{{ true ? "Lending" : "Borrowing" }} Library</div>
-                    <!-- FIXME: send selected library data in form request -->
-                    <searchable-select database_route="/libraries" @selection="selectLibrary" />
+                <div v-if="isLendingOrBorrowing()">
+                    <div class="field-header">{{ getLibraryHeader() }}</div>
+                    <SearchableSelect database_route="/libraries" @input="onLibraryInput" />
                 </div>
 
-                <div>
+                <div v-if="isBorrowingOrShipping()">
                     <div class="field-header">VCC Borrower</div>
 
-                    <dynamic-selector :set="vcc_borrower_types" setName="vcc_borrower_type" />
-                    <textarea name="vcc_borrower_notes" placeholder="Notes..."></textarea>
+                    <DynamicSelector :choices="getSelectableBorrowerTypes()" selectorName="VCC Borrower Type" @input="onBorrowerTypeInput" />
+                    <textarea v-model="form.vcc_borrower_notes" placeholder="Notes..."></textarea>
                 </div>
             </div>
         </div>
@@ -61,6 +59,10 @@
 </template>
 
 <script>
+    import DynamicSelector from './DynamicSelector.vue';
+    import DynamicSelectorWithOther from './DynamicSelectorWithOther.vue';
+    import SearchableSelect from './SearchableSelect.vue';
+
     export default {
         name: "ILLRequestForm",
         props: [
@@ -71,15 +73,84 @@
         ],
         data() {
             return {
-                library_id: null,
-                library_name: null,
+                form: {
+                    request_date: new Date().toISOString().split('T')[0],
+                    fulfilled: true,
+                    unfulfilled_reason: null,
+                    resource: null,
+                    action: null,
+                    library_id: null,
+                    library_name: null,
+                    vcc_borrower_type: this.vcc_borrower_types['library'],
+                    vcc_borrower_notes: null,
+                },
             }
         },
         methods: {
-            selectLibrary: function(library) {
-                this.library_id = library.id;
-                this.library_name = library.name;
+            onActionInput(event) {
+                this.form.action = event.target.value;
+            },
+            onBorrowerTypeInput(event) {
+                this.form.vcc_borrower_type = event.target.value;
+            },
+            onUnfulfilledReasonInput(event) {
+                this.form.unfulfilled_reason = event.target.value;
+            },
+            onResourceInput(event) {
+                this.form.resource = event.target.value;
+            },
+            onLibraryInput(library) {
+                this.form.library_id = library.id;
+                this.form.library_name = library.name;
+            },
+            isUnfulfilled() {
+                const isFulfilled = this.form.fulfilled;
+                if (isFulfilled) this.form.unfulfilled_reason = null;
+                return !isFulfilled;
+            },
+            isLendingOrBorrowing() {
+                const neither = this.form.action !== this.actions['lend'] && this.form.action != this.actions['borrow'];
+
+                if (neither) {
+                    this.form.library_id = null;
+                    this.form.library_name = null;
+                }
+
+                return !neither;
+            },
+            isBorrowingOrShipping() {
+                const neither = this.form.action !== this.actions['borrow'] && this.form.action !== this.actions['ship-to-me'];
+
+                if (neither) {
+                    this.form.vcc_borrower_type = this.vcc_borrower_types['library'];
+                    this.form.vcc_borrower_notes = null;
+                }
+
+                return !neither;
+            },
+            hasAction() {
+                return this.isLendingOrBorrowing() || this.isBorrowingOrShipping();
+            },
+            getLibraryHeader() {
+                return (this.form.action === this.actions['borrow'] ? "Lending" : "Borrowing") + " Library";
+            },
+            getHiddenActionSlugs() {
+                return (this.form.resource !== this.resources['ea'] && this.form.resource !== this.resources['book-chapter']) ? [] : ['ship-to-me'];
+            },
+            getSelectableBorrowerTypes() {
+                let {library, ...borrowerTypes} = this.vcc_borrower_types;
+                return borrowerTypes;
+
+            },
+            submit() {
+                // FIXME: send post request to /
+                console.log(this.form);
             }
+        },
+        components: {
+            DynamicSelector,
+            DynamicSelectorWithOther,
+            SearchableSelect
         }
     }
 </script>

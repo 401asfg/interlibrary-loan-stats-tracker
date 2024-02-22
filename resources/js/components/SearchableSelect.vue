@@ -31,36 +31,36 @@
             }
         },
         methods: {
-            hasQuery: function() {
+            hasQuery() {
                 return this.query !== '';
             },
-            startSearch: function() {
+            startSearch() {
                 this.selection = null;
             },
-            endSearch: function() {
+            endSearch() {
                 if (this.selection === null) this.query = '';
             },
-            isSearching: function() {
+            isSearching() {
                 return this.hasQuery() && this.selection === null;
             },
-            hasResults: function() {
+            hasResults() {
                 return this.results.length !== 0;
             },
-            updateHover: function(index) {
+            updateHover(index) {
                 this.hoverIndex = index;
             },
-            getDropdownItemClass: function(index) {
+            getDropdownItemClass(index) {
                 return index === this.hoverIndex ? FOCUSED_DROPDOWN_ITEM_CLASS : '';
             },
-            chooseSelection: function(index) {
+            chooseSelection(index) {
                 if (this.results.length === 0) return;
 
                 this.selection = this.results[index];
                 this.query = this.selection.name;
 
-                this.$emit('selection', this.selection);
+                this.$emit('input', this.selection);
             },
-            queryDatabase: function() {
+            queryDatabase() {
                 this.updateHover(0);
 
                 if (!this.hasQuery()) return;
