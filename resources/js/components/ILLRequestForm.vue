@@ -61,6 +61,7 @@
 </template>
 
 <script>
+    import axios from 'axios';
     import DynamicSelector from './DynamicSelector.vue';
     import DynamicSelectorWithOther from './DynamicSelectorWithOther.vue';
     import SearchableSelect from './SearchableSelect.vue';
@@ -137,12 +138,12 @@
                 return (this.form.resource !== this.resources['ea'] && this.form.resource !== this.resources['book-chapter']) ? [] : ['ship-to-me'];
             },
             getSelectableBorrowerTypes() {
-                let {library, ...borrowerTypes} = this.vcc_borrower_types;
+                const {library, ...borrowerTypes} = this.vcc_borrower_types;
                 return borrowerTypes;
             },
             submit() {
-                // FIXME: send post request to "/"
-                console.log(this.form);
+                axios.post('/', this.form)
+                     .catch(error => console.log(error));
             }
         },
         components: {

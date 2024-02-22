@@ -15,6 +15,8 @@ class ILLRequestController extends Controller
     }
 
     public function store(Request $request) {
+        dd($request);
+
         // FIXME: parse new style of request
         $request['library_id'] = null;
         $libraryName = null;
