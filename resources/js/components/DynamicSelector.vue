@@ -2,7 +2,8 @@
     <div class="radio-buttons-container">
         <div v-for="[slug, displayName] of Object.entries(choices)">
             <div v-if="notHidden(slug)">
-                <input type="radio" :name="selectorName" :id="slug" :value="displayName" @input="onInput" required>
+                <!-- FIXME: bad practice to tie v-model to init value that will be outdated? -->
+                <input type="radio" :name="selectorName" :id="slug" :value="displayName" @input="onInput" v-model="selection" required>
                 <label :for="slug">{{ displayName }}</label>
             </div>
         </div>
@@ -14,16 +15,23 @@
         name: "DynamicSelector",
         props: {
             choices: {
-                type: Object,
-                default: {}
+                type: Object
             },
             selectorName: {
-                type: String,
-                default: ""
+                type: String
             },
             hiddenSlugs: {
                 type: Array,
                 default: []
+            },
+            initSelection: {
+                type: String,
+                default: null
+            }
+        },
+        data() {
+            return {
+                selection: this.initSelection
             }
         },
         methods: {

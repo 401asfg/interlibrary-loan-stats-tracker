@@ -19,18 +19,28 @@
 
     export default {
         name: 'SearchableSelect',
-        props: [
-            'database_route'
-        ],
+        props: {
+            databaseRoute: {
+                type: String,
+            },
+            initSelection: {
+                type: Object,
+                default: null
+            }
+        },
         data() {
             return {
-                query: '',
+                query: this.getInitQuery(),
                 results: [],
                 hoverIndex: 0,
-                selection: null
+                selection: this.initSelection
             }
         },
         methods: {
+            getInitQuery() {
+                if (this.initSelection === null) return '';
+                return this.initSelection.name;
+            },
             hasQuery() {
                 return this.query !== '';
             },
@@ -65,7 +75,7 @@
 
                 if (!this.hasQuery()) return;
 
-                axios.get(this.database_route, { params: { query: this.query } })
+                axios.get(this.databaseRoute, { params: { query: this.query } })
                      .then(response => {
                         this.results = response.data;
                      })

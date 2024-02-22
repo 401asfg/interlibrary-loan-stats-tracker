@@ -1,7 +1,8 @@
 <template>
     <div>
-        <DynamicSelector :choices="setWithOther()" :selectorName="selectorName" @input="onSelectorInput" />
-        <textarea v-if="otherSelected" :name="selectorName" placeholder="Describe..." @input="onTextInput" required></textarea>
+        <DynamicSelector :choices="setWithOther()" :selectorName="selectorName" :initSelection="getInitButtonSelection()" @input="onSelectorInput" />
+        <!-- FIXME: bad practice to tie v-model to init value that will be outdated? -->
+        <textarea v-if="otherSelected" :name="selectorName" placeholder="Describe..." @input="onTextInput" v-model="selection" required></textarea>
     </div>
 </template>
 
@@ -12,16 +13,31 @@
 
     export default {
     name: "DynamicSelectorWithOther",
-    props: [
-        'choices',
-        'selectorName',
-    ],
+    props: {
+        choices: {
+            type: Object
+        },
+        selectorName: {
+            type: String
+        },
+        initSelection: {
+            type: String,
+            default: null
+        }
+    },
     data() {
         return {
-            otherSelected: false,
+            otherSelected: this.isOtherSelectedInit(),
+            selection: this.initSelection,
         }
     },
     methods: {
+        isOtherSelectedInit() {
+            return this.initSelection !== null && !Object.values(this.choices).includes(this.initSelection);
+        },
+        getInitButtonSelection() {
+            return this.isOtherSelectedInit() ? OTHER_DISPLAY_TEXT : this.initSelection;
+        },
         setWithOther() {
             const choicesWithOther = this.choices;
             choicesWithOther['other'] = OTHER_DISPLAY_TEXT;
@@ -33,7 +49,7 @@
         },
         onTextInput(event) {
             this.$emit('input', event);
-        }
+        },
     },
     components: { DynamicSelector }
 }

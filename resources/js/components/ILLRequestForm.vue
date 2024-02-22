@@ -1,3 +1,5 @@
+<!-- FIXME: implement 2 way bindings for all fields to replace @input and :initSelection with v-model -->
+
 <template>
     <form @submit.prevent="submit">
         <div>
@@ -15,7 +17,7 @@
 
                 <div v-if="isUnfulfilled()">
                     <div class="field-header">Reason</div>
-                    <DynamicSelectorWithOther :choices="unfulfilled_reasons" selectorName="Unfulfilled Reason" @input="onUnfulfilledReasonInput" />
+                    <DynamicSelectorWithOther :choices="unfulfilled_reasons" selectorName="Unfulfilled Reason" @input="onUnfulfilledReasonInput" :initSelection="form.unfulfilled_reason" />
                 </div>
             </div>
         </div>
@@ -25,12 +27,12 @@
             <div>
                 <div>
                     <div class="field-header">Resource</div>
-                    <DynamicSelectorWithOther :choices="resources" selectorName="Resource" @input="onResourceInput" />
+                    <DynamicSelectorWithOther :choices="resources" selectorName="Resource" @input="onResourceInput" :initSelection="form.resource" />
                 </div>
 
                 <div>
                     <div class="field-header">Action</div>
-                    <DynamicSelector :choices="actions" :hiddenSlugs="getHiddenActionSlugs()" selectorName="Action" @input="onActionInput" />
+                    <DynamicSelector :choices="actions" :hiddenSlugs="getHiddenActionSlugs()" selectorName="Action" @input="onActionInput" :initSelection="form.action" />
                 </div>
             </div>
         </div>
@@ -40,13 +42,13 @@
             <div>
                 <div v-if="isLendingOrBorrowing()">
                     <div class="field-header">{{ getLibraryHeader() }}</div>
-                    <SearchableSelect database_route="/libraries" @input="onLibraryInput" />
+                    <SearchableSelect databaseRoute="/libraries" @input="onLibraryInput" :initSelection="form.library" />
                 </div>
 
                 <div v-if="isBorrowingOrShipping()">
                     <div class="field-header">VCC Borrower</div>
 
-                    <DynamicSelector :choices="getSelectableBorrowerTypes()" selectorName="VCC Borrower Type" @input="onBorrowerTypeInput" />
+                    <DynamicSelector :choices="getSelectableBorrowerTypes()" selectorName="VCC Borrower Type" @input="onBorrowerTypeInput" :initSelection="form.vcc_borrower_type" />
                     <textarea v-model="form.vcc_borrower_notes" placeholder="Notes..."></textarea>
                 </div>
             </div>
@@ -79,8 +81,7 @@
                     unfulfilled_reason: null,
                     resource: null,
                     action: null,
-                    library_id: null,
-                    library_name: null,
+                    library: null,
                     vcc_borrower_type: this.vcc_borrower_types['library'],
                     vcc_borrower_notes: null,
                 },
@@ -100,8 +101,7 @@
                 this.form.resource = event.target.value;
             },
             onLibraryInput(library) {
-                this.form.library_id = library.id;
-                this.form.library_name = library.name;
+                this.form.library = library;
             },
             isUnfulfilled() {
                 const isFulfilled = this.form.fulfilled;
@@ -112,8 +112,7 @@
                 const neither = this.form.action !== this.actions['lend'] && this.form.action != this.actions['borrow'];
 
                 if (neither) {
-                    this.form.library_id = null;
-                    this.form.library_name = null;
+                    this.form.library = null;
                 }
 
                 return !neither;
@@ -140,10 +139,9 @@
             getSelectableBorrowerTypes() {
                 let {library, ...borrowerTypes} = this.vcc_borrower_types;
                 return borrowerTypes;
-
             },
             submit() {
-                // FIXME: send post request to /
+                // FIXME: send post request to "/"
                 console.log(this.form);
             }
         },
