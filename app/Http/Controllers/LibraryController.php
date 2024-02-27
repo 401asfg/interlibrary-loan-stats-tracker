@@ -12,10 +12,19 @@ class LibraryController extends Controller
 
         if ($request->has('query')) {
             $data = Library::select('id', 'name')
-                            ->where('name', 'LIKE', '%' . $request->input('query') . '%')
-                            ->get();
+                             ->where('name', 'LIKE', '%' . $request->input('query') . '%')
+                             ->get();
         }
 
         return response()->json($data);
+    }
+
+    public function show($id) {
+        $name = Library::select('name')
+                         ->where('id', '=', $id)
+                         ->get()
+                         ->first();
+
+        return response()->json($name);
     }
 }

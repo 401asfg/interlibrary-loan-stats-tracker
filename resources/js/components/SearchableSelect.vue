@@ -68,7 +68,7 @@
                 this.selection = this.results[index];
                 this.query = this.selection.name;
 
-                this.$emit('input', this.selection);
+                this.$emit('input', this.selection.id);
             },
             queryDatabase() {
                 this.updateHover(0);

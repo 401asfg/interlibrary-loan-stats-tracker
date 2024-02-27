@@ -7,7 +7,7 @@
 
         @vite('resources/css/app.css')
 
-        @yield('scripts')
+        @stack('scripts')
 
         <title>@yield('title')</title>
     </head>

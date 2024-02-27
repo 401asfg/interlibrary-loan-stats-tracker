@@ -66,6 +66,11 @@
     import DynamicSelectorWithOther from './DynamicSelectorWithOther.vue';
     import SearchableSelect from './SearchableSelect.vue';
 
+    axios.defaults.headers.common = {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-TOKEN': window.csrf_token
+    };
+
     export default {
         name: "ILLRequestForm",
         props: [
@@ -82,7 +87,7 @@
                     unfulfilled_reason: null,
                     resource: null,
                     action: null,
-                    library: null,
+                    library_id: null,
                     vcc_borrower_type: this.vcc_borrower_types['library'],
                     vcc_borrower_notes: null,
                 },
@@ -101,8 +106,8 @@
             onResourceInput(event) {
                 this.form.resource = event.target.value;
             },
-            onLibraryInput(library) {
-                this.form.library = library;
+            onLibraryInput(library_id) {
+                this.form.library_id = library_id;
             },
             isUnfulfilled() {
                 const isFulfilled = this.form.fulfilled;
@@ -113,7 +118,7 @@
                 const neither = this.form.action !== this.actions['lend'] && this.form.action != this.actions['borrow'];
 
                 if (neither) {
-                    this.form.library = null;
+                    this.form.library_id = null;
                 }
 
                 return !neither;
@@ -142,8 +147,7 @@
                 return borrowerTypes;
             },
             submit() {
-                axios.post('/', this.form)
-                     .catch(error => console.log(error));
+                axios.post('/', this.form);
             }
         },
         components: {
