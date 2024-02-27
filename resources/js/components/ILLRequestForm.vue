@@ -1,75 +1,71 @@
 <!-- FIXME: implement 2 way bindings for all fields to replace @input and :initSelection with v-model -->
 
 <template>
-    <form @submit.prevent="submit">
+    <div>
+        <h2>Request Fulfilled</h2>
         <div>
-            <h2>Request Fulfilled</h2>
             <div>
-                <div>
-                    <div class="field-header">Date</div>
-                    <input type="date" v-model="form.request_date" required>
-                </div>
+                <div class="field-header">Date</div>
+                <input name="request_date" type="date" v-model="form.request_date" required>
+            </div>
 
-                <div>
-                    <div class="field-header">Fulfilled?</div>
-                    <input type="checkbox" :checked="true" v-model="form.fulfilled">
-                </div>
+            <div>
+                <div class="field-header">Fulfilled?</div>
+                <input name="fulfilled" type="checkbox" :checked="true" v-model="form.fulfilled">
+                <input type="hidden" name="fulfilled" v-model="form.fulfilled">
+            </div>
 
-                <div v-if="isUnfulfilled()">
-                    <div class="field-header">Reason</div>
-                    <DynamicSelectorWithOther :choices="unfulfilled_reasons" selectorName="Unfulfilled Reason" @input="onUnfulfilledReasonInput" :initSelection="form.unfulfilled_reason" />
-                </div>
+            <div v-if="isUnfulfilled()">
+                <div class="field-header">Reason</div>
+                <DynamicSelectorWithOther :choices="unfulfilled_reasons" selectorName="unfulfilled_reason" @input="onUnfulfilledReasonInput" :initSelection="form.unfulfilled_reason" />
             </div>
         </div>
+    </div>
 
+    <div>
+        <h2>Request Info</h2>
         <div>
-            <h2>Request Info</h2>
             <div>
-                <div>
-                    <div class="field-header">Resource</div>
-                    <DynamicSelectorWithOther :choices="resources" selectorName="Resource" @input="onResourceInput" :initSelection="form.resource" />
-                </div>
+                <div class="field-header">Resource</div>
+                <DynamicSelectorWithOther :choices="resources" selectorName="resource" @input="onResourceInput" :initSelection="form.resource" />
+            </div>
 
-                <div>
-                    <div class="field-header">Action</div>
-                    <DynamicSelector :choices="actions" :hiddenSlugs="getHiddenActionSlugs()" selectorName="Action" @input="onActionInput" :initSelection="form.action" />
-                </div>
+            <div>
+                <div class="field-header">Action</div>
+                <DynamicSelector :choices="actions" :hiddenSlugs="getHiddenActionSlugs()" selectorName="action" @input="onActionInput" :initSelection="form.action" />
             </div>
         </div>
+    </div>
 
-        <div v-if="hasAction()">
-            <h2>Parties Involved</h2>
-            <div>
-                <div v-if="isLendingOrBorrowing()">
-                    <div class="field-header">{{ getLibraryHeader() }}</div>
-                    <SearchableSelect databaseRoute="/libraries" @input="onLibraryInput" :initSelection="form.library" />
-                </div>
+    <div v-if="hasAction()">
+        <h2>Parties Involved</h2>
+        <div>
+            <div v-if="isLendingOrBorrowing()">
+                <div class="field-header">{{ getLibraryHeader() }}</div>
+                <SearchableSelect databaseRoute="/libraries" @input="onLibraryInput" :initSelection="form.library" />
+                <input v-if="hasLibrary()" type="hidden" name="library_id" v-model="form.library.id">
+            </div>
 
-                <div v-if="isBorrowingOrShipping()">
-                    <div class="field-header">VCC Borrower</div>
+            <div v-if="isBorrowingOrShipping()">
+                <div class="field-header">VCC Borrower</div>
 
-                    <DynamicSelector :choices="getSelectableBorrowerTypes()" selectorName="VCC Borrower Type" @input="onBorrowerTypeInput" :initSelection="form.vcc_borrower_type" />
-                    <textarea v-model="form.vcc_borrower_notes" placeholder="Notes..."></textarea>
-                </div>
+                <DynamicSelector :choices="getSelectableBorrowerTypes()" selectorName="vcc_borrower_type" @input="onBorrowerTypeInput" :initSelection="form.vcc_borrower_type" />
+                <textarea name="vcc_borrower_notes" v-model="form.vcc_borrower_notes" placeholder="Notes..."></textarea>
             </div>
         </div>
+    </div>
 
-        <div class="main-buttons-container">
-            <button type="submit" class="submit-button">Submit</button>
-        </div>
-    </form>
+    <input type="hidden" name="vcc_borrower_type" v-model="form.vcc_borrower_type">
+
+    <div class="main-buttons-container">
+        <button type="submit" class="submit-button">Submit</button>
+    </div>
 </template>
 
 <script>
-    import axios from 'axios';
     import DynamicSelector from './DynamicSelector.vue';
     import DynamicSelectorWithOther from './DynamicSelectorWithOther.vue';
     import SearchableSelect from './SearchableSelect.vue';
-
-    axios.defaults.headers.common = {
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-CSRF-TOKEN': window.csrf_token
-    };
 
     export default {
         name: "ILLRequestForm",
@@ -87,7 +83,7 @@
                     unfulfilled_reason: null,
                     resource: null,
                     action: null,
-                    library_id: null,
+                    library: null,
                     vcc_borrower_type: this.vcc_borrower_types['library'],
                     vcc_borrower_notes: null,
                 },
@@ -106,8 +102,8 @@
             onResourceInput(event) {
                 this.form.resource = event.target.value;
             },
-            onLibraryInput(library_id) {
-                this.form.library_id = library_id;
+            onLibraryInput(library) {
+                this.form.library = library;
             },
             isUnfulfilled() {
                 const isFulfilled = this.form.fulfilled;
@@ -116,11 +112,7 @@
             },
             isLendingOrBorrowing() {
                 const neither = this.form.action !== this.actions['lend'] && this.form.action != this.actions['borrow'];
-
-                if (neither) {
-                    this.form.library_id = null;
-                }
-
+                if (neither) this.form.library = null;
                 return !neither;
             },
             isBorrowingOrShipping() {
@@ -146,8 +138,8 @@
                 const {library, ...borrowerTypes} = this.vcc_borrower_types;
                 return borrowerTypes;
             },
-            submit() {
-                axios.post('/', this.form);
+            hasLibrary() {
+                return this.form.library !== null;
             }
         },
         components: {

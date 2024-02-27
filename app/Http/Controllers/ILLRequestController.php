@@ -20,7 +20,7 @@ class ILLRequestController extends Controller
     }
 
     public function store(Request $request) {
-        // FIXME: does this request need to have its fields validated?
+        // FIXME: this request needs to have its fields validated
         $illRequest = ILLRequest::create($request->all());
         $illRequest->save();
 
