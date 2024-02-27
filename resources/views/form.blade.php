@@ -11,7 +11,7 @@
 
     <form action="/" method="POST">
         @csrf
-        <ill-request-form
+        <ill-request-form-fields
             :actions='{{ json_encode($actions) }}'
             :vcc_borrower_types='{{ json_encode($vccBorrowerTypes) }}'
             :unfulfilled_reasons='{{ json_encode($unfulfilledReasons) }}'

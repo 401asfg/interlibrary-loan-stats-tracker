@@ -68,7 +68,7 @@
     import SearchableSelect from './SearchableSelect.vue';
 
     export default {
-        name: "ILLRequestForm",
+        name: "ILLRequestFormFields",
         props: [
             'actions',
             'vcc_borrower_types',

@@ -1,8 +1,8 @@
 import './bootstrap';
 
 import { createApp } from 'vue';
-import ILLRequestForm from './components/ILLRequestForm.vue';
+import ILLRequestFormFields from './components/ILLRequestFormFields.vue';
 
 const app = createApp({});
-app.component('ill-request-form', ILLRequestForm);
+app.component('ill-request-form-fields', ILLRequestFormFields);
 app.mount('#app');
