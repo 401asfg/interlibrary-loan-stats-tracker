@@ -21,12 +21,16 @@ use App\Http\Controllers\LibraryController;
 */
 
 Route::get('/', [ILLRequestController::class, 'index']);
-Route::get('/create', [ILLRequestController::class, 'create'])->name('create');
+Route::get('create', [ILLRequestController::class, 'create']);
 
 Route::post('/', [ILLRequestController::class, 'store']);
-Route::get('/show/{id}', [ILLRequestController::class, 'show'])->name('show');
+Route::get('/show/{id}', [ILLRequestController::class, 'show']);
+// FIXME: remove show from route
 
-Route::delete('/{id}', [ILLRequestController::class, 'destroy']);
+Route::delete('{id}', [ILLRequestController::class, 'destroy']);
 
-Route::get('/libraries', [LibraryController::class, 'index'])->name('libraries');
-Route::get('/libraries/show/{id}', [LibraryController::class, 'show'])->name('libraries/show');
+Route::get('{id}/edit', [ILLRequestController::class, 'edit']);
+Route::put('{id}', [ILLRequestController::class, 'update']);
+
+Route::get('libraries', [LibraryController::class, 'index'])->name('libraries');
+Route::get('libraries/{id}', [LibraryController::class, 'show']);

@@ -11,7 +11,7 @@
 
             <div>
                 <div class="field-header">Fulfilled?</div>
-                <input name="fulfilled" type="checkbox" :checked="true" v-model="form.fulfilled">
+                <input name="fulfilled" type="checkbox" v-model="form.fulfilled">
                 <input type="hidden" name="fulfilled" v-model="form.fulfilled">
             </div>
 
@@ -42,7 +42,7 @@
         <div>
             <div v-if="isLendingOrBorrowing()">
                 <div class="field-header">{{ getLibraryHeader() }}</div>
-                <SearchableSelect databaseRoute="/libraries" @input="onLibraryInput" :initSelection="form.library" />
+                <SearchableSelect :databaseRoute="libraries_url" @input="onLibraryInput" :initSelection="form.library" />
                 <input v-if="hasLibrary()" type="hidden" name="library_id" v-model="form.library.id">
             </div>
 
@@ -73,9 +73,30 @@
             'actions',
             'vcc_borrower_types',
             'unfulfilled_reasons',
-            'resources'
+            'resources',
+            'ill_request',
+            'library_name',
+            'libraries_url'
         ],
         data() {
+            if (this.ill_request) {
+                const prevForm = { ...this.ill_request };
+
+                if (this.library_name) {
+                    const libraryId = this.ill_request.library_id;
+
+                    prevForm.library = {
+                        id: libraryId,
+                        name: this.library_name
+                    };
+                } else {
+                    prevForm.library = null;
+                }
+
+                delete prevForm.library_id;
+                return { form: prevForm };
+            }
+
             return {
                 form: {
                     request_date: new Date().toISOString().split('T')[0],
@@ -86,7 +107,7 @@
                     library: null,
                     vcc_borrower_type: this.vcc_borrower_types['library'],
                     vcc_borrower_notes: null,
-                },
+                }
             }
         },
         methods: {
@@ -106,9 +127,10 @@
                 this.form.library = library;
             },
             isUnfulfilled() {
+                // FIXME: normalize true values for fulfilled
                 const isFulfilled = this.form.fulfilled;
-                if (isFulfilled) this.form.unfulfilled_reason = null;
-                return !isFulfilled;
+                if (isFulfilled === "true" && isFulfilled === true) this.form.unfulfilled_reason = null;
+                return isFulfilled !== "true" && isFulfilled !== true;
             },
             isLendingOrBorrowing() {
                 const neither = this.form.action !== this.actions['lend'] && this.form.action != this.actions['borrow'];

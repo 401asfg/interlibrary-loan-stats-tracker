@@ -9,7 +9,8 @@
         <h2>Summary</h2>
 
         <div>
-            @if ($illRequest->fulfilled)
+            {{-- FIXME: normalize true values for fulfilled --}}
+            @if ($illRequest->fulfilled === "true" || $illRequest->fulfilled === true)
                 <div class="field-header"><strong>Request was Fulfilled</strong></div>
             @else
                 <div class="field-header"><strong>Request was not Fulfilled</strong></div>
@@ -58,6 +59,7 @@
 
     <div class="main-buttons-container">
         <button onclick="window.location.href='/'">Submit Another ILL Request</button>
+        <button onclick="window.location.href='/{{ $illRequest->id }}/edit'">Edit Record</button>
 
         {{-- FIXME: better way of making PUT and DELETE requests? --}}
         <form action="/{{ $illRequest->id }}" method="POST">

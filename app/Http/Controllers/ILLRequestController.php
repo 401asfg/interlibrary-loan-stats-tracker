@@ -13,10 +13,7 @@ class ILLRequestController extends Controller
     }
 
     public function create() {
-        return view('form')->with('actions', ILLRequest::ACTIONS)
-                            ->with('vccBorrowerTypes', ILLRequest::VCC_BORROWER_TYPES)
-                            ->with('unfulfilledReasons', ILLRequest::UNFULFILLED_REASONS)
-                            ->with('resources', ILLRequest::RESOURCES);
+        return ILLRequestController::getFormView();
     }
 
     public function store(Request $request) {
@@ -27,25 +24,49 @@ class ILLRequestController extends Controller
         return redirect('/show/' . $illRequest->id);
     }
 
-    public function show($id) {
+    public function show(string $id) {
         $illRequest = ILLRequest::findOrFail($id);
 
         $libraryId = $illRequest->library_id;
-        $libraryName = null;
-
-        if ($libraryId) {
-            $request = Request::create('/libraries/show/' . $libraryId, 'GET');
-            $response = Route::dispatch($request);
-            $libraryName = $response->getData()->name;
-        }
+        $libraryName = ILLRequestController::getLibraryName($libraryId);
 
         return view('submission')->with('illRequest', $illRequest)
                                  ->with('libraryName', $libraryName);
     }
 
-    public function destroy($id) {
+    public function destroy(string $id) {
         $illRequest = ILLRequest::findOrFail($id);
         $illRequest->delete();
         return redirect('/create')->with('status', 'Last submission deleted!');
+    }
+
+    public function edit(string $id) {
+        $illRequest = ILLRequest::findOrFail($id);
+        $libraryId = $illRequest->library_id;
+        $libraryName = IllRequestController::getLibraryName($libraryId);
+        return ILLRequestController::getFormView($illRequest, $libraryName);
+    }
+
+    public function update(Request $request, string $id) {
+        $illRequest = ILLRequest::findOrFail($id);
+        $illRequest->update($request->all());
+        return redirect('/show/' . $id);
+    }
+
+    private function getFormView(ILLRequest $illRequest = null, string $libraryName = null) {
+        return view('form')->with('actions', ILLRequest::ACTIONS)
+                           ->with('vccBorrowerTypes', ILLRequest::VCC_BORROWER_TYPES)
+                           ->with('unfulfilledReasons', ILLRequest::UNFULFILLED_REASONS)
+                           ->with('resources', ILLRequest::RESOURCES)
+                           ->with('illRequest', $illRequest)
+                           ->with('libraryName', $libraryName);
+    }
+
+    private function getLibraryName($libraryId) {
+        if (!$libraryId) return null;
+
+        $request = Request::create('/libraries/' . $libraryId, 'GET');
+        $response = Route::dispatch($request);
+        return $response->getData()->name;
     }
 }
