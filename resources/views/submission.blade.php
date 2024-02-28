@@ -61,7 +61,6 @@
         <button onclick="window.location.href='/'">Submit Another ILL Request</button>
         <button onclick="window.location.href='/{{ $illRequest->id }}/edit'">Edit Record</button>
 
-        {{-- FIXME: better way of making PUT and DELETE requests? --}}
         <form action="/{{ $illRequest->id }}" method="POST">
             @csrf
             @method("DELETE")

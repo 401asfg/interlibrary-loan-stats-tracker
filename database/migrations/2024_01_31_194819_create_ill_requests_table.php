@@ -31,7 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // FIXME: do we need to drop the foreign key?
         Schema::dropIfExists('ill_requests');
     }
 };

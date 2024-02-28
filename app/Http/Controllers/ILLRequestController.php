@@ -18,7 +18,6 @@ class ILLRequestController extends Controller
     }
 
     public function store(Request $request) {
-        // FIXME: this request needs to have its fields validated
         $validator = ILLRequestController::makeILLRequestFieldsValidator($request->all());
 
         if ($validator->fails()) return $validator->errors();
