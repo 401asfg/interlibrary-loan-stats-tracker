@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
 use App\Models\ILLRequest;
 
 class ILLRequestController extends Controller
@@ -18,9 +19,12 @@ class ILLRequestController extends Controller
 
     public function store(Request $request) {
         // FIXME: this request needs to have its fields validated
-        $illRequest = ILLRequest::create($request->all());
-        $illRequest->save();
+        $validator = ILLRequestController::makeILLRequestFieldsValidator($request->all());
 
+        if ($validator->fails()) return $validator->errors();
+
+        $illRequest = ILLRequest::create($validator->validated());
+        $illRequest->save();
         return redirect('/show/' . $illRequest->id);
     }
 
@@ -48,12 +52,16 @@ class ILLRequestController extends Controller
     }
 
     public function update(Request $request, string $id) {
+        $validator = ILLRequestController::makeILLRequestFieldsValidator($request->all());
+
+        if ($validator->fails()) return $validator->errors();
+
         $illRequest = ILLRequest::findOrFail($id);
-        $illRequest->update($request->all());
+        $illRequest->update($validator->validated());
         return redirect('/show/' . $id);
     }
 
-    private function getFormView(ILLRequest $illRequest = null, string $libraryName = null) {
+    private static function getFormView(ILLRequest $illRequest = null, string $libraryName = null) {
         return view('form')->with('actions', ILLRequest::ACTIONS)
                            ->with('vccBorrowerTypes', ILLRequest::VCC_BORROWER_TYPES)
                            ->with('unfulfilledReasons', ILLRequest::UNFULFILLED_REASONS)
@@ -62,11 +70,24 @@ class ILLRequestController extends Controller
                            ->with('libraryName', $libraryName);
     }
 
-    private function getLibraryName($libraryId) {
+    private static function getLibraryName($libraryId) {
         if (!$libraryId) return null;
 
         $request = Request::create('/libraries/' . $libraryId, 'GET');
         $response = Route::dispatch($request);
         return $response->getData()->name;
+    }
+
+    private static function makeILLRequestFieldsValidator($fields) {
+        return Validator::make($fields, [
+            'request_date' => 'required|date',
+            'fulfilled' => 'required|in:true,false',
+            'unfulfilled_reason' => 'nullable|string',
+            'resource' => 'required|string',
+            'action' => 'required|in:' . implode(',', ILLRequest::ACTIONS),
+            'library_id' => 'nullable|exists:libraries,id',
+            'vcc_borrower_type' => 'required|in:' . implode(',', ILLRequest::VCC_BORROWER_TYPES),
+            'vcc_borrower_notes' => 'nullable|string'
+        ]);
     }
 }
