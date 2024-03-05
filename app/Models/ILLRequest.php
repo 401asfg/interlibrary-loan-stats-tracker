@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class ILLRequest extends Model
 {
@@ -47,4 +49,16 @@ class ILLRequest extends Model
         'vcc_borrower_type',
         'vcc_borrower_notes'
     ];
+
+    public function getLibraryName(): string|null
+    {
+        $libraryId = $this->library_id;
+
+        if (!$libraryId)
+            return null;
+
+        $request = Request::create('/libraries/' . $libraryId, 'GET');
+        $response = Route::dispatch($request);
+        return $response->getData()->name;
+    }
 }
