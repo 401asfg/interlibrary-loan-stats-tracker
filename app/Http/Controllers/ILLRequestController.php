@@ -23,7 +23,7 @@ class ILLRequestController extends Controller
         $validator = ILLRequestController::makeILLRequestFieldsValidator($request->all());
 
         if ($validator->fails())
-            return $validator->errors();
+            return response()->json($validator->errors(), 422);
 
         $illRequest = ILLRequest::create($validator->validated());
         $illRequest->save();
@@ -58,7 +58,7 @@ class ILLRequestController extends Controller
         $validator = ILLRequestController::makeILLRequestFieldsValidator($request->all());
 
         if ($validator->fails())
-            return $validator->errors();
+            return response()->json($validator->errors(), 422);
 
         $illRequest = ILLRequest::findOrFail($id);
         $illRequest->update($validator->validated());

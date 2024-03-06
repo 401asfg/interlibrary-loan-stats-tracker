@@ -8,8 +8,6 @@ use Carbon\Carbon;
 
 class ILLRequestTest extends TestCase
 {
-    // TODO: test migration up and down
-
     public function testGetLibraryNameWithNullId(): void
     {
         $this->assertGetsLibraryName(null, null);
