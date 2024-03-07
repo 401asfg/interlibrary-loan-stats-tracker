@@ -276,7 +276,7 @@ class ILLRequestsAPITest extends TestCase
         );
     }
 
-    public function testStoreNullVCCBorrowerType(): void
+    public function testStoreNullVccBorrowerType(): void
     {
         $this->assertPostFailed(
             new MockILLRequest(
@@ -285,7 +285,7 @@ class ILLRequestsAPITest extends TestCase
         );
     }
 
-    public function testStoreNullVCCBorrowerNotes(): void
+    public function testStoreNullVccBorrowerNotes(): void
     {
         $this->assertPostSuccessful(
             new MockILLRequest(
@@ -487,7 +487,7 @@ class ILLRequestsAPITest extends TestCase
         );
     }
 
-    public function testUpdateNullVCCBorrowerType(): void
+    public function testUpdateNullVccBorrowerType(): void
     {
         $this->assertPutFailed(
             new MockILLRequest(
@@ -496,7 +496,7 @@ class ILLRequestsAPITest extends TestCase
         );
     }
 
-    public function testUpdateNullVCCBorrowerNotes(): void
+    public function testUpdateNullVccBorrowerNotes(): void
     {
         $this->assertPutSuccessful(
             new MockILLRequest(
