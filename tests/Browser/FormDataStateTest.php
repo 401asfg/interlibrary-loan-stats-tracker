@@ -1,14 +1,16 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Browser;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Laravel\Dusk\Browser;
+use Tests\DuskTestCase;
 
-class CorrectFormDataStateTest extends TestCase
+class FormDataStateTest extends DuskTestCase
 {
-    public function testDefaultDateIsToday(): void
+    use DatabaseMigrations;
+
+    public function testInitialValues(): void
     {
         // TODO: implement
     }
@@ -43,7 +45,7 @@ class CorrectFormDataStateTest extends TestCase
         // TODO: implement
     }
 
-    public function testVCCBorrowerFieldsClearOnLendAction(): void
+    public function testVccBorrowerFieldsClearOnLendAction(): void
     {
         // TODO: implement
     }

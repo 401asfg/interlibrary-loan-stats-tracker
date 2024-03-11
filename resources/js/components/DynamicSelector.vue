@@ -3,7 +3,7 @@
         <div v-for="[slug, displayName] of Object.entries(choices)">
             <div v-if="notHidden(slug)">
                 <!-- FIXME: bad practice to tie v-model to init value that will be outdated? -->
-                <input type="radio" :name="selectorName" :id="slug" :value="displayName" @input="onInput" v-model="selection" required>
+                <input type="radio" :name="selectorName" :id="slug" :value="displayName" @input="onInput" v-model="selection" :dusk="selectorName + '_' + slug" required>
                 <label :for="slug">{{ displayName }}</label>
             </div>
         </div>

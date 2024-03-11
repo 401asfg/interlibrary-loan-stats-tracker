@@ -2,7 +2,7 @@
     <div>
         <DynamicSelector :choices="setWithOther()" :selectorName="selectorName" :initSelection="getInitButtonSelection()" @input="onSelectorInput" />
         <!-- FIXME: bad practice to tie v-model to init value that will be outdated? -->
-        <textarea v-if="otherSelected" :name="selectorName" placeholder="Describe..." @input="onTextInput" v-model="selection" required></textarea>
+        <textarea v-if="otherSelected" :name="selectorName" placeholder="Describe..." @input="onTextInput" v-model="selection" :dusk="selectorName + '_description'" required></textarea>
     </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input type="text" placeholder="Search..." v-model="query" @input="queryDatabase" @focus="startSearch" @blur="endSearch" required>
+        <input type="text" placeholder="Search..." v-model="query" @input="queryDatabase" @focus="startSearch" @blur="endSearch" dusk="library" required>
         <div class="options-dropdown" v-if="isSearching()">
             <ul v-if="hasResults()">
                 <li v-for="(result, index) in results" :class="getDropdownItemClass(index)" @mouseenter="updateHover(index)" @mousedown="chooseSelection(index)">{{ result.name }}</li>

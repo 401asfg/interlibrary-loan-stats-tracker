@@ -6,18 +6,18 @@
         <div>
             <div>
                 <div class="field-header">Date</div>
-                <input name="request_date" type="date" v-model="form.request_date" required>
+                <input name="request_date" type="date" v-model="form.request_date" dusk="request_date" required>
             </div>
 
             <div>
                 <div class="field-header">Fulfilled?</div>
-                <input name="fulfilled" type="checkbox" v-model="form.fulfilled">
+                <input name="fulfilled" type="checkbox" v-model="form.fulfilled" dusk="fulfilled">
                 <input type="hidden" name="fulfilled" v-model="form.fulfilled">
             </div>
 
             <div v-if="isUnfulfilled()">
                 <div class="field-header">Reason</div>
-                <DynamicSelectorWithOther :choices="unfulfilled_reasons" selectorName="unfulfilled_reason" @input="onUnfulfilledReasonInput" :initSelection="form.unfulfilled_reason" />
+                <DynamicSelectorWithOther :choices="unfulfilled_reasons" selectorName="unfulfilled_reason" @input="onUnfulfilledReasonInput" :initSelection="form.unfulfilled_reason" dusk="unfulfilled_reason" />
             </div>
         </div>
     </div>
@@ -27,12 +27,12 @@
         <div>
             <div>
                 <div class="field-header">Resource</div>
-                <DynamicSelectorWithOther :choices="resources" selectorName="resource" @input="onResourceInput" :initSelection="form.resource" />
+                <DynamicSelectorWithOther :choices="resources" selectorName="resource" @input="onResourceInput" :initSelection="form.resource" dusk="resource" />
             </div>
 
             <div>
                 <div class="field-header">Action</div>
-                <DynamicSelector :choices="actions" :hiddenSlugs="getHiddenActionSlugs()" selectorName="action" @input="onActionInput" :initSelection="form.action" />
+                <DynamicSelector :choices="actions" :hiddenSlugs="getHiddenActionSlugs()" selectorName="action" @input="onActionInput" :initSelection="form.action" dusk="action" />
             </div>
         </div>
     </div>
@@ -49,8 +49,8 @@
             <div v-if="isBorrowingOrShipping()">
                 <div class="field-header">VCC Borrower</div>
 
-                <DynamicSelector :choices="getSelectableBorrowerTypes()" selectorName="vcc_borrower_type" @input="onBorrowerTypeInput" :initSelection="form.vcc_borrower_type" />
-                <textarea name="vcc_borrower_notes" v-model="form.vcc_borrower_notes" placeholder="Notes..."></textarea>
+                <DynamicSelector :choices="getSelectableBorrowerTypes()" selectorName="vcc_borrower_type" @input="onBorrowerTypeInput" :initSelection="form.vcc_borrower_type" dusk="vcc_borrower_type" />
+                <textarea name="vcc_borrower_notes" v-model="form.vcc_borrower_notes" placeholder="Notes..." dusk="vcc_borrower_notes"></textarea>
             </div>
         </div>
     </div>
