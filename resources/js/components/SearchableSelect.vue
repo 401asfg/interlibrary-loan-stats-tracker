@@ -1,9 +1,9 @@
 <template>
     <div>
-        <input type="text" placeholder="Search..." v-model="query" @input="queryDatabase" @focus="startSearch" @blur="endSearch" dusk="library" required>
+        <input type="text" placeholder="Search..." v-model="query" @input="queryDatabase" @focus="startSearch" @blur="endSearch" dusk="searchable_select_input" required>
         <div class="options-dropdown" v-if="isSearching()">
             <ul v-if="hasResults()">
-                <li v-for="(result, index) in results" :class="getDropdownItemClass(index)" @mouseenter="updateHover(index)" @mousedown="chooseSelection(index)">{{ result.name }}</li>
+                <li v-for="(result, index) in results" :class="getDropdownItemClass(index)" @mouseenter="updateHover(index)" @mousedown="chooseSelection(index)" :dusk="'searchable_select_result_' + index">{{ result.name }}</li>
             </ul>
             <ul v-if="!hasResults()">
                 <li>No results found</li>

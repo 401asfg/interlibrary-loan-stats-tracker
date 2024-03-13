@@ -8,7 +8,10 @@ use Tests\DuskTestCase;
 
 class EditRecordTest extends DuskTestCase
 {
-    use DatabaseMigrations;
+    protected function createBrowser($driver)
+    {
+        return new Browser($driver);
+    }
 
     public function testEditLastAddedRecord(): void
     {

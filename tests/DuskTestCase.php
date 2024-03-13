@@ -6,7 +6,9 @@ use Illuminate\Support\Collection;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Illuminate\Support\Facades\Artisan;
 use Laravel\Dusk\TestCase as BaseTestCase;
+use Laravel\Dusk\Browser;
 
 abstract class DuskTestCase extends BaseTestCase
 {
@@ -22,6 +24,34 @@ abstract class DuskTestCase extends BaseTestCase
         if (!static::runningInSail()) {
             static::startChromeDriver();
         }
+    }
+
+    protected abstract function createBrowser($driver);
+
+    protected function newBrowser($driver)
+    {
+        $browser = $this->createBrowser($driver);
+        return $browser->visit('/');
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Artisan::call('migrate:fresh');
+
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/');
+        });
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $this->browse(function (Browser $browser) {
+            $browser->driver->manage()->deleteAllCookies();
+            $browser->refresh();
+        });
     }
 
     /**

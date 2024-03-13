@@ -78,22 +78,9 @@ class Browser extends \Laravel\Dusk\Browser
 
 class FormFieldStatesTest extends DuskTestCase
 {
-    use DatabaseMigrations;
-
-    protected function newBrowser($driver)
+    protected function createBrowser($driver)
     {
-        $browser = new Browser($driver);
-        return $browser->visit('/');
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->browse(function (Browser $browser) {
-            $browser->driver->manage()->deleteAllCookies();
-            $browser->refresh();
-        });
+        return new Browser($driver);
     }
 
     public function testInitialVisibility(): void
@@ -164,7 +151,7 @@ class FormFieldStatesTest extends DuskTestCase
                 ->assertSee('Parties Involved')
                 ->assertSee('Lending Library')
                 ->assertMissing('Borrowing Library')
-                ->assertValue('@library', '')
+                ->assertValue('@searchable_select_input', '')
                 ->assertSee('VCC Borrower')
                 ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['student'])
                 ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['employee']);
@@ -178,7 +165,7 @@ class FormFieldStatesTest extends DuskTestCase
                 ->assertSee('Parties Involved')
                 ->assertMissing('Lending Library')
                 ->assertSee('Borrowing Library')
-                ->assertValue('@library', '')
+                ->assertValue('@searchable_select_input', '')
                 ->assertMissing('VCC Borrower')
                 ->assertMissing('@vcc_borrower_type_student')
                 ->assertMissing('@vcc_borrower_type_employee');
@@ -192,7 +179,7 @@ class FormFieldStatesTest extends DuskTestCase
                 ->assertMissing('Parties Involved')
                 ->assertMissing('Lending Library')
                 ->assertMissing('Borrowing Library')
-                ->assertMissing('@library')
+                ->assertMissing('@searchable_select_input')
                 ->assertSee('VCC Borrower')
                 ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['student'])
                 ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['employee']);

@@ -8,7 +8,10 @@ use Tests\DuskTestCase;
 
 class DeleteRecordTest extends DuskTestCase
 {
-    use DatabaseMigrations;
+    protected function createBrowser($driver)
+    {
+        return new Browser($driver);
+    }
 
     public function testDeleteLastAddedRecord(): void
     {

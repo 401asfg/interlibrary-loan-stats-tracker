@@ -8,7 +8,10 @@ use Tests\DuskTestCase;
 
 class SearchableSelectTest extends DuskTestCase
 {
-    use DatabaseMigrations;
+    protected function createBrowser($driver)
+    {
+        return new Browser($driver);
+    }
 
     // TODO: write tests
 }
