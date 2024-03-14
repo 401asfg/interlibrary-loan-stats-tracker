@@ -1,3 +1,5 @@
+<!-- Author: Michael Allan -->
+
 <!-- FIXME: implement 2 way bindings for all fields to replace @input and :initSelection with v-model -->
 
 <template>

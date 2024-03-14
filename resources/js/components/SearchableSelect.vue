@@ -1,3 +1,5 @@
+<!-- Author: Michael Allan -->
+
 <template>
     <div>
         <input type="text" placeholder="Search..." v-model="query" @input="queryDatabase" @focus="startSearch" @blur="endSearch" dusk="searchable_select_input" required>

@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Author: Michael Allan
+ */
+
 namespace Tests;
 
 use Illuminate\Support\Collection;

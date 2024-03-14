@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Author: Michael Allan
+ */
+
 namespace App\View\Components;
 
 use Closure;

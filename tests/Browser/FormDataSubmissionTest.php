@@ -1,10 +1,93 @@
 <?php
 
+/*
+ * Author: Michael Allan
+ */
+
 namespace Tests\Browser;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Laravel\Dusk\Browser;
+use App\Models\ILLRequest;
 use Tests\DuskTestCase;
+
+const SHOW_PAGE_TITLE = 'Submission Successful!';
+const UNFULFILLED_REASON_DESCRIPTION = 'unfulfilled reason description';
+const RESOURCE_DESCRIPTION = 'resource description';
+const VCC_BORROWER_NOTES = 'borrower notes';
+const LIBRARY_NAME = 'University of British Columbia';
+const LIBRARY_ID = 58;
+
+class Browser extends \Laravel\Dusk\Browser
+{
+    public function fillOutForm()
+    {
+        return $this->click('@resource_book')
+            ->click('@action_borrow')
+            ->type('@searchable_select_input', 'british')
+            ->waitFor('@searchable_select_result_0')
+            ->click('@searchable_select_result_0')
+            ->click('@vcc_borrower_type_student');
+    }
+
+    public function submit()
+    {
+        return $this->click('@submit')
+            ->waitForText(SHOW_PAGE_TITLE);
+    }
+
+    public function clickUnfulfilledReason($reason)
+    {
+        return $this->click('@fulfilled')
+            ->click('@unfulfilled_reason_' . $reason);
+    }
+
+    public function clickUnfulfilledReasonUnavailable()
+    {
+        return $this->clickUnfulfilledReason('unavailable');
+    }
+
+    public function typeUnfulfilledReasonOther()
+    {
+        return $this->clickUnfulfilledReason('other')
+            ->type('@unfulfilled_reason_description', UNFULFILLED_REASON_DESCRIPTION);
+    }
+
+    public function typeVCCBorrowerNotes()
+    {
+        return $this->type('@vcc_borrower_notes', VCC_BORROWER_NOTES);
+    }
+
+    public function selectOtherResource()
+    {
+        return $this->click('@resource_other')
+            ->type('@resource_description', RESOURCE_DESCRIPTION);
+    }
+    public function selectLendAction()
+    {
+        return $this->click('@action_lend');
+    }
+
+    public function selectShipToMeAction()
+    {
+        return $this->click('@action_ship-to-me');
+    }
+
+    public function assertResourcActionBorrowerType($resource, $action, $borrowerType)
+    {
+        return $this->assertSee($resource)
+            ->assertSee($action)
+            ->assertSee($borrowerType);
+    }
+
+    public function assertStatus($fulfilled, $unfulfilledReason, $resource, $action, $vccBorrowerType, $vccBorrowerNotes, $libraryName)
+    {
+        $browser = $fulfilled ? $this->assertVisible('@fulfilled') : $this->assertVisible('@unfulfilled');
+        $browser = $unfulfilledReason ? $browser->assertVisible('@unfulfilled_reason') : $browser->assertMissing('@unfulfilled_reason');
+        $browser = $browser->assertResourcActionBorrowerType($resource, $action, $vccBorrowerType);
+        $browser = $libraryName ? $browser->assertSee($libraryName) : $browser->assertDontSee($libraryName);
+        $browser = $vccBorrowerNotes ? $browser->assertVisible('@vcc_borrower_notes') : $browser->assertMissing('@vcc_borrower_notes');
+        return $browser;
+    }
+}
 
 class FormDataSubmissionTest extends DuskTestCase
 {
@@ -15,183 +98,611 @@ class FormDataSubmissionTest extends DuskTestCase
         return new Browser($driver);
     }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->browse(function (Browser $browser) {
+            $browser->fillOutForm();
+        });
+    }
+
     public function testFulfilledBorrowBookNoNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->submit(),
+                true,
+                null,
+                'book',
+                'borrow',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
     public function testFulfilledBorrowBookWithNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->typeVCCBorrowerNotes()
+                    ->submit(),
+                true,
+                null,
+                'book',
+                'borrow',
+                'student',
+                VCC_BORROWER_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
     public function testFulfilledBorrowOtherNoNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->selectOtherResource()
+                    ->submit(),
+                true,
+                null,
+                RESOURCE_DESCRIPTION,
+                'borrow',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
     public function testFulfilledBorrowOtherWithNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->selectOtherResource()
+                    ->typeVCCBorrowerNotes()
+                    ->submit(),
+                true,
+                null,
+                RESOURCE_DESCRIPTION,
+                'borrow',
+                'student',
+                VCC_BORROWER_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
-    public function testFulfilledLendBookNoNotes()
+    public function testFulfilledLendBook()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->selectLendAction()
+                    ->submit(),
+                true,
+                null,
+                'book',
+                'lend',
+                'library',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
-    public function testFulfilledLendBookWithNotes()
+    public function testFulfilledLendOther()
     {
-        // TODO: implement
-    }
-
-    public function testFulfilledLendOtherNoNotes()
-    {
-        // TODO: implement
-    }
-
-    public function testFulfilledLendOtherWithNotes()
-    {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->selectLendAction()
+                    ->selectOtherResource()
+                    ->submit(),
+                true,
+                null,
+                RESOURCE_DESCRIPTION,
+                'lend',
+                'library',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
     public function testFulfilledShipToMeBookNoNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->selectShipToMeAction()
+                    ->submit(),
+                true,
+                null,
+                'book',
+                'ship-to-me',
+                'student',
+                null,
+                null,
+                null
+            );
+        });
     }
 
     public function testFulfilledShipToMeBookWithNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->selectShipToMeAction()
+                    ->typeVCCBorrowerNotes()
+                    ->submit(),
+                true,
+                null,
+                'book',
+                'ship-to-me',
+                'student',
+                VCC_BORROWER_NOTES,
+                null,
+                null
+            );
+        });
     }
 
     public function testFulfilledShipToMeOtherNoNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->selectShipToMeAction()
+                    ->selectOtherResource()
+                    ->submit(),
+                true,
+                null,
+                RESOURCE_DESCRIPTION,
+                'ship-to-me',
+                'student',
+                null,
+                null,
+                null
+            );
+        });
     }
 
     public function testFulfilledShipToMeOtherWithNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->selectShipToMeAction()
+                    ->selectOtherResource()
+                    ->typeVCCBorrowerNotes()
+                    ->submit(),
+                true,
+                null,
+                RESOURCE_DESCRIPTION,
+                'ship-to-me',
+                'student',
+                VCC_BORROWER_NOTES,
+                null,
+                null
+            );
+        });
     }
 
     public function testUnfulfilledUnavailableBorrowBookNoNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->clickUnfulfilledReasonUnavailable()
+                    ->submit(),
+                false,
+                'unavailable',
+                'book',
+                'borrow',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
     public function testUnfulfilledUnavailableBorrowBookWithNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->clickUnfulfilledReasonUnavailable()
+                    ->typeVCCBorrowerNotes()
+                    ->submit(),
+                false,
+                'unavailable',
+                'book',
+                'borrow',
+                'student',
+                VCC_BORROWER_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
     public function testUnfulfilledUnavailableBorrowOtherNoNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->clickUnfulfilledReasonUnavailable()
+                    ->selectOtherResource()
+                    ->submit(),
+                false,
+                'unavailable',
+                RESOURCE_DESCRIPTION,
+                'borrow',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
     public function testUnfulfilledUnavailableBorrowOtherWithNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->clickUnfulfilledReasonUnavailable()
+                    ->selectOtherResource()
+                    ->typeVCCBorrowerNotes()
+                    ->submit(),
+                false,
+                'unavailable',
+                RESOURCE_DESCRIPTION,
+                'borrow',
+                'student',
+                VCC_BORROWER_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
-    public function testUnfulfilledUnavailableLendBookNoNotes()
+    public function testUnfulfilledUnavailableLendBook()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->clickUnfulfilledReasonUnavailable()
+                    ->selectLendAction()
+                    ->submit(),
+                false,
+                'unavailable',
+                'book',
+                'lend',
+                'library',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
-    public function testUnfulfilledUnavailableLendBookWithNotes()
+    public function testUnfulfilledUnavailableLendOther()
     {
-        // TODO: implement
-    }
-
-    public function testUnfulfilledUnavailableLendOtherNoNotes()
-    {
-        // TODO: implement
-    }
-
-    public function testUnfulfilledUnavailableLendOtherWithNotes()
-    {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->clickUnfulfilledReasonUnavailable()
+                    ->selectLendAction()
+                    ->selectOtherResource()
+                    ->submit(),
+                false,
+                'unavailable',
+                RESOURCE_DESCRIPTION,
+                'lend',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
     public function testUnfulfilledUnavailableShipToMeBookNoNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->clickUnfulfilledReasonUnavailable()
+                    ->selectShipToMeAction()
+                    ->submit(),
+                false,
+                'unavailable',
+                'book',
+                'ship-to-me',
+                'student',
+                null,
+                null,
+                null
+            );
+        });
     }
 
     public function testUnfulfilledUnavailableShipToMeBookWithNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->clickUnfulfilledReasonUnavailable()
+                    ->selectShipToMeAction()
+                    ->typeVCCBorrowerNotes()
+                    ->submit(),
+                false,
+                'unavailable',
+                'book',
+                'ship-to-me',
+                'student',
+                VCC_BORROWER_NOTES,
+                null,
+                null
+            );
+        });
     }
 
     public function testUnfulfilledUnavailableShipToMeOtherNoNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->clickUnfulfilledReasonUnavailable()
+                    ->selectShipToMeAction()
+                    ->selectOtherResource()
+                    ->submit(),
+                false,
+                'unavailable',
+                RESOURCE_DESCRIPTION,
+                'ship-to-me',
+                'student',
+                null,
+                null,
+                null
+            );
+        });
     }
 
     public function testUnfulfilledUnavailableShipToMeOtherWithNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->clickUnfulfilledReasonUnavailable()
+                    ->selectShipToMeAction()
+                    ->selectOtherResource()
+                    ->typeVCCBorrowerNotes()
+                    ->submit(),
+                false,
+                'unavailable',
+                RESOURCE_DESCRIPTION,
+                'ship-to-me',
+                'student',
+                VCC_BORROWER_NOTES,
+                null,
+                null
+            );
+        });
     }
 
     public function testUnfulfilledOtherBorrowBookNoNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->typeUnfulfilledReasonOther()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                'book',
+                'borrow',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
     public function testUnfulfilledOtherBorrowBookWithNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->typeUnfulfilledReasonOther()
+                    ->typeVCCBorrowerNotes()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                'book',
+                'borrow',
+                'student',
+                VCC_BORROWER_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
     public function testUnfulfilledOtherBorrowOtherNoNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->typeUnfulfilledReasonOther()
+                    ->selectOtherResource()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                RESOURCE_DESCRIPTION,
+                'borrow',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
     public function testUnfulfilledOtherBorrowOtherWithNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->typeUnfulfilledReasonOther()
+                    ->selectOtherResource()
+                    ->typeVCCBorrowerNotes()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                RESOURCE_DESCRIPTION,
+                'borrow',
+                'student',
+                VCC_BORROWER_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
-    public function testUnfulfilledOtherLendBookNoNotes()
+    public function testUnfulfilledOtherLendBook()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->typeUnfulfilledReasonOther()
+                    ->selectLendAction()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                'book',
+                'lend',
+                'library',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
-    public function testUnfulfilledOtherLendBookWithNotes()
+    public function testUnfulfilledOtherLendOther()
     {
-        // TODO: implement
-    }
-
-    public function testUnfulfilledOtherLendOtherNoNotes()
-    {
-        // TODO: implement
-    }
-
-    public function testUnfulfilledOtherLendOtherWithNotes()
-    {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->typeUnfulfilledReasonOther()
+                    ->selectLendAction()
+                    ->selectOtherResource()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                RESOURCE_DESCRIPTION,
+                'lend',
+                'library',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
     }
 
     public function testUnfulfilledOtherShipToMeBookNoNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->typeUnfulfilledReasonOther()
+                    ->selectShipToMeAction()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                'book',
+                'ship-to-me',
+                'student',
+                null,
+                null,
+                null
+            );
+        });
     }
 
     public function testUnfulfilledOtherShipToMeBookWithNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->typeUnfulfilledReasonOther()
+                    ->selectShipToMeAction()
+                    ->typeVCCBorrowerNotes()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                'book',
+                'ship-to-me',
+                'student',
+                VCC_BORROWER_NOTES,
+                null,
+                null
+            );
+        });
     }
 
     public function testUnfulfilledOtherShipToMeOtherNoNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->typeUnfulfilledReasonOther()
+                    ->selectShipToMeAction()
+                    ->selectOtherResource()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                RESOURCE_DESCRIPTION,
+                'ship-to-me',
+                'student',
+                null,
+                null,
+                null
+            );
+        });
     }
 
     public function testUnfulfilledOtherShipToMeOtherWithNotes()
     {
-        // TODO: implement
+        $this->browse(function (Browser $browser) {
+            $this->assertStatus(
+                $browser->typeUnfulfilledReasonOther()
+                    ->selectShipToMeAction()
+                    ->selectOtherResource()
+                    ->typeVCCBorrowerNotes()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                RESOURCE_DESCRIPTION,
+                'ship-to-me',
+                'student',
+                VCC_BORROWER_NOTES,
+                null,
+                null
+            );
+        });
+    }
+
+    private function assertDatabaseRow($fulfilled, $unfulfilledReason, $resource, $action, $vccBorrowerType, $vccBorrowerNotes, $libraryId)
+    {
+        $illRequest = ILLRequest::find(1);
+
+        $this->assertEquals($fulfilled ? 'true' : 'false', $illRequest->fulfilled);
+        $this->assertEquals($unfulfilledReason, $illRequest->unfulfilled_reason);
+        $this->assertEquals($resource, $illRequest->resource);
+        $this->assertEquals($action, $illRequest->action);
+        $this->assertEquals($libraryId, $illRequest->library_id);
+        $this->assertEquals($vccBorrowerType, $illRequest->vcc_borrower_type);
+        $this->assertEquals($vccBorrowerNotes, $illRequest->vcc_borrower_notes);
+    }
+
+    private function assertStatus($browser, $fulfilled, $unfulfilledReasonSlug, $resourceSlug, $actionSlug, $vccBorrowerTypeSlug, $vccBorrowerNotes, $libraryId, $libraryName)
+    {
+        $unfulfilledReason = array_key_exists($unfulfilledReasonSlug, ILLRequest::UNFULFILLED_REASONS) ? ILLRequest::UNFULFILLED_REASONS[$unfulfilledReasonSlug] : $unfulfilledReasonSlug;
+        $resource = array_key_exists($resourceSlug, ILLRequest::RESOURCES) ? ILLRequest::RESOURCES[$resourceSlug] : $resourceSlug;
+        $action = ILLRequest::ACTIONS[$actionSlug];
+        $vccBorrowerType = ILLRequest::VCC_BORROWER_TYPES[$vccBorrowerTypeSlug];
+
+        $browser->assertStatus($fulfilled, $unfulfilledReason, $resource, $action, $vccBorrowerType, $vccBorrowerNotes, $libraryName);
+        $this->assertDatabaseRow($fulfilled, $unfulfilledReason, $resource, $action, $vccBorrowerType, $vccBorrowerNotes, $libraryId);
     }
 }

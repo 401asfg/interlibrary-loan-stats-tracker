@@ -1,11 +1,14 @@
 <?php
 
+/*
+ * Author: Michael Allan
+ */
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -27,16 +30,19 @@ return new class extends Migration
         Schema::dropIfExists('libraries');
     }
 
-    private static function saveLibrariesFromCSV(string $filePath) {
+    private static function saveLibrariesFromCSV(string $filePath)
+    {
         $names = self::readNamesFromCSV($filePath);
         self::saveLibraries($names);
     }
 
-    private static function saveLibraries(array $names) {
+    private static function saveLibraries(array $names)
+    {
         DB::table('libraries')->insert($names);
     }
 
-    private static function readNamesFromCSV(string $filePath): array {
+    private static function readNamesFromCSV(string $filePath): array
+    {
         $file = file(public_path($filePath));
         $names = [];
 

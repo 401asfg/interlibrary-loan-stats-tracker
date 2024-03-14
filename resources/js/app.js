@@ -1,3 +1,7 @@
+/*
+* Author: Michael Allan
+*/
+
 import './bootstrap';
 
 import { createApp } from 'vue';

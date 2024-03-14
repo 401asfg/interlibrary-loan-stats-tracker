@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Author: Michael Allan
+ */
+
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;

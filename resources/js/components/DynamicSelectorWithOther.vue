@@ -1,3 +1,5 @@
+<!-- Author: Michael Allan -->
+
 <template>
     <div>
         <DynamicSelector :choices="setWithOther()" :selectorName="selectorName" :initSelection="getInitButtonSelection()" @input="onSelectorInput" />

@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Author: Michael Allan
+ */
+
 namespace Tests\Browser;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -13,7 +17,7 @@ class EditRecordTest extends DuskTestCase
         return new Browser($driver);
     }
 
-    public function testEditLastAddedRecord(): void
+    public function testEditLastAddedRecordPopulatesAllFields(): void
     {
         // TODO: implement
     }

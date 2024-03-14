@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Author: Michael Allan
+ */
+
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -7,14 +11,15 @@ use Carbon\Carbon;
 use App\Models\ILLRequest;
 use App\Models\Library;
 
-class ILLRequestFactory extends Factory {
+class ILLRequestFactory extends Factory
+{
     const MAX_SUB_DAYS = 365;
 
     /**
-    * Define the model's default state.
-    *
-    * @return array<string, mixed>
-    */
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition()
     {
         return [
@@ -29,32 +34,42 @@ class ILLRequestFactory extends Factory {
         ];
     }
 
-    private function randomNullableForeignKey(int $maxId) {
-        if ($this->faker->boolean) return null;
+    private function randomNullableForeignKey(int $maxId)
+    {
+        if ($this->faker->boolean)
+            return null;
         return $this->faker->numberBetween(1, $maxId);
     }
 
-    private function randomDate() {
+    private function randomDate()
+    {
         return Carbon::today()->subDays(rand(0, self::MAX_SUB_DAYS));
     }
 
-    private function randomSetValueOrString(array $set): string {
+    private function randomSetValueOrString(array $set): string
+    {
         $str = self::randomNullableString();
-        if ($str !== null) return $str;
+        if ($str !== null)
+            return $str;
         return self::randomSetValue($set);
     }
 
-    private function randomSetValueOrNullableString(array $set): ?string {
-        if ($this->faker->boolean) return self::randomSetValue($set);
+    private function randomSetValueOrNullableString(array $set): ?string
+    {
+        if ($this->faker->boolean)
+            return self::randomSetValue($set);
         return self::randomNullableString();
     }
 
-    private function randomNullableString(): ?string {
-        if ($this->faker->boolean) return null;
+    private function randomNullableString(): ?string
+    {
+        if ($this->faker->boolean)
+            return null;
         return $this->faker->name;
     }
 
-    private function randomSetValue(array $set) {
+    private function randomSetValue(array $set)
+    {
         $values = array_values($set);
         $index = $this->faker->randomNumber() % count($values);
         return $values[$index];

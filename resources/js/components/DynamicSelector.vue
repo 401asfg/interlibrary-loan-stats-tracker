@@ -1,3 +1,5 @@
+<!-- Author: Michael Allan -->
+
 <template>
     <div class="radio-buttons-container">
         <div v-for="[slug, displayName] of Object.entries(choices)">
