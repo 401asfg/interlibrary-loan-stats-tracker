@@ -30,14 +30,6 @@ abstract class DuskTestCase extends BaseTestCase
         }
     }
 
-    protected abstract function createBrowser($driver);
-
-    protected function newBrowser($driver)
-    {
-        $browser = $this->createBrowser($driver);
-        return $browser->visit('/');
-    }
-
     protected function setUp(): void
     {
         parent::setUp();

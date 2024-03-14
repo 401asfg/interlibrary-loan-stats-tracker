@@ -82,9 +82,10 @@ class Browser extends \Laravel\Dusk\Browser
 
 class FormFieldStatesTest extends DuskTestCase
 {
-    protected function createBrowser($driver)
+    protected function newBrowser($driver)
     {
-        return new Browser($driver);
+        $browser = new Browser($driver);
+        return $browser->visit('/');
     }
 
     public function testInitialVisibility(): void

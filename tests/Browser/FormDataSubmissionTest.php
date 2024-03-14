@@ -91,11 +91,10 @@ class Browser extends \Laravel\Dusk\Browser
 
 class FormDataSubmissionTest extends DuskTestCase
 {
-    // TODO: test that both the database is updated and that the submission page shows the correct result
-
-    protected function createBrowser($driver)
+    protected function newBrowser($driver)
     {
-        return new Browser($driver);
+        $browser = new Browser($driver);
+        return $browser->visit('/');
     }
 
     protected function setUp(): void

@@ -90,9 +90,10 @@ class Browser extends \Laravel\Dusk\Browser
 
 class FormDataClearingTest extends DuskTestCase
 {
-    protected function createBrowser($driver)
+    protected function newBrowser($driver)
     {
-        return new Browser($driver);
+        $browser = new Browser($driver);
+        return $browser->visit('/');
     }
 
     protected function setUp(): void
