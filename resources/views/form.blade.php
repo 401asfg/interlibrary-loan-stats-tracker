@@ -9,7 +9,7 @@
         <div class="success-banner">{{ session('status') }}</div>
     @endif
 
-    <h1>ILL Statistics Form</h1>
+    <h1 dusk="form_title">ILL Statistics Form</h1>
 
     @if ($illRequest)
         <form action="/{{ $illRequest->id }}" method="POST">

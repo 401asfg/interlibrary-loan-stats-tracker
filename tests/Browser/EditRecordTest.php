@@ -11,8 +11,6 @@ use Carbon\Carbon;
 use Laravel\Dusk\Browser;
 use Tests\DuskTestCase;
 
-const CREATE_PAGE_TITLE = 'ILL Statistics Form';
-const SHOW_PAGE_TITLE = 'Submission Successful!';
 const LIBRARY_NAME = 'University of British Columbia';
 const LIBRARY_ID = 58;
 const UNFULFILLED_REASON_DESCRIPTION = 'reason';
@@ -41,7 +39,7 @@ class EditRecordTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/1')
                 ->click('@edit')
-                ->waitForText(CREATE_PAGE_TITLE)
+                ->waitFor('@form_title')
                 ->assertValue('@request_date', Carbon::today()->toDateString())
                 ->assertVisible('@unfulfilled_reason_other')
                 ->assertValue('@unfulfilled_reason_description', UNFULFILLED_REASON_DESCRIPTION)
@@ -54,7 +52,7 @@ class EditRecordTest extends DuskTestCase
                 ->click('@fulfilled')
                 ->click('@resource_book')
                 ->click('@submit')
-                ->waitForText(SHOW_PAGE_TITLE)
+                ->waitFor('@submission_title')
                 ->assertSee('Request was Fulfilled')
                 ->assertMissing('@unfulfilled_reason')
                 ->assertSee(ILLRequest::RESOURCES['book'])
@@ -94,7 +92,7 @@ class EditRecordTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/1')
                 ->click('@edit')
-                ->waitForText(CREATE_PAGE_TITLE)
+                ->waitFor('@form_title')
                 ->assertValue('@request_date', Carbon::today()->toDateString())
                 ->assertVisible('@unfulfilled_reason_other')
                 ->assertValue('@unfulfilled_reason_description', UNFULFILLED_REASON_DESCRIPTION)
@@ -107,7 +105,7 @@ class EditRecordTest extends DuskTestCase
                 ->click('@resource_book')
                 ->click('@action_ship-to-me')
                 ->click('@submit')
-                ->waitForText(SHOW_PAGE_TITLE)
+                ->waitFor('@submission_title')
                 ->assertSee('Request was not Fulfilled')
                 ->assertVisible('@unfulfilled_reason')
                 ->assertSee(ILLRequest::RESOURCES['book'])
@@ -147,7 +145,7 @@ class EditRecordTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/show/1')
                 ->click('@edit')
-                ->waitForText(CREATE_PAGE_TITLE)
+                ->waitFor('@form_title')
                 ->assertValue('@request_date', Carbon::today()->toDateString())
                 ->assertVisible('@unfulfilled_reason_other')
                 ->assertValue('@unfulfilled_reason_description', UNFULFILLED_REASON_DESCRIPTION)
@@ -160,7 +158,7 @@ class EditRecordTest extends DuskTestCase
                 ->click('@resource_book')
                 ->click('@action_lend')
                 ->click('@submit')
-                ->waitForText(SHOW_PAGE_TITLE)
+                ->waitFor('@submission_title')
                 ->assertSee('Request was not Fulfilled')
                 ->assertVisible('@unfulfilled_reason')
                 ->assertSee(ILLRequest::RESOURCES['book'])

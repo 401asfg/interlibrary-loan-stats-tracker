@@ -8,7 +8,7 @@
                 <li v-for="(result, index) in results" :class="getDropdownItemClass(index)" @mouseenter="updateHover(index)" @mousedown="chooseSelection(index)" :dusk="'searchable_select_result_' + index">{{ result.name }}</li>
             </ul>
             <ul v-if="!hasResults()">
-                <li>No results found</li>
+                <li dusk="searchable_select_no_results">No results found</li>
             </ul>
         </div>
     </div>

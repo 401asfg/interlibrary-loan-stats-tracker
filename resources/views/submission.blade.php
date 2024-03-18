@@ -5,7 +5,7 @@
 @section('title', 'Submission')
 
 @section('content')
-    <h1 class="success-title">Submission Successful!</h1>
+    <h1 class="success-title" dusk="submission_title">Submission Successful!</h1>
 
     <div class="report-container">
         <h2>Summary</h2>
@@ -41,7 +41,7 @@
             @if (!is_null($libraryName))
                 <div>
                     <div class="field-header" dusk="library"><strong>Library:</strong></div>
-                    <div>{{ $libraryName }}</div>
+                    <div dusk="library_name">{{ $libraryName }}</div>
                 </div>
             @endif
 

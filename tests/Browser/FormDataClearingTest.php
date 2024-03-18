@@ -9,8 +9,6 @@ namespace Tests\Browser;
 use App\Models\ILLRequest;
 use Tests\DuskTestCase;
 
-const SHOW_PAGE_TITLE = 'Submission Successful!';
-
 class Browser extends \Laravel\Dusk\Browser
 {
     public function fillOutForm()
@@ -61,12 +59,12 @@ class Browser extends \Laravel\Dusk\Browser
         return $this->click($clearingSelector)
             ->click($optionSelector)
             ->click('@submit')
-            ->assertDontSee(SHOW_PAGE_TITLE);
+            ->assertMissing('@submission_title');
     }
 
     public function waitForShowPage()
     {
-        return $this->waitForText('Submission Successful!');
+        return $this->waitFor('@submission_title');
     }
 
     public function assertShowPageSelectorVisible($selector)

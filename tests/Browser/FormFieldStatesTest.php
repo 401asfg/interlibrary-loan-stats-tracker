@@ -36,7 +36,7 @@ class Browser extends \Laravel\Dusk\Browser
 
     public function assertDefaultPage()
     {
-        return $this->assertSee('ILL Statistics Form')
+        return $this->assertVisible('@form_title')
             ->assertDefaultPreFulfilled()
             ->assertMissing('@unfulfilled_reason')
             ->assertDefaultPostRequestFulfilledSections();

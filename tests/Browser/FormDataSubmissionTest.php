@@ -9,7 +9,6 @@ namespace Tests\Browser;
 use App\Models\ILLRequest;
 use Tests\DuskTestCase;
 
-const SHOW_PAGE_TITLE = 'Submission Successful!';
 const UNFULFILLED_REASON_DESCRIPTION = 'unfulfilled reason description';
 const RESOURCE_DESCRIPTION = 'resource description';
 const VCC_BORROWER_NOTES = 'borrower notes';
@@ -31,7 +30,7 @@ class Browser extends \Laravel\Dusk\Browser
     public function submit()
     {
         return $this->click('@submit')
-            ->waitForText(SHOW_PAGE_TITLE);
+            ->waitFor('@submission_title');
     }
 
     public function clickUnfulfilledReason($reason)
