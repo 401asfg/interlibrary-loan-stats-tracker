@@ -116,7 +116,6 @@ class ILLRequestsAPITest extends TestCase
     {
         $firstILLRequest = ILLRequest::first();
 
-        // FIXME: remove show from url
         $response = $this->get('/show/' . $firstILLRequest->id);
         $response->assertStatus(200);
         $response->assertViewIs('submission');

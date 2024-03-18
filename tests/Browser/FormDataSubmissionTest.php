@@ -397,7 +397,7 @@ class FormDataSubmissionTest extends DuskTestCase
                 'unavailable',
                 RESOURCE_DESCRIPTION,
                 'lend',
-                'student',
+                'library',
                 null,
                 LIBRARY_ID,
                 LIBRARY_NAME

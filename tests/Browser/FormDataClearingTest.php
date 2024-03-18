@@ -140,7 +140,7 @@ class FormDataClearingTest extends DuskTestCase
 
     public function testVccBorrowerFieldsChangesToLibraryOnLendAction(): void
     {
-        $this->assertHasStatusOnHidding('@action_lend', '@vcc_borrower_type', 'library', 'vcc_borrower_type', 'assertShowPageHasLibraryVCCBorrowerType');
+        $this->assertHasStatusOnHidding('@action_lend', '@vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['library'], 'vcc_borrower_type', 'assertShowPageHasLibraryVCCBorrowerType');
     }
 
     private function assertNewDBEntryPropertyHas($expectedValue, $propertyName)

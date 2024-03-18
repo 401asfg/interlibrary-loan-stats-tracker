@@ -4,8 +4,6 @@
  * Author: Michael Allan
  */
 
-// TODO: write unit tests
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ILLRequestController;
 use App\Http\Controllers\LibraryController;
