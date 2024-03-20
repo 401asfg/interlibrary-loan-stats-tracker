@@ -18,6 +18,7 @@ class LibraryController extends Controller
         if ($request->has('query')) {
             $data = Library::select('id', 'name')
                 ->where('name', 'LIKE', '%' . $request->input('query') . '%')
+                ->orderBy('id')
                 ->get();
         }
 

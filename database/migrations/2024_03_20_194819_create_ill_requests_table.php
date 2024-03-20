@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->id();
             $table->timestamps();
             $table->date('request_date');
-            $table->boolean('fulfilled')->default(true);
+            $table->string('fulfilled')->default(true);
             $table->string('unfulfilled_reason')->nullable();
             $table->string('resource');
             $table->enum('action', array_values(ILLRequest::ACTIONS));
