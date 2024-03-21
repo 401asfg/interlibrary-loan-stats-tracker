@@ -40,7 +40,6 @@
             onInput(event) {
                 this.$emit('input', event);
             },
-            // FIXME: needs to wipe frontend and make sure form is in the proper state if this was hidden (may not be necessary)
             notHidden(slug) {
                 return !this.hiddenSlugs.includes(slug);
             }

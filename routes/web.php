@@ -24,7 +24,6 @@ Route::get('ill-requests/create', [ILLRequestController::class, 'create']);
 
 Route::post('ill-requests', [ILLRequestController::class, 'store']);
 Route::get('ill-requests/{id}', [ILLRequestController::class, 'show']);
-// FIXME: remove show from route
 
 Route::delete('ill-requests/{id}', [ILLRequestController::class, 'destroy']);
 
