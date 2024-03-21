@@ -91,7 +91,7 @@ class FormDataClearingTest extends DuskTestCase
     protected function newBrowser($driver)
     {
         $browser = new Browser($driver);
-        return $browser->visit('/');
+        return $browser->visit('ill-requests/create');
     }
 
     protected function setUp(): void

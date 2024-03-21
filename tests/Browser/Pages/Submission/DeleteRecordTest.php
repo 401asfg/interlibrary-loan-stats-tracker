@@ -29,7 +29,7 @@ class DeleteRecordTest extends DuskTestCase
         $illRequest->save();
 
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/1')
+            $browser->visit('ill-requests/1')
                 ->click('@delete');
         });
 

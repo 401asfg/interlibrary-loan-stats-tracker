@@ -101,12 +101,12 @@ class ILLRequestsAPITest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(302);
-        $response->assertRedirect('create');
+        $response->assertRedirect('ill-requests/create');
     }
 
     public function testCreate(): void
     {
-        $response = $this->get('/create');
+        $response = $this->get('ill-requests/create');
 
         $response->assertStatus(200);
         $response->assertViewIs('form');
@@ -116,7 +116,7 @@ class ILLRequestsAPITest extends TestCase
     {
         $firstILLRequest = ILLRequest::first();
 
-        $response = $this->get('/show/' . $firstILLRequest->id);
+        $response = $this->get('ill-requests/' . $firstILLRequest->id);
         $response->assertStatus(200);
         $response->assertViewIs('submission');
 
@@ -307,9 +307,9 @@ class ILLRequestsAPITest extends TestCase
     {
         $id = ILLRequest::first()->id;
 
-        $response = $this->delete($id);
+        $response = $this->delete('ill-requests/' . $id);
         $response->assertStatus(302);
-        $response->assertRedirect('create');
+        $response->assertRedirect('ill-requests/create');
 
         $response->assertSessionHas([
             'status' => 'Last submission deleted!'
@@ -323,7 +323,7 @@ class ILLRequestsAPITest extends TestCase
     {
         $firstILLRequest = ILLRequest::first();
 
-        $response = $this->get($firstILLRequest->id . '/edit');
+        $response = $this->get('ill-requests/' . $firstILLRequest->id . '/edit');
         $response->assertStatus(200);
         $response->assertViewIs('form');
 
@@ -531,7 +531,7 @@ class ILLRequestsAPITest extends TestCase
 
         $this->assertEquals($beforePostMaxId + 1, $afterPostMaxId);
         $this->assertTrue($illRequest->isEqual($afterPostLatestILLRequest));
-        $response->assertRedirect('/show/' . $afterPostMaxId);
+        $response->assertRedirect('ill-requests/' . $afterPostMaxId);
     }
 
     private function assertPostFailed(MockILLRequest $illRequest)
@@ -560,7 +560,7 @@ class ILLRequestsAPITest extends TestCase
         );
 
         $response->assertStatus(302);
-        $response->assertRedirect('/show/' . $id);
+        $response->assertRedirect('ill-requests/' . $id);
 
         $updatedILLRequest = ILLRequest::find($id);
         $this->assertTrue($illRequest->isEqual($updatedILLRequest));
@@ -595,7 +595,7 @@ class ILLRequestsAPITest extends TestCase
             'put test notes'
         );
 
-        $this->post('/', $postILLRequest->getAttributes());
+        $this->post('ill-requests', $postILLRequest->getAttributes());
         return ILLRequestsAPITest::getLatestILLRequest()->id;
     }
 
@@ -606,6 +606,6 @@ class ILLRequestsAPITest extends TestCase
 
     private function callRestMethod(string $method, string|null $id, MockILLRequest $illRequest)
     {
-        return $this->call($method, '/' . $id ?? '', $illRequest->getAttributes());
+        return $this->call($method, 'ill-requests/' . $id ?? '', $illRequest->getAttributes());
     }
 }

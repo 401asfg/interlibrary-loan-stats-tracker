@@ -47,7 +47,13 @@
         },
         onSelectorInput(event) {
             this.otherSelected = event.target.value === OTHER_DISPLAY_TEXT;
-            if (!this.otherSelected) this.$emit('input', event);
+
+            if (this.otherSelected) {
+                this.selection = '';
+                return;
+            }
+
+            this.$emit('input', event);
         },
         onTextInput(event) {
             this.$emit('input', event);

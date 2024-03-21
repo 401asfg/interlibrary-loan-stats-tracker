@@ -72,7 +72,7 @@ class Browser extends \Laravel\Dusk\Browser
 
     public function assertDropdownHasNoResults()
     {
-        return $this->assertVisible('@searchable_select_no_results');
+        return $this->waitFor('@searchable_select_no_results');
     }
 
     public function assertSearchbarHasValue($value)
@@ -188,7 +188,7 @@ class SearchableSelectTest extends DuskTestCase
     protected function newBrowser($driver)
     {
         $browser = new Browser($driver);
-        return $browser->visit('/');
+        return $browser->visit('ill-requests/create');
     }
 
     protected function setUp(): void

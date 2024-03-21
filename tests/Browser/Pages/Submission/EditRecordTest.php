@@ -37,7 +37,7 @@ class EditRecordTest extends DuskTestCase
         $illRequest->save();
 
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/1')
+            $browser->visit('ill-requests/1')
                 ->click('@edit')
                 ->waitFor('@form_title')
                 ->assertValue('@request_date', Carbon::today()->toDateString())
@@ -90,7 +90,7 @@ class EditRecordTest extends DuskTestCase
         $illRequest->save();
 
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/1')
+            $browser->visit('ill-requests/1')
                 ->click('@edit')
                 ->waitFor('@form_title')
                 ->assertValue('@request_date', Carbon::today()->toDateString())
@@ -143,7 +143,7 @@ class EditRecordTest extends DuskTestCase
         $illRequest->save();
 
         $this->browse(function (Browser $browser) {
-            $browser->visit('/show/1')
+            $browser->visit('ill-requests/1')
                 ->click('@edit')
                 ->waitFor('@form_title')
                 ->assertValue('@request_date', Carbon::today()->toDateString())
@@ -177,6 +177,117 @@ class EditRecordTest extends DuskTestCase
         $this->assertEquals(ILLRequest::ACTIONS['lend'], $illRequest->action);
         $this->assertEquals(LIBRARY_ID, $illRequest->library_id);
         $this->assertEquals(ILLRequest::VCC_BORROWER_TYPES['library'], $illRequest->vcc_borrower_type);
+        $this->assertEquals(VCC_BORROWER_NOTES, $illRequest->vcc_borrower_notes);
+    }
+
+    public function testUnfulfilledReasonOtherDescriptionDoesntContainNonOther(): void
+    {
+        $illRequest = ILLRequest::create([
+            'request_date' => Carbon::today()->toDateString(),
+            'fulfilled' => 'false',
+            'unfulfilled_reason' => ILLRequest::UNFULFILLED_REASONS['google-scholar'],
+            'resource' => RESOURCE_DESCRIPTION,
+            'action' => ILLRequest::ACTIONS['borrow'],
+            'library_id' => LIBRARY_ID,
+            'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+            'vcc_borrower_notes' => VCC_BORROWER_NOTES
+        ]);
+
+        $illRequest->save();
+
+        $this->browse(function (Browser $browser) {
+            $browser->visit('ill-requests/1')
+                ->click('@edit')
+                ->waitFor('@form_title')
+                ->assertValue('@request_date', Carbon::today()->toDateString())
+                ->assertVisible('@unfulfilled_reason_google-scholar')
+                ->assertVisible('@unfulfilled_reason_other')
+                ->assertMissing('@unfulfilled_reason_description')
+                ->click('@unfulfilled_reason_other')
+                ->assertValue('@unfulfilled_reason_description', '')
+                ->type('@unfulfilled_reason_description', UNFULFILLED_REASON_DESCRIPTION)
+                ->assertValue('@unfulfilled_reason_description', UNFULFILLED_REASON_DESCRIPTION)
+                ->assertChecked('@resource_other')
+                ->assertValue('@resource_description', RESOURCE_DESCRIPTION)
+                ->assertChecked('@action_borrow')
+                ->assertValue('@searchable_select_input', LIBRARY_NAME)
+                ->assertChecked('@vcc_borrower_type_student')
+                ->assertValue('@vcc_borrower_notes', VCC_BORROWER_NOTES)
+                ->click('@submit')
+                ->waitFor('@submission_title')
+                ->assertSee('Request was not Fulfilled')
+                ->assertSee(UNFULFILLED_REASON_DESCRIPTION)
+                ->assertSee(RESOURCE_DESCRIPTION)
+                ->assertSee(ILLRequest::ACTIONS['borrow'])
+                ->assertSee(LIBRARY_NAME)
+                ->assertSee(ILLRequest::VCC_BORROWER_TYPES['student'])
+                ->assertSee(VCC_BORROWER_NOTES);
+        });
+
+        $illRequest = ILLRequest::find(1);
+
+        $this->assertEquals(Carbon::today()->toDateString(), $illRequest->request_date);
+        $this->assertEquals('false', $illRequest->fulfilled);
+        $this->assertEquals(UNFULFILLED_REASON_DESCRIPTION, $illRequest->unfulfilled_reason);
+        $this->assertEquals(RESOURCE_DESCRIPTION, $illRequest->resource);
+        $this->assertEquals(ILLRequest::ACTIONS['borrow'], $illRequest->action);
+        $this->assertEquals(LIBRARY_ID, $illRequest->library_id);
+        $this->assertEquals(ILLRequest::VCC_BORROWER_TYPES['student'], $illRequest->vcc_borrower_type);
+        $this->assertEquals(VCC_BORROWER_NOTES, $illRequest->vcc_borrower_notes);
+    }
+
+    public function testResourceOtherDescriptionDoesntContainNonOther(): void
+    {
+        $illRequest = ILLRequest::create([
+            'request_date' => Carbon::today()->toDateString(),
+            'fulfilled' => 'false',
+            'unfulfilled_reason' => ILLRequest::UNFULFILLED_REASONS['google-scholar'],
+            'resource' => ILLRequest::RESOURCES['book'],
+            'action' => ILLRequest::ACTIONS['borrow'],
+            'library_id' => LIBRARY_ID,
+            'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+            'vcc_borrower_notes' => VCC_BORROWER_NOTES
+        ]);
+
+        $illRequest->save();
+
+        $this->browse(function (Browser $browser) {
+            $browser->visit('ill-requests/1')
+                ->click('@edit')
+                ->waitFor('@form_title')
+                ->assertValue('@request_date', Carbon::today()->toDateString())
+                ->assertVisible('@unfulfilled_reason_google-scholar')
+                ->assertVisible('@unfulfilled_reason_other')
+                ->assertMissing('@unfulfilled_reason_description')
+                ->assertChecked('@resource_book')
+                ->click('@resource_other')
+                ->assertValue('@resource_description', '')
+                ->type('@resource_description', RESOURCE_DESCRIPTION)
+                ->assertValue('@resource_description', RESOURCE_DESCRIPTION)
+                ->assertChecked('@action_borrow')
+                ->assertValue('@searchable_select_input', LIBRARY_NAME)
+                ->assertChecked('@vcc_borrower_type_student')
+                ->assertValue('@vcc_borrower_notes', VCC_BORROWER_NOTES)
+                ->click('@submit')
+                ->waitFor('@submission_title')
+                ->assertSee('Request was not Fulfilled')
+                ->assertSee(ILLRequest::UNFULFILLED_REASONS['google-scholar'])
+                ->assertSee(RESOURCE_DESCRIPTION)
+                ->assertSee(ILLRequest::ACTIONS['borrow'])
+                ->assertSee(LIBRARY_NAME)
+                ->assertSee(ILLRequest::VCC_BORROWER_TYPES['student'])
+                ->assertSee(VCC_BORROWER_NOTES);
+        });
+
+        $illRequest = ILLRequest::find(1);
+
+        $this->assertEquals(Carbon::today()->toDateString(), $illRequest->request_date);
+        $this->assertEquals('false', $illRequest->fulfilled);
+        $this->assertEquals(ILLRequest::UNFULFILLED_REASONS['google-scholar'], $illRequest->unfulfilled_reason);
+        $this->assertEquals(RESOURCE_DESCRIPTION, $illRequest->resource);
+        $this->assertEquals(ILLRequest::ACTIONS['borrow'], $illRequest->action);
+        $this->assertEquals(LIBRARY_ID, $illRequest->library_id);
+        $this->assertEquals(ILLRequest::VCC_BORROWER_TYPES['student'], $illRequest->vcc_borrower_type);
         $this->assertEquals(VCC_BORROWER_NOTES, $illRequest->vcc_borrower_notes);
     }
 }

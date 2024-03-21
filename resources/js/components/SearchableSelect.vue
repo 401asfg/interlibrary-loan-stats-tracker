@@ -4,10 +4,13 @@
     <div>
         <input type="text" placeholder="Search..." v-model="query" @input="queryDatabase" @focus="startSearch" @blur="endSearch" dusk="searchable_select_input" required>
         <div class="options-dropdown" v-if="isSearching()">
-            <ul v-if="hasResults()">
+            <ul v-if="isLoading">
+                <li dusk="searchable_select_loading">Loading...</li>
+            </ul>
+            <ul v-else-if="hasResults()">
                 <li v-for="(result, index) in results" :class="getDropdownItemClass(index)" @mouseenter="updateHover(index)" @mousedown="chooseSelection(index)" :dusk="'searchable_select_result_' + index">{{ result.name }}</li>
             </ul>
-            <ul v-if="!hasResults()">
+            <ul v-else>
                 <li dusk="searchable_select_no_results">No results found</li>
             </ul>
         </div>
@@ -35,7 +38,8 @@
                 query: this.getInitQuery(),
                 results: [],
                 hoverIndex: 0,
-                selection: this.initSelection
+                selection: this.initSelection,
+                isLoading: false
             }
         },
         methods: {
@@ -77,11 +81,12 @@
 
                 if (!this.hasQuery()) return;
 
+                this.isLoading = true;
+
                 axios.get(this.databaseRoute, { params: { query: this.query } })
-                     .then(response => {
-                        this.results = response.data;
-                     })
-                     .catch(error => console.log(error));
+                     .then(response => this.results = response.data)
+                     .catch(error => console.log(error))
+                     .finally(() => this.isLoading = false);
             }
         }
     };

@@ -14,7 +14,7 @@ class ILLRequestController extends Controller
 {
     public function index()
     {
-        return redirect('/create');
+        return redirect('ill-requests/create');
     }
 
     public function create()
@@ -31,7 +31,7 @@ class ILLRequestController extends Controller
 
         $illRequest = ILLRequest::create($validator->validated());
         $illRequest->save();
-        return redirect('/show/' . $illRequest->id);
+        return redirect('ill-requests/' . $illRequest->id);
     }
 
     public function show(string $id)
@@ -47,7 +47,7 @@ class ILLRequestController extends Controller
     {
         $illRequest = ILLRequest::findOrFail($id);
         $illRequest->delete();
-        return redirect('/create')->with('status', 'Last submission deleted!');
+        return redirect('ill-requests/create')->with('status', 'Last submission deleted!');
     }
 
     public function edit(string $id)
@@ -66,7 +66,7 @@ class ILLRequestController extends Controller
 
         $illRequest = ILLRequest::findOrFail($id);
         $illRequest->update($validator->validated());
-        return redirect('/show/' . $id);
+        return redirect('ill-requests/' . $id);
     }
 
     private static function getFormView(ILLRequest $illRequest = null, string $libraryName = null)

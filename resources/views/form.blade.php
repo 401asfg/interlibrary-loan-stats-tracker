@@ -12,10 +12,10 @@
     <h1 dusk="form_title">ILL Statistics Form</h1>
 
     @if ($illRequest)
-        <form action="/{{ $illRequest->id }}" method="POST">
+        <form action="/ill-requests/{{ $illRequest->id }}" method="POST">
             @method("PUT")
     @else
-        <form action="/" method="POST">
+        <form action="/ill-requests" method="POST">
     @endif
             @csrf
             <ill-request-form-fields
