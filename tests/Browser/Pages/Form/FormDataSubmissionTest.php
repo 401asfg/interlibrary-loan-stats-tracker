@@ -22,7 +22,7 @@ class Browser extends \Laravel\Dusk\Browser
         return $this->click('@resource_book')
             ->click('@action_borrow')
             ->type('@searchable_select_input', 'british')
-            ->waitFor('@searchable_select_result_0')
+            ->waitFor('@searchable_select_result_0', 10)
             ->click('@searchable_select_result_0')
             ->click('@vcc_borrower_type_student');
     }

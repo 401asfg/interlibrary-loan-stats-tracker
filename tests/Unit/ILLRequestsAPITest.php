@@ -7,7 +7,6 @@
 namespace Tests\Unit;
 
 use App\Models\ILLRequest;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -82,8 +81,6 @@ class MockILLRequest
 
 class ILLRequestsAPITest extends TestCase
 {
-    use RefreshDatabase;
-
     const MAX_REQUEST_DATE_DAYS_AGO = 180;
     const MIN_LIBRARY_ID = 1;
     const MAX_LIBRARY_ID = 345;

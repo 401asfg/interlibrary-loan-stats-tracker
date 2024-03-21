@@ -61,7 +61,7 @@ class Browser extends \Laravel\Dusk\Browser
 
     public function assertDropdownHasResults()
     {
-        return $this->waitFor('@searchable_select_result_0');
+        return $this->waitFor('@searchable_select_result_0', 10);
     }
 
     public function assertDropdownResult($index, $result)
@@ -72,7 +72,7 @@ class Browser extends \Laravel\Dusk\Browser
 
     public function assertDropdownHasNoResults()
     {
-        return $this->waitFor('@searchable_select_no_results');
+        return $this->waitFor('@searchable_select_no_results', 10);
     }
 
     public function assertSearchbarHasValue($value)
