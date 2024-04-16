@@ -7,9 +7,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        @vite('resources/css/app.css')
-
-        @stack('scripts')
+        <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css">
 
         <title>@yield('title')</title>
     </head>
@@ -18,6 +16,7 @@
         <div id="app">
             @yield('content')
         </div>
-        @vite('resources/js/app.js')
+
+        <script src="{{ mix('js/app.js') }}"></script>
     </body>
 </html>

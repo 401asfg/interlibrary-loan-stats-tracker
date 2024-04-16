@@ -1,0 +1,152 @@
+/*
+ * Author: Michael Allan
+ */
+
+body {
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-family: Source Sans Pro, EdmondSans, Helvetica Neue, Helvetica, Arial, sans-serif, Open Sans, Ubuntu, Roboto;
+    background-color: #f8fafc;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+h2, .main-buttons-container {
+    margin-top: 70px;
+}
+
+form {
+    display: inline;
+}
+
+div, button, label, textarea, input, select {
+    font-size: 20px;
+}
+
+button {
+    background-color: lightskyblue;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 30px;
+}
+
+button:hover {
+    filter: brightness(110%);
+    transition: 0.4s;
+}
+
+button:active {
+    filter: brightness(100%);
+    transition: 0.0s;
+}
+
+label {
+    margin-right: 20px;
+}
+
+input[type="date"] {
+    padding: 4px 10px;
+}
+
+input[type="checkbox"], input[type="radio"] {
+    transform: scale(1.5);
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+textarea {
+    padding-bottom: 50px;
+    font-family: Source Sans Pro, EdmondSans, Helvetica Neue, Helvetica, Arial, sans-serif, Open Sans, Ubuntu, Roboto;
+}
+
+textarea, input[type="text"] {
+    width: 100%;
+    margin-top: 10px;
+    padding-left: 8px;
+}
+
+.field-header {
+    margin-top: 30px;
+    margin-bottom: 5px;
+}
+
+.radio-buttons-container {
+    display: flex;
+}
+
+.main-buttons-container {
+    padding-bottom: 30px;
+    text-align: center;
+}
+
+.main-buttons-container > button, .main-buttons-container > form {
+    margin: auto 10px 15px;
+}
+
+.report-container {
+    max-width: 500px;
+    margin: auto auto 40px;
+    word-wrap: break-word;
+}
+
+.report-container > h2 {
+    text-align: center;
+}
+
+.submit-button {
+    background-color: lightgreen;
+}
+
+.destructive-button {
+    background-color: lightcoral;
+}
+
+.success-title {
+    color: green;
+}
+
+.success-banner {
+    background-color: lightgreen;
+    padding: 10px;
+}
+
+.options-dropdown {
+    max-height: 200px;
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: grey;
+    box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.5);
+    overflow-y: scroll;
+    position: absolute;
+    z-index: 1;
+}
+
+.options-dropdown > ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+.options-dropdown > ul > li {
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
+    border-color: rgba(0, 0, 0, 0.25);
+    list-style-type: none;
+    padding: 5px 15px;
+}
+
+.focused-dropdown-item {
+    background-color: lightblue;
+}
+

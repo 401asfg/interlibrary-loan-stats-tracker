@@ -54,7 +54,7 @@ class ILLRequest extends Model
         'vcc_borrower_notes'
     ];
 
-    public function getLibraryName(): string|null
+    public function getLibraryName(): ?string
     {
         $libraryId = $this->library_id;
 
