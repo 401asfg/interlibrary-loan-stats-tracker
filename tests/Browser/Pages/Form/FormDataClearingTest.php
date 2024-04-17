@@ -8,8 +8,9 @@ namespace Tests\Browser;
 
 use App\Models\ILLRequest;
 use Tests\DuskTestCase;
+use Laravel\Dusk\Browser;
 
-class Browser extends \Laravel\Dusk\Browser
+class FormDataClearingBrowser extends Browser
 {
     public function fillOutForm()
     {
@@ -90,7 +91,7 @@ class FormDataClearingTest extends DuskTestCase
 {
     protected function newBrowser($driver)
     {
-        $browser = new Browser($driver);
+        $browser = new FormDataClearingBrowser($driver);
         return $browser->visit('ill-requests/create');
     }
 
@@ -98,7 +99,7 @@ class FormDataClearingTest extends DuskTestCase
     {
         parent::setUp();
 
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataClearingBrowser $browser) {
             $browser->fillOutForm();
         });
     }
@@ -126,7 +127,7 @@ class FormDataClearingTest extends DuskTestCase
 
     public function testShipToMeActionClearsOnBookChapterOrEaResource(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataClearingBrowser $browser) {
             $browser->assertSelectorClearsOption('@action_ship-to-me', '@resource_ea')
                 ->click('@resource_book')
                 ->assertSelectorClearsOption('@action_ship-to-me', '@resource_book-chapter');
@@ -150,7 +151,7 @@ class FormDataClearingTest extends DuskTestCase
 
     private function assertHiddenRadioHasStatusOnRehidding($clearingSelector, $radioSlug, $expectedClearedValue, $clearedName, $assertStatus)
     {
-        $this->browse(function (Browser $browser) use ($clearingSelector, $clearedName, $radioSlug, $assertStatus) {
+        $this->browse(function (FormDataClearingBrowser $browser) use ($clearingSelector, $clearedName, $radioSlug, $assertStatus) {
             $browser->assertHiddenRadioHasStatusOnRehidding($clearingSelector, '@' . $clearedName, $radioSlug, $assertStatus);
         });
 
@@ -159,7 +160,7 @@ class FormDataClearingTest extends DuskTestCase
 
     private function assertOtherDescriptionInHiddenFieldHasStatusOnHidding($revealingSelector, $hiddingSelector, $expectedClearedValue, $clearedName, $assertStatus)
     {
-        $this->browse(function (Browser $browser) use ($revealingSelector, $hiddingSelector, $clearedName, $assertStatus) {
+        $this->browse(function (FormDataClearingBrowser $browser) use ($revealingSelector, $hiddingSelector, $clearedName, $assertStatus) {
             $browser->assertOtherDescriptionInHiddenFieldHasStatusOnHidding($revealingSelector, $hiddingSelector, '@' . $clearedName, $assertStatus);
         });
 
@@ -168,7 +169,7 @@ class FormDataClearingTest extends DuskTestCase
 
     private function assertOtherDescriptionHasStatusOnNonOtherSelected($nonOtherRadioName, $expectedClearedValue, $clearedName, $assertStatus)
     {
-        $this->browse(function (Browser $browser) use ($clearedName, $nonOtherRadioName, $assertStatus) {
+        $this->browse(function (FormDataClearingBrowser $browser) use ($clearedName, $nonOtherRadioName, $assertStatus) {
             $browser->assertOtherDescriptionHasStatusOnNonOtherSelected('@' . $clearedName, $nonOtherRadioName, $assertStatus);
         });
 
@@ -177,7 +178,7 @@ class FormDataClearingTest extends DuskTestCase
 
     private function assertHasStatusOnHidding($clearingSelector, $clearedSelector, $dbExpectedValue, $dbPropertyName, $assertStatus)
     {
-        $this->browse(function (Browser $browser) use ($clearingSelector, $clearedSelector, $assertStatus) {
+        $this->browse(function (FormDataClearingBrowser $browser) use ($clearingSelector, $clearedSelector, $assertStatus) {
             $browser->assertHasStatusOnHidding($clearingSelector, $clearedSelector, $assertStatus);
         });
 

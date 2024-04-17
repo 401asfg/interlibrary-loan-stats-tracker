@@ -16,23 +16,23 @@ use Tests\TestCase;
 
 class MockILLRequest
 {
-    private string|null $vccBorrowerType;
-    private string|null $action;
-    private string|null $resource;
-    private string|null $fulfilled;
-    private string|null $unfulfilledReason;
-    private int|null $libraryId;
-    private string|null $vccBorrowerNotes;
-    private string|null $requestDate;
+    private $vccBorrowerType;
+    private $action;
+    private $resource;
+    private $fulfilled;
+    private $unfulfilledReason;
+    private $libraryId;
+    private $vccBorrowerNotes;
+    private $requestDate;
 
     function __construct(
-        string|null $vccBorrowerType = ILLRequest::VCC_BORROWER_TYPES['library'],
-        string|null $action = ILLRequest::ACTIONS['borrow'],
-        string|null $resource = ILLRequest::RESOURCES['book'],
-        string|null $fulfilled = 'false',
-        string|null $unfulfilledReason = 'test reason',
+        ?string $vccBorrowerType = ILLRequest::VCC_BORROWER_TYPES['library'],
+        ?string $action = ILLRequest::ACTIONS['borrow'],
+        ?string $resource = ILLRequest::RESOURCES['book'],
+        ?string $fulfilled = 'false',
+        ?string $unfulfilledReason = 'test reason',
         bool $libraryIdIsNull = false,
-        string|null $vccBorrowerNotes = 'test notes',
+        ?string $vccBorrowerNotes = 'test notes',
         bool $requestDateIsNull = false
     ) {
         $this->requestDate = null;
@@ -69,11 +69,11 @@ class MockILLRequest
     public function isEqual(ILLRequest $illRequest): bool
     {
         return $this->requestDate === $illRequest->request_date
-            && $this->fulfilled === $illRequest->fulfilled
+            && $this->fulfilled == $illRequest->fulfilled
             && $this->unfulfilledReason === $illRequest->unfulfilled_reason
             && $this->action === $illRequest->action
             && $this->resource === $illRequest->resource
-            && $this->libraryId === $illRequest->library_id
+            && $this->libraryId == $illRequest->library_id
             && $this->vccBorrowerType === $illRequest->vcc_borrower_type
             && $this->vccBorrowerNotes === $illRequest->vcc_borrower_notes;
     }
@@ -601,7 +601,7 @@ class ILLRequestsAPITest extends TestCase
         return ILLRequest::find(DB::table('ill_requests')->max('id'));
     }
 
-    private function callRestMethod(string $method, string|null $id, MockILLRequest $illRequest)
+    private function callRestMethod(string $method, ?string $id, MockILLRequest $illRequest)
     {
         return $this->call($method, 'ill-requests/' . $id ?? '', $illRequest->getAttributes());
     }

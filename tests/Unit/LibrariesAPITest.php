@@ -19,7 +19,6 @@ class LibrariesAPITest extends TestCase
         $response = $this->get('libraries');
 
         $response->assertStatus(200);
-        $response->assertJsonIsArray();
         $response->assertJsonCount(0);
     }
 
@@ -28,7 +27,6 @@ class LibrariesAPITest extends TestCase
         $response = $this->get('libraries?query=');
 
         $response->assertStatus(200);
-        $response->assertJsonIsArray();
         $response->assertJsonCount(345);
     }
 
@@ -39,20 +37,25 @@ class LibrariesAPITest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJson(
-            fn(AssertableJson $json) =>
-            $json->has(4)
-                ->has(0, fn(AssertableJson $json) =>
-                    $json->where('id', 19)
-                        ->where('name', 'Memorial University of Newfoundland, Queen Elizabeth II Library'))
-                ->has(1, fn(AssertableJson $json) =>
-                    $json->where('id', 91)
-                        ->where('name', 'Mackenzie Public Library'))
-                ->has(2, fn(AssertableJson $json) =>
-                    $json->where('id', 99)
-                        ->where('name', 'Hazelton District Public Library'))
-                ->has(3, fn(AssertableJson $json) =>
-                    $json->where('id', 243)
-                        ->where('name', 'New Zealand National Library'))
+            function (AssertableJson $json) {
+                return $json->has(4)
+                    ->has(0, function (AssertableJson $json) {
+                        return $json->where('id', 19)
+                            ->where('name', 'Memorial University of Newfoundland, Queen Elizabeth II Library');
+                    })
+                    ->has(1, function (AssertableJson $json) {
+                        return $json->where('id', 91)
+                            ->where('name', 'Mackenzie Public Library');
+                    })
+                    ->has(2, function (AssertableJson $json) {
+                        return $json->where('id', 99)
+                            ->where('name', 'Hazelton District Public Library');
+                    })
+                    ->has(3, function (AssertableJson $json) {
+                        return $json->where('id', 243)
+                            ->where('name', 'New Zealand National Library');
+                    });
+            }
         );
     }
 
@@ -63,14 +66,17 @@ class LibrariesAPITest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJson(
-            fn(AssertableJson $json) =>
-            $json->has(2)
-                ->has(0, fn(AssertableJson $json) =>
-                    $json->where('id', 58)
-                        ->where('name', 'University of British Columbia'))
-                ->has(1, fn(AssertableJson $json) =>
-                    $json->where('id', 59)
-                        ->where('name', 'University of Northern British Columbia'))
+            function (AssertableJson $json) {
+                return $json->has(2)
+                    ->has(0, function (AssertableJson $json) {
+                        return $json->where('id', 58)
+                            ->where('name', 'University of British Columbia');
+                    })
+                    ->has(1, function (AssertableJson $json) {
+                        return $json->where('id', 59)
+                            ->where('name', 'University of Northern British Columbia');
+                    });
+            }
         );
     }
 
@@ -79,7 +85,6 @@ class LibrariesAPITest extends TestCase
         $response = $this->get('libraries?query=regina+public+library');
 
         $response->assertStatus(200);
-        $response->assertJsonIsArray();
         $response->assertJsonCount(1);
 
         $response->assertSimilarJson([
@@ -95,7 +100,6 @@ class LibrariesAPITest extends TestCase
         $response = $this->get('libraries?query=coastal+health,+vancouver');
 
         $response->assertStatus(200);
-        $response->assertJsonIsArray();
         $response->assertJsonCount(1);
 
         $response->assertSimilarJson([
@@ -111,7 +115,6 @@ class LibrariesAPITest extends TestCase
         $response = $this->get('libraries?query=notreal');
 
         $response->assertStatus(200);
-        $response->assertJsonIsArray();
         $response->assertJsonCount(0);
     }
 
@@ -154,11 +157,11 @@ class LibrariesAPITest extends TestCase
         $response = $this->get('libraries/' . $id);
 
         $response->assertStatus(200);
-        $response->assertJsonIsObject();
 
         $response->assertJson(
-            fn(AssertableJson $json) =>
-            $json->where('name', $expectedName)
+            function (AssertableJson $json) use ($expectedName) {
+                return $json->where('name', $expectedName);
+            }
         );
     }
 
@@ -167,7 +170,6 @@ class LibrariesAPITest extends TestCase
         $response = $this->get('libraries/' . $id);
 
         $response->assertStatus(200);
-        $response->assertJsonIsArray();
         $response->assertSimilarJson([]);
     }
 }

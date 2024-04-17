@@ -8,6 +8,7 @@ namespace Tests\Browser;
 
 use App\Models\ILLRequest;
 use Tests\DuskTestCase;
+use Laravel\Dusk\Browser;
 
 const UNFULFILLED_REASON_DESCRIPTION = 'unfulfilled reason description';
 const RESOURCE_DESCRIPTION = 'resource description';
@@ -15,7 +16,7 @@ const VCC_BORROWER_NOTES = 'borrower notes';
 const LIBRARY_NAME = 'University of British Columbia';
 const LIBRARY_ID = 58;
 
-class Browser extends \Laravel\Dusk\Browser
+class FormDataSubmissionBrowser extends Browser
 {
     public function fillOutForm()
     {
@@ -92,7 +93,7 @@ class FormDataSubmissionTest extends DuskTestCase
 {
     protected function newBrowser($driver)
     {
-        $browser = new Browser($driver);
+        $browser = new FormDataSubmissionBrowser($driver);
         return $browser->visit('ill-requests/create');
     }
 
@@ -100,14 +101,14 @@ class FormDataSubmissionTest extends DuskTestCase
     {
         parent::setUp();
 
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $browser->fillOutForm();
         });
     }
 
     public function testFulfilledBorrowBookNoNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->submit(),
                 true,
@@ -124,7 +125,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testFulfilledBorrowBookWithNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->typeVCCBorrowerNotes()
                     ->submit(),
@@ -142,7 +143,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testFulfilledBorrowOtherNoNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->selectOtherResource()
                     ->submit(),
@@ -160,7 +161,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testFulfilledBorrowOtherWithNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->selectOtherResource()
                     ->typeVCCBorrowerNotes()
@@ -179,7 +180,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testFulfilledLendBook()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->selectLendAction()
                     ->submit(),
@@ -197,7 +198,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testFulfilledLendOther()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->selectLendAction()
                     ->selectOtherResource()
@@ -216,7 +217,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testFulfilledShipToMeBookNoNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->selectShipToMeAction()
                     ->submit(),
@@ -234,7 +235,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testFulfilledShipToMeBookWithNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->selectShipToMeAction()
                     ->typeVCCBorrowerNotes()
@@ -253,7 +254,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testFulfilledShipToMeOtherNoNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->selectShipToMeAction()
                     ->selectOtherResource()
@@ -272,7 +273,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testFulfilledShipToMeOtherWithNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->selectShipToMeAction()
                     ->selectOtherResource()
@@ -292,7 +293,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledUnavailableBorrowBookNoNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->submit(),
@@ -310,7 +311,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledUnavailableBorrowBookWithNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->typeVCCBorrowerNotes()
@@ -329,7 +330,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledUnavailableBorrowOtherNoNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->selectOtherResource()
@@ -348,7 +349,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledUnavailableBorrowOtherWithNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->selectOtherResource()
@@ -368,7 +369,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledUnavailableLendBook()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->selectLendAction()
@@ -387,7 +388,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledUnavailableLendOther()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->selectLendAction()
@@ -407,7 +408,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledUnavailableShipToMeBookNoNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->selectShipToMeAction()
@@ -426,7 +427,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledUnavailableShipToMeBookWithNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->selectShipToMeAction()
@@ -446,7 +447,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledUnavailableShipToMeOtherNoNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->selectShipToMeAction()
@@ -466,7 +467,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledUnavailableShipToMeOtherWithNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->selectShipToMeAction()
@@ -487,7 +488,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledOtherBorrowBookNoNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
                     ->submit(),
@@ -505,7 +506,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledOtherBorrowBookWithNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
                     ->typeVCCBorrowerNotes()
@@ -524,7 +525,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledOtherBorrowOtherNoNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
                     ->selectOtherResource()
@@ -543,7 +544,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledOtherBorrowOtherWithNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
                     ->selectOtherResource()
@@ -563,7 +564,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledOtherLendBook()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
                     ->selectLendAction()
@@ -582,7 +583,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledOtherLendOther()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
                     ->selectLendAction()
@@ -602,7 +603,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledOtherShipToMeBookNoNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
                     ->selectShipToMeAction()
@@ -621,7 +622,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledOtherShipToMeBookWithNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
                     ->selectShipToMeAction()
@@ -641,7 +642,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledOtherShipToMeOtherNoNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
                     ->selectShipToMeAction()
@@ -661,7 +662,7 @@ class FormDataSubmissionTest extends DuskTestCase
 
     public function testUnfulfilledOtherShipToMeOtherWithNotes()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
                     ->selectShipToMeAction()

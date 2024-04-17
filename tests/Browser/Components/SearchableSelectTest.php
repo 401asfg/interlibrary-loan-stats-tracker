@@ -8,8 +8,9 @@ namespace Tests\Browser;
 
 use Tests\DuskTestCase;
 use App\Models\ILLRequest;
+use Laravel\Dusk\Browser;
 
-class Browser extends \Laravel\Dusk\Browser
+class SearchableSelectBrowser extends Browser
 {
     const SUBMISSION_PAGE_TITLE = 'Submission Successful!';
 
@@ -187,7 +188,7 @@ class SearchableSelectTest extends DuskTestCase
 
     protected function newBrowser($driver)
     {
-        $browser = new Browser($driver);
+        $browser = new SearchableSelectBrowser($driver);
         return $browser->visit('ill-requests/create');
     }
 
@@ -195,14 +196,14 @@ class SearchableSelectTest extends DuskTestCase
     {
         parent::setUp();
 
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->fillOutForm();
         });
     }
 
     public function testClick()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->assertNoSearchbarValueAndDropdownMissing()
                 ->clickSearchBar()
                 ->assertNoSearchbarValueAndDropdownMissingWithSubmit($this);
@@ -211,7 +212,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testClickOnClickOff()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->assertNoSearchbarValueAndDropdownMissing()
                 ->clickSearchBar()
                 ->assertNoSearchbarValueAndDropdownMissing()
@@ -222,7 +223,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testClickOnTypeOneLetterClickOff()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeInSearchbar($this::ONE_LETTER_QUERY)
                 ->assertSearchbarHasValueAndDropdownResults($this::ONE_LETTER_QUERY)
                 ->clickOffSearchBar()
@@ -232,7 +233,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testClickOnTypeOneLetterSelect()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeInSearchbar($this::ONE_LETTER_QUERY)
                 ->clickDropdownResult($this::FIRST_RESULT_INDEX)
                 ->assertSearchbarHasValueAndDropdownMissingWithSubmit($this::ONE_LETTER_FIRST_RESULT, $this, $this::ONE_LETTER_FIRST_RESULT, $this::ONE_LETTER_FIRST_ID);
@@ -241,7 +242,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testClickOnTypeOneLetterSelectClickOnSelectOther()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeInSearchbar($this::ONE_LETTER_QUERY)
                 ->clickDropdownResult($this::FIRST_RESULT_INDEX)
                 ->assertSearchbarHasValueAndDropdownMissing($this::ONE_LETTER_FIRST_RESULT)
@@ -254,7 +255,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testClickOnTypeMultipleLettersClickOff()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeInSearchbar($this::MULTIPLE_LETTERS_QUERY)
                 ->assertSearchbarHasValueAndDropdownResults($this::MULTIPLE_LETTERS_QUERY)
                 ->clickOffSearchBar()
@@ -264,7 +265,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testClickOnTypeMultipleLettersSelect()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeInSearchbar($this::MULTIPLE_LETTERS_QUERY)
                 ->clickDropdownResult($this::FIRST_RESULT_INDEX)
                 ->assertSearchbarHasValueAndDropdownMissingWithSubmit($this::MULTIPLE_LETTERS_FIRST_RESULT, $this, $this::MULTIPLE_LETTERS_FIRST_RESULT, $this::MULTIPLE_LETTERS_FIRST_ID);
@@ -273,7 +274,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testClickOnTypeMultipleLettersSelectClickOnSelectOther()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeInSearchbar($this::MULTIPLE_LETTERS_QUERY)
                 ->clickDropdownResult($this::FIRST_RESULT_INDEX)
                 ->assertSearchbarHasValue($this::MULTIPLE_LETTERS_FIRST_RESULT)
@@ -285,7 +286,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testClickOnTypeFullName()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeInSearchbar($this::MULTIPLE_LETTERS_FIRST_RESULT)
                 ->assertSearchbarHasValueAndDropdownResults($this::MULTIPLE_LETTERS_FIRST_RESULT)
                 ->assertSubmitFails($this);
@@ -294,7 +295,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testClickOnTypeInvalid()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeInSearchbar($this::INVALID_QUERY)
                 ->assertSearchbarHasValueAndNoDropdownResultsWithSubmit($this::INVALID_QUERY, $this);
         });
@@ -302,7 +303,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testClickOnTypeInvalidClickOff()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeInSearchbar($this::INVALID_QUERY)
                 ->assertSearchbarHasValueAndNoDropdownResults($this::INVALID_QUERY)
                 ->clickOffSearchBar()
@@ -312,7 +313,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testClickOnTypeInvalidSelect()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeInSearchbar($this::INVALID_QUERY)
                 ->assertSearchbarHasValueAndNoDropdownResults($this::INVALID_QUERY)
                 ->clickDropdownNoResult()
@@ -322,7 +323,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testSelectTypeNothing()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeAndClickDropdownResult($this::UBC_QUERY, $this::FIRST_RESULT_INDEX)
                 ->clickSearchBar()
                 ->assertSearchbarHasValue($this::UBC_FIRST_RESULT)
@@ -333,7 +334,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testSelectTypeNothingClickOff()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeAndClickDropdownResult($this::UBC_QUERY, $this::FIRST_RESULT_INDEX)
                 ->clickSearchBar()
                 ->assertSearchbarHasValue($this::UBC_FIRST_RESULT)
@@ -345,7 +346,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testSelectTypeNothingSelect()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeAndClickDropdownResult($this::UBC_QUERY, $this::FIRST_RESULT_INDEX)
                 ->clickSearchBar()
                 ->assertSearchbarHasValue($this::UBC_FIRST_RESULT)
@@ -357,7 +358,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testSelectTypeValid()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeAndClickDropdownResult($this::MULTIPLE_LETTERS_QUERY, $this::FIRST_RESULT_INDEX)
                 ->typeInSearchbar($this::UBC_QUERY)
                 ->assertSearchbarHasValue($this::UBC_QUERY)
@@ -368,7 +369,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testSelectTypeValidClickOff()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeAndClickDropdownResult($this::UBC_QUERY, $this::FIRST_RESULT_INDEX)
                 ->typeInSearchbar($this::ONE_LETTER_QUERY)
                 ->assertSearchbarHasValueAndDropdownResults($this::ONE_LETTER_QUERY)
@@ -379,7 +380,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testSelectTypeValidSelect()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeAndClickDropdownResult($this::UBC_QUERY, $this::FIRST_RESULT_INDEX)
                 ->typeInSearchbar($this::ONE_LETTER_QUERY)
                 ->assertSearchbarHasValueAndDropdownResults($this::ONE_LETTER_QUERY)
@@ -390,7 +391,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testSelectTypeInvalid()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeAndClickDropdownResult($this::UBC_QUERY, $this::FIRST_RESULT_INDEX)
                 ->typeInSearchbar($this::INVALID_QUERY)
                 ->assertSearchbarHasValueAndNoDropdownResultsWithSubmit($this::INVALID_QUERY, $this);
@@ -399,7 +400,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testSelectTypeInvalidClickOff()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeAndClickDropdownResult($this::UBC_QUERY, $this::FIRST_RESULT_INDEX)
                 ->typeInSearchbar($this::INVALID_QUERY)
                 ->assertSearchbarHasValueAndNoDropdownResults($this::INVALID_QUERY)
@@ -410,7 +411,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testSelectTypeInvalidSelect()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeAndClickDropdownResult($this::UBC_QUERY, $this::FIRST_RESULT_INDEX)
                 ->typeInSearchbar($this::INVALID_QUERY)
                 ->assertSearchbarHasValueAndNoDropdownResults($this::INVALID_QUERY)
@@ -421,7 +422,7 @@ class SearchableSelectTest extends DuskTestCase
 
     public function testSelectTypeFullName()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (SearchableSelectBrowser $browser) {
             $browser->typeAndClickDropdownResult($this::UBC_QUERY, $this::FIRST_RESULT_INDEX)
                 ->typeInSearchbar($this::MULTIPLE_LETTERS_FIRST_RESULT)
                 ->assertSearchbarHasValue($this::MULTIPLE_LETTERS_FIRST_RESULT)

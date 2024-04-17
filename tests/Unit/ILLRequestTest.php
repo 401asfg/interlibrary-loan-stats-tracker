@@ -24,14 +24,14 @@ class ILLRequestTest extends TestCase
         $this->assertGetsLibraryName(345, 'Libraries Branch of B.C.');
     }
 
-    private function assertGetsLibraryName(int|null $libraryId, string|null $expectedLibraryName): void
+    private function assertGetsLibraryName(?int $libraryId, ?string $expectedLibraryName): void
     {
         $illRequest = ILLRequestTest::createILLRequest($libraryId);
         $libraryName = $illRequest->getLibraryName();
         $this->assertEquals($libraryName, $expectedLibraryName);
     }
 
-    private static function createILLRequest(int|null $libraryId): ILLRequest
+    private static function createILLRequest(?int $libraryId): ILLRequest
     {
         return ILLRequest::create([
             'request_date' => Carbon::today(),

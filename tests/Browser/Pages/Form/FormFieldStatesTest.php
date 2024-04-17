@@ -6,12 +6,12 @@
 
 namespace Tests\Browser;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\DuskTestCase;
 use Carbon\Carbon;
 use App\Models\ILLRequest;
+use Laravel\Dusk\Browser;
 
-class Browser extends \Laravel\Dusk\Browser
+class FormFieldStatesBrowser extends Browser
 {
     public function assertDefaultPreFulfilled()
     {
@@ -84,20 +84,20 @@ class FormFieldStatesTest extends DuskTestCase
 {
     protected function newBrowser($driver)
     {
-        $browser = new Browser($driver);
+        $browser = new FormFieldStatesBrowser($driver);
         return $browser->visit('ill-requests/create');
     }
 
     public function testInitialVisibility(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormFieldStatesBrowser $browser) {
             $browser->assertDefaultPage();
         });
     }
 
     public function testDifferentDate(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormFieldStatesBrowser $browser) {
             $browser->type('@request_date', '01-02-1970')
                 ->assertValue('@request_date', '1970-01-02');
         });
@@ -105,7 +105,7 @@ class FormFieldStatesTest extends DuskTestCase
 
     public function testUnfulfilled(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormFieldStatesBrowser $browser) {
             $browser->click('@fulfilled')
                 ->assertDefaultPreFulfilled()
                 ->assertNonOtherUnfulfilledReasonOptionsNotSelected()
@@ -118,7 +118,7 @@ class FormFieldStatesTest extends DuskTestCase
 
     public function testOtherUnfulfilledReason(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormFieldStatesBrowser $browser) {
             $browser->click('@fulfilled')
                 ->assertDynamicSelectorWithOtherHasCorrectBehavior('unfulfilled_reason', 'google-scholar', 'assertNonOtherUnfulfilledReasonOptionsNotSelected')
                 ->click('@unfulfilled_reason_other')
@@ -130,14 +130,14 @@ class FormFieldStatesTest extends DuskTestCase
 
     public function testOtherResource(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormFieldStatesBrowser $browser) {
             $browser->assertDynamicSelectorWithOtherHasCorrectBehavior('resource', 'book', 'assertNonOtherResourceOptionsNotSelected');
         });
     }
 
     public function testBookChapterOrEaResource(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormFieldStatesBrowser $browser) {
             $browser->click('@resource_ea')
                 ->assertRadioNotSelected('resource', ILLRequest::RESOURCES['book'])
                 ->assertRadioSelected('resource', ILLRequest::RESOURCES['ea'])
@@ -151,7 +151,7 @@ class FormFieldStatesTest extends DuskTestCase
 
     public function testBorrowAction(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormFieldStatesBrowser $browser) {
             $browser->click('@action_borrow')
                 ->assertSee('Parties Involved')
                 ->assertSee('Lending Library')
@@ -165,7 +165,7 @@ class FormFieldStatesTest extends DuskTestCase
 
     public function testLendAction(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormFieldStatesBrowser $browser) {
             $browser->click('@action_lend')
                 ->assertSee('Parties Involved')
                 ->assertMissing('Lending Library')
@@ -179,7 +179,7 @@ class FormFieldStatesTest extends DuskTestCase
 
     public function testShipToMeAction(): void
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormFieldStatesBrowser $browser) {
             $browser->click('@action_ship-to-me')
                 ->assertMissing('Parties Involved')
                 ->assertMissing('Lending Library')
