@@ -20,6 +20,7 @@ use App\Http\Controllers\LibraryController;
 */
 
 Route::get('/', [ILLRequestController::class, 'index']);
+Route::get('ill-requests', [ILLRequestController::class, 'index']);
 Route::get('ill-requests/create', [ILLRequestController::class, 'create']);
 
 Route::post('ill-requests', [ILLRequestController::class, 'store']);
