@@ -28,6 +28,18 @@ div, button, label, textarea, input, select {
     font-size: 20px;
 }
 
+th {
+    background-color: lightgrey;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+th, td {
+    text-align: center;
+    padding: 5px 10px;
+}
+
 button {
     background-color: lightskyblue;
     border: none;
@@ -133,14 +145,25 @@ textarea, input[type="text"] {
     padding: 10px;
 }
 
-.options-dropdown {
-    max-height: 200px;
-    background-color: white;
+.record-table-container {
+    overflow-x: auto;
+    max-height: 500px;
+}
+
+.options-dropdown, .record-table-container, th, td {
     border-style: solid;
     border-width: 1px;
     border-color: grey;
+}
+
+.options-dropdown, .record-table-container {
+    overflow-y: auto;
+    background-color: white;
+}
+
+.options-dropdown {
+    max-height: 200px;
     box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.5);
-    overflow-y: scroll;
     position: absolute;
     z-index: 1;
 }
@@ -160,5 +183,12 @@ textarea, input[type="text"] {
 
 .focused-dropdown-item {
     background-color: lightblue;
+}
+
+.empty-table-notification {
+    margin: 100px auto;
+    padding: 0px 10px;
+    display: table;
+    border-style: solid;
 }
 

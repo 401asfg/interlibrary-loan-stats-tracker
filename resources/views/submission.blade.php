@@ -62,7 +62,7 @@
 <div class="centered-elements-container bottom-buttons-container">
     <button onclick="window.location.href='{{ url('/') }}/ill-requests/create'" dusk='submit' class="submit-button">Submit Another ILL Request</button>
     <button onclick="window.location.href='{{ url('/') }}/ill-requests/{{ $illRequest->id }}/edit'" dusk='edit'>Edit Record</button>
-    <button onclick="window.location.href='{{ url('/') }}/ill-requests'" dusk='records'>View Records</button>
+    <button onclick="window.location.href='{{ url('/') }}/ill-requests/records'" dusk='records'>View Records</button>
     <button onclick="window.location.href='{{ url('/') }}/ill-requests/totals'" dusk='totals'>View Totals</button>
 
     <form action="{{ url('/') }}/ill-requests/{{ $illRequest->id }}" method="POST">

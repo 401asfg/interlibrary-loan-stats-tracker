@@ -9,17 +9,43 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\ILLRequest;
+use Illuminate\Support\Facades\DB;
 
 class ILLRequestController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return view('records');
+        $records = [];
+
+        if ($request->has('date')) {
+            $records = ILLRequest::select(
+                DB::raw('created_at AS "Created At"'),
+                DB::raw('request_date AS "Request Date"'),
+                DB::raw('fulfilled AS "Fulfilled"'),
+                DB::raw('unfulfilled_reason AS "Unfulfilled Reason"'),
+                DB::raw('resource AS "Resource"'),
+                DB::raw('action AS "Action"'),
+                DB::raw('vcc_borrower_type AS "VCC Borrower Type"'),
+                DB::raw('vcc_borrower_notes AS "VCC Borrower Notes"'),
+                DB::raw('libraries.name AS "Library Name"')
+            )
+                ->leftJoin('libraries', 'ill_requests.library_id', '=', 'libraries.id')
+                ->where('created_at', 'LIKE', $request->input('date') . ' __:__:__')
+                ->orderBy('created_at')
+                ->get();
+        }
+
+        return response()->json($records);
     }
 
     public function create()
     {
         return ILLRequestController::getFormView();
+    }
+
+    public function records()
+    {
+        return view('records');
     }
 
     public function totals()

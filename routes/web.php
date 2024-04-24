@@ -25,6 +25,7 @@ Route::get('/', function () {
 
 Route::get('ill-requests', [ILLRequestController::class, 'index']);
 Route::get('ill-requests/create', [ILLRequestController::class, 'create']);
+Route::get('ill-requests/records', [ILLRequestController::class, 'records']);
 Route::get('ill-requests/totals', [ILLRequestController::class, 'totals']);
 Route::post('ill-requests', [ILLRequestController::class, 'store']);
 Route::get('ill-requests/{id}', [ILLRequestController::class, 'show']);
