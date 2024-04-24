@@ -81,41 +81,12 @@ textarea, input[type="text"] {
     display: flex;
 }
 
-.index-buttons-container, .bottom-buttons-container {
-    display: grid;
+.centered-elements-container, .centered-elements-container > form {
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 80px;
+    margin: 30px auto;
 }
 
-.index-buttons-container > button, .bottom-buttons-container > button, .index-buttons-container > form, .bottom-buttons-container > form {
-    margin-top: 0px;
-    margin-left: 15px;
-    margin-right: 15px;
-}
-
-.index-buttons-container > form, .bottom-buttons-container > form {
-    display: grid;
-}
-
-.index-buttons-container {
-    margin-top: 125px;
-}
-
-.bottom-buttons-container {
-    margin-top: 30px;
-}
-
-.index-buttons-container > button, .index-buttons-container > form {
-    margin-bottom: 50px;
-}
-
-.bottom-buttons-container > button, .bottom-buttons-container > form {
-    margin-bottom: 15px;
-}
-
-.report-container, .index-buttons-container, .bottom-buttons-container {
+.report-container, .centered-elements-container {
     max-width: 500px;
     word-wrap: break-word;
 }
@@ -126,6 +97,23 @@ textarea, input[type="text"] {
 
 .report-container > h2 {
     text-align: center;
+}
+
+.bottom-buttons-container, .bottom-buttons-container > form {
+    display: grid;
+    margin-bottom: 80px;
+}
+
+.bottom-buttons-container > button, .bottom-buttons-container > form {
+    margin: 0px 15px 15px;
+}
+
+.index-page-body {
+    margin-top: 125px;
+}
+
+.index-page-body > button, .index-page-body > form {
+    margin-bottom: 50px;
 }
 
 .submit-button {
