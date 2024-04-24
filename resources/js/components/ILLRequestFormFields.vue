@@ -59,8 +59,9 @@
 
     <input type="hidden" name="vcc_borrower_type" v-model="form.vcc_borrower_type">
 
-    <div class="main-buttons-container">
+    <div class="bottom-buttons-container">
         <button type="submit" class="submit-button" dusk="submit">Submit</button>
+        <button onclick="window.location.href='/'" dusk='cancel' class="cancel-button">Cancel</button>
     </div>
 </template>
 

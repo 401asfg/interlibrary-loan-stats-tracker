@@ -14,12 +14,17 @@ class ILLRequestController extends Controller
 {
     public function index()
     {
-        return redirect('ill-requests/create');
+        return view('records');
     }
 
     public function create()
     {
         return ILLRequestController::getFormView();
+    }
+
+    public function totals()
+    {
+        return view('totals');
     }
 
     public function store(Request $request)

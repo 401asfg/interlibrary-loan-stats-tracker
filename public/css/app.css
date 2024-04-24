@@ -1,1 +1,176 @@
-body{background-color:#f8fafc;font-family:Source Sans Pro,EdmondSans,Helvetica Neue,Helvetica,Arial,sans-serif,Open Sans,Ubuntu,Roboto;margin-left:auto;margin-right:auto;max-width:1140px;padding-left:30px;padding-right:30px}h1{text-align:center}h2{margin-bottom:10px}.main-buttons-container,h2{margin-top:70px}form{display:inline}button,div,input,label,select,textarea{font-size:20px}button{background-color:#87cefa;border:none;border-radius:10px;padding:10px 30px}button:hover{filter:brightness(110%);transition:.4s}button:active{filter:brightness(100%);transition:0s}label{margin-right:20px}input[type=date]{padding:4px 10px}input[type=checkbox],input[type=radio]{transform:scale(1.5)}input[type=radio]{margin-right:10px}textarea{font-family:Source Sans Pro,EdmondSans,Helvetica Neue,Helvetica,Arial,sans-serif,Open Sans,Ubuntu,Roboto;padding-bottom:50px}input[type=text],textarea{margin-top:10px;padding-left:8px;width:100%}.field-header{margin-bottom:5px;margin-top:30px}.radio-buttons-container{display:flex}.main-buttons-container{padding-bottom:30px;text-align:center}.main-buttons-container>button,.main-buttons-container>form{margin:auto 10px 15px}.report-container{word-wrap:break-word;margin:auto auto 40px;max-width:500px}.report-container>h2{text-align:center}.submit-button{background-color:#90ee90}.destructive-button{background-color:#f08080}.success-title{color:green}.success-banner{background-color:#90ee90;padding:10px}.options-dropdown{background-color:#fff;border:1px solid grey;box-shadow:10px 10px 10px 0 rgba(0,0,0,.5);max-height:200px;overflow-y:scroll;position:absolute;z-index:1}.options-dropdown>ul{margin:0;padding:0}.options-dropdown>ul>li{border:solid rgba(0,0,0,.25);border-width:0 0 1px;list-style-type:none;padding:5px 15px}.focused-dropdown-item{background-color:#add8e6}
+/*
+ * Author: Michael Allan
+ */
+
+body {
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-family: Source Sans Pro, EdmondSans, Helvetica Neue, Helvetica, Arial, sans-serif, Open Sans, Ubuntu, Roboto;
+    background-color: #f8fafc;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+h2, .bottom-buttons-container {
+    margin-top: 70px;
+}
+
+div, button, label, textarea, input, select {
+    font-size: 20px;
+}
+
+button {
+    background-color: lightskyblue;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 30px;
+}
+
+button:hover {
+    filter: brightness(110%);
+    transition: 0.4s;
+}
+
+button:active {
+    filter: brightness(100%);
+    transition: 0.0s;
+}
+
+label {
+    margin-right: 20px;
+}
+
+input[type="date"] {
+    padding: 4px 10px;
+}
+
+input[type="checkbox"], input[type="radio"] {
+    transform: scale(1.5);
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+textarea {
+    padding-bottom: 50px;
+    font-family: Source Sans Pro, EdmondSans, Helvetica Neue, Helvetica, Arial, sans-serif, Open Sans, Ubuntu, Roboto;
+}
+
+textarea, input[type="text"] {
+    width: 100%;
+    margin-top: 10px;
+    padding-left: 8px;
+}
+
+.field-header {
+    margin-top: 30px;
+    margin-bottom: 5px;
+}
+
+.radio-buttons-container {
+    display: flex;
+}
+
+.index-buttons-container, .bottom-buttons-container {
+    display: grid;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 80px;
+}
+
+.index-buttons-container > button, .bottom-buttons-container > button, .index-buttons-container > form, .bottom-buttons-container > form {
+    margin-top: 0px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.index-buttons-container > form, .bottom-buttons-container > form {
+    display: grid;
+}
+
+.index-buttons-container {
+    margin-top: 125px;
+}
+
+.bottom-buttons-container {
+    margin-top: 30px;
+}
+
+.index-buttons-container > button, .index-buttons-container > form {
+    margin-bottom: 50px;
+}
+
+.bottom-buttons-container > button, .bottom-buttons-container > form {
+    margin-bottom: 15px;
+}
+
+.report-container, .index-buttons-container, .bottom-buttons-container {
+    max-width: 500px;
+    word-wrap: break-word;
+}
+
+.report-container {
+    margin: auto auto 40px;
+}
+
+.report-container > h2 {
+    text-align: center;
+}
+
+.submit-button {
+    background-color: lightgreen;
+}
+
+.cancel-button {
+    background-color: lightcoral;
+}
+
+.success-title {
+    color: green;
+}
+
+.success-banner {
+    background-color: lightgreen;
+    padding: 10px;
+}
+
+.options-dropdown {
+    max-height: 200px;
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: grey;
+    box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.5);
+    overflow-y: scroll;
+    position: absolute;
+    z-index: 1;
+}
+
+.options-dropdown > ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+.options-dropdown > ul > li {
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
+    border-color: rgba(0, 0, 0, 0.25);
+    list-style-type: none;
+    padding: 5px 15px;
+}
+
+.focused-dropdown-item {
+    background-color: lightblue;
+}
+

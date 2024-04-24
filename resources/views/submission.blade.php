@@ -59,14 +59,16 @@
     </div>
 </div>
 
-<div class="main-buttons-container">
-    <button onclick="window.location.href='{{ url('/') }}/ill-requests/create'" dusk='submit'>Submit Another ILL Request</button>
+<div class="bottom-buttons-container">
+    <button onclick="window.location.href='{{ url('/') }}/ill-requests/create'" dusk='submit' class="submit-button">Submit Another ILL Request</button>
     <button onclick="window.location.href='{{ url('/') }}/ill-requests/{{ $illRequest->id }}/edit'" dusk='edit'>Edit Record</button>
+    <button onclick="window.location.href='{{ url('/') }}/ill-requests'" dusk='records'>View Records</button>
+    <button onclick="window.location.href='{{ url('/') }}/ill-requests/totals'" dusk='totals'>View Totals</button>
 
     <form action="{{ url('/') }}/ill-requests/{{ $illRequest->id }}" method="POST">
         @csrf
         @method("DELETE")
-        <button class="destructive-button" dusk='delete'>Delete Record</button>
+        <button class="cancel-button" dusk='delete'>Delete Record</button>
     </form>
 </div>
 @endsection

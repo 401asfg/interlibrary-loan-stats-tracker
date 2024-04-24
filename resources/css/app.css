@@ -20,12 +20,8 @@ h2 {
     margin-bottom: 10px;
 }
 
-h2, .main-buttons-container {
+h2, .bottom-buttons-container {
     margin-top: 70px;
-}
-
-form {
-    display: inline;
 }
 
 div, button, label, textarea, input, select {
@@ -85,19 +81,47 @@ textarea, input[type="text"] {
     display: flex;
 }
 
-.main-buttons-container {
-    padding-bottom: 30px;
+.index-buttons-container, .bottom-buttons-container {
+    display: grid;
     text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 80px;
 }
 
-.main-buttons-container > button, .main-buttons-container > form {
-    margin: auto 10px 15px;
+.index-buttons-container > button, .bottom-buttons-container > button, .index-buttons-container > form, .bottom-buttons-container > form {
+    margin-top: 0px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.index-buttons-container > form, .bottom-buttons-container > form {
+    display: grid;
+}
+
+.index-buttons-container {
+    margin-top: 125px;
+}
+
+.bottom-buttons-container {
+    margin-top: 30px;
+}
+
+.index-buttons-container > button, .index-buttons-container > form {
+    margin-bottom: 50px;
+}
+
+.bottom-buttons-container > button, .bottom-buttons-container > form {
+    margin-bottom: 15px;
+}
+
+.report-container, .index-buttons-container, .bottom-buttons-container {
+    max-width: 500px;
+    word-wrap: break-word;
 }
 
 .report-container {
-    max-width: 500px;
     margin: auto auto 40px;
-    word-wrap: break-word;
 }
 
 .report-container > h2 {
@@ -108,7 +132,7 @@ textarea, input[type="text"] {
     background-color: lightgreen;
 }
 
-.destructive-button {
+.cancel-button {
     background-color: lightcoral;
 }
 
