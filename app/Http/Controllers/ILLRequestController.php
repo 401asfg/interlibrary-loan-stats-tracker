@@ -10,30 +10,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\ILLRequest;
 use Illuminate\Support\Facades\DB;
+use DateTime;
 
 class ILLRequestController extends Controller
 {
     public function index(Request $request)
     {
-        $records = [];
+        if (!$request->has('fromDate') || !$request->has('toDate'))
+            return response()->json([]);
 
-        if ($request->has('date')) {
-            $records = ILLRequest::select(
-                DB::raw('created_at AS "Created At"'),
-                DB::raw('request_date AS "Request Date"'),
-                DB::raw('fulfilled AS "Fulfilled"'),
-                DB::raw('unfulfilled_reason AS "Unfulfilled Reason"'),
-                DB::raw('resource AS "Resource"'),
-                DB::raw('action AS "Action"'),
-                DB::raw('vcc_borrower_type AS "VCC Borrower Type"'),
-                DB::raw('vcc_borrower_notes AS "VCC Borrower Notes"'),
-                DB::raw('libraries.name AS "Library Name"')
-            )
-                ->leftJoin('libraries', 'ill_requests.library_id', '=', 'libraries.id')
-                ->where('created_at', 'LIKE', $request->input('date') . ' __:__:__')
-                ->orderBy('created_at')
-                ->get();
-        }
+        $fromDate = new DateTime($request->input('fromDate'));
+        $toDate = (new DateTime($request->input('toDate')))->modify("+1 day");
+
+        $records = ILLRequest::select(
+            DB::raw('created_at AS "Created At"'),
+            DB::raw('request_date AS "Request Date"'),
+            DB::raw('fulfilled AS "Fulfilled"'),
+            DB::raw('unfulfilled_reason AS "Unfulfilled Reason"'),
+            DB::raw('resource AS "Resource"'),
+            DB::raw('action AS "Action"'),
+            DB::raw('vcc_borrower_type AS "VCC Borrower Type"'),
+            DB::raw('vcc_borrower_notes AS "VCC Borrower Notes"'),
+            DB::raw('libraries.name AS "Library Name"')
+        )
+            ->leftJoin('libraries', 'ill_requests.library_id', '=', 'libraries.id')
+            ->where('created_at', '>=', $fromDate)
+            ->where('created_at', '<', $toDate)
+            ->orderBy('created_at')
+            ->get();
 
         return response()->json($records);
     }
@@ -46,11 +50,6 @@ class ILLRequestController extends Controller
     public function records()
     {
         return view('records');
-    }
-
-    public function totals()
-    {
-        return view('totals');
     }
 
     public function store(Request $request)

@@ -1,21 +1,34 @@
 <template>
-    <div class="centered-elements-container">
-        <input name="date" type="date" dusk="date" @input="onDateSelection" required>
+    <div class="horizontal-container">
+        <div class="horizontal-container">
+            <div>Multiple Dates?</div>
+            <input name="fulfilled" type="checkbox" dusk="multiple_checkbox" :value="isDateRange" @input="onToggleMultiple">
+        </div>
+
+        <div class="horizontal-container">
+            <div>{{ isDateRange ? "From" : "Date" }}</div>
+            <input name="from-date" type="date" dusk="from_date" :value="fromDate" @input="onFromDateSelection">
+        </div>
+
+        <div v-if="isDateRange" class="horizontal-container">
+            <div>To</div>
+            <input name="to-date" type="date" dusk="to_date" :value="toDate" @input="onToDateSelection">
+        </div>
     </div>
 
-    <div v-if="hasRecords()" class="record-table-container">
-        <table>
-            <tr>
-                <th v-for="header in Object.keys(records[0])">{{ header }}</th>
-            </tr>
-            <tr v-for="record in records">
-                <td v-for="value in Object.values(record)">{{ value }}</td>
-            </tr>
-        </table>
-    </div>
+    <h3>Records Found: {{ numRecords() }}</h3>
 
-    <div v-else class="empty-table-notification">
-        <h3>No records found</h3>
+    <div v-if="hasRecords()">
+        <div class="record-table-container">
+            <table>
+                <tr>
+                    <th v-for="header in Object.keys(records[0])">{{ header }}</th>
+                </tr>
+                <tr v-for="record in records">
+                    <td v-for="value in Object.values(record)">{{ value }}</td>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <div class="centered-elements-container bottom-buttons-container">
@@ -30,17 +43,48 @@
         name: 'Records',
         data() {
             return {
+                isDateRange: false,
+                fromDate: '',
+                toDate: '',
                 records: []
             }
         },
         methods: {
-            hasRecords() {
-                return this.records.length !== 0;
+            numRecords() {
+                return this.records.length;
             },
-            onDateSelection(event) {
-                axios.get('/ill-requests', { params: { date: event.target.value } })
-                     .then(response => this.records = response.data)
-                     .catch(error => console.log(error));
+            hasRecords() {
+                return this.numRecords() !== 0;
+            },
+            onDateSelection() {
+                if (this.fromDate === '') return;
+
+                let toDate = this.toDate;
+                if (!this.isDateRange) toDate = this.fromDate;
+
+                if (toDate === '') return;
+
+                axios.get('/ill-requests', {
+                    params: {
+                        fromDate: this.fromDate,
+                        toDate: toDate
+                    }
+                })
+                    .then(response => this.records = response.data)
+                    .catch(error => console.log(error));
+            },
+            onToggleMultiple(event) {
+                this.isDateRange = event.target.checked;
+                if (!this.isDateRange) this.toDate = '';
+                this.onDateSelection();
+            },
+            onFromDateSelection(event) {
+                this.fromDate = event.target.value;
+                this.onDateSelection();
+            },
+            onToDateSelection(event) {
+                this.toDate = event.target.value;
+                this.onDateSelection();
             }
         }
     }

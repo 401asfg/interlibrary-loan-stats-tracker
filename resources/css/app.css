@@ -89,8 +89,17 @@ textarea, input[type="text"] {
     margin-bottom: 5px;
 }
 
-.radio-buttons-container {
+.horizontal-container {
     display: flex;
+    align-items: center;
+}
+
+.horizontal-container > input[type="checkbox"], .horizontal-container > input[type="date"] {
+    margin-right: 40px;
+}
+
+.horizontal-container > div {
+    margin-right: 10px;
 }
 
 .centered-elements-container, .centered-elements-container > form {
@@ -146,6 +155,7 @@ textarea, input[type="text"] {
 }
 
 .record-table-container {
+    margin: 50px auto;
     overflow-x: auto;
     max-height: 500px;
 }
@@ -157,8 +167,8 @@ textarea, input[type="text"] {
 }
 
 .options-dropdown, .record-table-container {
-    overflow-y: auto;
     background-color: white;
+    overflow-y: auto;
 }
 
 .options-dropdown {
@@ -183,11 +193,4 @@ textarea, input[type="text"] {
 
 .focused-dropdown-item {
     background-color: lightblue;
-}
-
-.empty-table-notification {
-    margin: 100px auto;
-    padding: 0px 10px;
-    display: table;
-    border-style: solid;
 }

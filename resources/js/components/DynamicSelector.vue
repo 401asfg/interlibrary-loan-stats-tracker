@@ -1,7 +1,7 @@
 <!-- Author: Michael Allan -->
 
 <template>
-    <div class="radio-buttons-container">
+    <div class="horizontal-container">
         <div v-for="[slug, displayName] of Object.entries(choices)">
             <div v-if="notHidden(slug)">
                 <!-- FIXME: bad practice to tie v-model to init value that will be outdated? -->
