@@ -93,8 +93,7 @@ class FormDataSubmissionTest extends DuskTestCase
 {
     protected function newBrowser($driver)
     {
-        $browser = new FormDataSubmissionBrowser($driver);
-        return $browser->visit('ill-requests/create');
+        return new FormDataSubmissionBrowser($driver);
     }
 
     protected function setUp(): void
@@ -102,7 +101,8 @@ class FormDataSubmissionTest extends DuskTestCase
         parent::setUp();
 
         $this->browse(function (FormDataSubmissionBrowser $browser) {
-            $browser->fillOutForm();
+            $browser->visit('ill-requests/create')
+                ->fillOutForm();
         });
     }
 

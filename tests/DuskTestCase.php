@@ -36,7 +36,7 @@ abstract class DuskTestCase extends BaseTestCase
         Artisan::call('migrate:fresh');
 
         $this->browse(function (Browser $browser) {
-            $browser->visit('ill-requests/create');
+            $browser->visit('/');
         });
     }
 

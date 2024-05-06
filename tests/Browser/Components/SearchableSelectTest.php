@@ -188,8 +188,7 @@ class SearchableSelectTest extends DuskTestCase
 
     protected function newBrowser($driver)
     {
-        $browser = new SearchableSelectBrowser($driver);
-        return $browser->visit('ill-requests/create');
+        return new SearchableSelectBrowser($driver);
     }
 
     protected function setUp(): void
@@ -197,7 +196,8 @@ class SearchableSelectTest extends DuskTestCase
         parent::setUp();
 
         $this->browse(function (SearchableSelectBrowser $browser) {
-            $browser->fillOutForm();
+            $browser->visit('ill-requests/create')
+                ->fillOutForm();
         });
     }
 

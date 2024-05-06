@@ -91,8 +91,7 @@ class FormDataClearingTest extends DuskTestCase
 {
     protected function newBrowser($driver)
     {
-        $browser = new FormDataClearingBrowser($driver);
-        return $browser->visit('ill-requests/create');
+        return new FormDataClearingBrowser($driver);
     }
 
     protected function setUp(): void
@@ -100,7 +99,8 @@ class FormDataClearingTest extends DuskTestCase
         parent::setUp();
 
         $this->browse(function (FormDataClearingBrowser $browser) {
-            $browser->fillOutForm();
+            $browser->visit('ill-requests/create')
+            ->fillOutForm();
         });
     }
 

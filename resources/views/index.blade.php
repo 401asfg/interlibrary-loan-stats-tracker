@@ -6,7 +6,7 @@
 
 @section('content')
 
-<h1 dusk="form_title">ILL Statistics Form</h1>
+<h1 dusk="index_title">ILL Statistics Form</h1>
 
 <div class="index-page-body centered-elements-container bottom-buttons-container">
     <button onclick="window.location.href='{{ url('/') }}/ill-requests/create'" dusk='submit' class="submit-button">Submit an ILL Request</button>

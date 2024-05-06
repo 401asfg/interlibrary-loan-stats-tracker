@@ -84,8 +84,15 @@ class FormFieldStatesTest extends DuskTestCase
 {
     protected function newBrowser($driver)
     {
-        $browser = new FormFieldStatesBrowser($driver);
-        return $browser->visit('ill-requests/create');
+        return new FormFieldStatesBrowser($driver);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->browse(function (FormFieldStatesBrowser $browser) {
+            $browser->visit('ill-requests/create');
+        });
     }
 
     public function testInitialVisibility(): void

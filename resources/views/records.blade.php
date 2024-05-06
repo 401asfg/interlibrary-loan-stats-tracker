@@ -10,7 +10,7 @@
 
 @section('content')
 
-<h1 dusk="form_title">Records</h1>
+<h1 dusk="records_title">Records</h1>
 
 <records />
 

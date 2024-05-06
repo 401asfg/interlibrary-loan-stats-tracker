@@ -16,8 +16,13 @@ class ILLRequestController extends Controller
 {
     public function index(Request $request)
     {
-        if (!$request->has('fromDate') || !$request->has('toDate'))
-            return response()->json([]);
+        if (
+            !$request->has('fromDate')
+            || !$request->has('toDate')
+            || !$request->filled('fromDate')
+            || !$request->filled('toDate')
+        )
+            return response('', 422);
 
         $fromDate = new DateTime($request->input('fromDate'));
         $toDate = (new DateTime($request->input('toDate')))->modify("+1 day");
@@ -36,7 +41,7 @@ class ILLRequestController extends Controller
             ->leftJoin('libraries', 'ill_requests.library_id', '=', 'libraries.id')
             ->where('created_at', '>=', $fromDate)
             ->where('created_at', '<', $toDate)
-            ->orderBy('created_at')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return response()->json($records);

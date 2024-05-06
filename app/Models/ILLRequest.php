@@ -51,7 +51,8 @@ class ILLRequest extends Model
         'action',
         'library_id',
         'vcc_borrower_type',
-        'vcc_borrower_notes'
+        'vcc_borrower_notes',
+        'created_at'
     ];
 
     public function getLibraryName(): ?string

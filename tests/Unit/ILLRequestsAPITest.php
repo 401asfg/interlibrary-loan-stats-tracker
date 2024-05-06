@@ -89,16 +89,8 @@ class ILLRequestsAPITest extends TestCase
     {
         parent::setUp();
 
-        Artisan::call('migrate');
+        Artisan::call('migrate:fresh');
         Artisan::call('db:seed');
-    }
-
-    public function testIndex(): void
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(302);
-        $response->assertRedirect('ill-requests/create');
     }
 
     public function testCreate(): void
@@ -107,6 +99,435 @@ class ILLRequestsAPITest extends TestCase
 
         $response->assertStatus(200);
         $response->assertViewIs('form');
+    }
+
+    public function testIndexNoParams(): void
+    {
+        $this->assertIndexMissingParameters('');
+    }
+
+    public function testIndexNoDates(): void
+    {
+        $this->assertIndexMissingParameters('fromDate=&toDate=');
+    }
+
+    public function testIndexNoFromDate(): void
+    {
+        $this->assertIndexMissingParameters('fromDate=&toDate=' . Carbon::today());
+    }
+
+    public function testIndexNoToDate(): void
+    {
+        $this->assertIndexMissingParameters('fromDate=' . Carbon::today() . '&toDate=');
+    }
+
+    public function testIndexDatesEqual(): void
+    {
+        $this->setupIndex();
+
+        $today = explode('T', Carbon::today())[0];
+
+        $this->assertIndex(
+            'fromDate=' . Carbon::today() . '&toDate=' . Carbon::today(),
+            [
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['borrow'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $today
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => ILLRequest::UNFULFILLED_REASONS['google-scholar'],
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['borrow'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $today
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['lend'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $today
+                ]
+            ]
+        );
+    }
+
+    public function testIndexToDateLessThanFromDate(): void
+    {
+        $this->assertIndexEmpty('fromDate=' . Carbon::tomorrow() . '&toDate=' . Carbon::today());
+    }
+
+    public function testIndexFromDateLessThanToDate(): void
+    {
+        $this->setupIndex();
+
+        $today = explode('T', Carbon::today())[0];
+        $tomorrow = explode('T', Carbon::tomorrow())[0];
+
+        $this->assertIndex(
+            'fromDate=' . Carbon::tomorrow() . '&toDate=' . Carbon::tomorrow()->addDays(1),
+            [
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['ship-to-me'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'New Notes',
+                    'Created At' => $tomorrow
+                ]
+            ]
+        );
+    }
+
+    public function testIndexEarlyFromDateTodayToDate(): void
+    {
+        $this->setupIndex();
+
+        $today = explode('T', Carbon::today())[0];
+        $yesterday = explode('T', Carbon::yesterday())[0];
+        $yesterdaySubFive = explode('T', Carbon::yesterday()->subDays(5))[0];
+        $yesterdaySubSix = explode('T', Carbon::yesterday()->subDays(6))[0];
+
+        $this->assertIndex(
+            'fromDate=' . Carbon::yesterday()->subDays(7) . '&toDate=' . Carbon::today(),
+            [
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['borrow'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $today
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => ILLRequest::UNFULFILLED_REASONS['google-scholar'],
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['borrow'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $today
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['lend'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $today
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['ship-to-me'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $yesterday
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => 'REASON',
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['ship-to-me'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'New Notes',
+                    'Created At' => $yesterdaySubFive
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => 'REASON',
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['ship-to-me'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'New Notes',
+                    'Created At' => $yesterdaySubSix
+                ]
+            ]
+        );
+    }
+
+    public function testIndexTodayFromDateLateToDate(): void
+    {
+        $this->setupIndex();
+
+        $today = explode('T', Carbon::today())[0];
+        $tomorrow = explode('T', Carbon::tomorrow())[0];
+        $tomorrowAddNine = explode('T', Carbon::tomorrow()->addDays(9))[0];
+
+        $this->assertIndex(
+            'fromDate=' . Carbon::today() . '&toDate=' . Carbon::tomorrow()->addDays(9),
+            [
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['borrow'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $today
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => ILLRequest::UNFULFILLED_REASONS['google-scholar'],
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['borrow'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $today
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['lend'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $today
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['ship-to-me'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'New Notes',
+                    'Created At' => $tomorrow
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => 'REASON',
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['lend'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'New Notes',
+                    'Created At' => $tomorrowAddNine
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => 'REASON',
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['lend'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
+                    'VCC Borrower Notes' => 'New Notes',
+                    'Created At' => $tomorrowAddNine
+                ]
+            ]
+        );
+    }
+
+    public function testIndexMissesEarlierRecords(): void
+    {
+        $this->setupIndex();
+        $this->assertIndexEmpty('fromDate=' . Carbon::yesterday()->subDays(8) . '&toDate=' . Carbon::yesterday()->subDays(7));
+    }
+
+    public function testIndexMissesLaterRecords(): void
+    {
+        $this->setupIndex();
+        $this->assertIndexEmpty('fromDate=' . Carbon::tomorrow()->addDays(11) . '&toDate=' . Carbon::tomorrow()->addDays(15));
+    }
+
+    public function testIndexCapturesWideRangeOfRecords(): void
+    {
+        $this->setupIndex();
+
+        $today = explode('T', Carbon::today())[0];
+        $tomorrow = explode('T', Carbon::tomorrow())[0];
+        $tomorrowAddNine = explode('T', Carbon::tomorrow()->addDays(9))[0];
+        $tomorrowAddTen = explode('T', Carbon::tomorrow()->addDays(10))[0];
+
+        $yesterday = explode('T', Carbon::yesterday())[0];
+        $yesterdaySubFive = explode('T', Carbon::yesterday()->subDays(5))[0];
+        $yesterdaySubSix = explode('T', Carbon::yesterday()->subDays(6))[0];
+
+        $this->assertIndex(
+            'fromDate=' . Carbon::yesterday()->subDays(15) . '&toDate=' . Carbon::tomorrow()->addDays(15),
+            [
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['borrow'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $today
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => ILLRequest::UNFULFILLED_REASONS['google-scholar'],
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['borrow'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $today
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['lend'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $today
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['ship-to-me'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'New Notes',
+                    'Created At' => $tomorrow
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => 'REASON',
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['lend'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'New Notes',
+                    'Created At' => $tomorrowAddNine
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => 'REASON',
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['lend'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
+                    'VCC Borrower Notes' => 'New Notes',
+                    'Created At' => $tomorrowAddNine
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => 'REASON',
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['lend'],
+                    'Library Name' => 'B.C. Cancer Agency',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
+                    'VCC Borrower Notes' => 'New Notes',
+                    'Created At' => $tomorrowAddTen
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '1',
+                    'Unfulfilled Reason' => null,
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['ship-to-me'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'Notes',
+                    'Created At' => $yesterday
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => 'REASON',
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['ship-to-me'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'New Notes',
+                    'Created At' => $yesterdaySubFive
+                ],
+                [
+                    'Request Date' => $today,
+                    'Fulfilled' => '0',
+                    'Unfulfilled Reason' => 'REASON',
+                    'Resource' => ILLRequest::RESOURCES['book'],
+                    'Action' => ILLRequest::ACTIONS['ship-to-me'],
+                    'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
+                    'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+                    'VCC Borrower Notes' => 'New Notes',
+                    'Created At' => $yesterdaySubSix
+                ]
+            ]
+        );
+    }
+
+    public function testIndexDatesEqualBeforeRecords(): void
+    {
+        $this->assertIndexEmpty('fromDate=' . Carbon::yesterday() . '&toDate=' . Carbon::yesterday());
+    }
+
+    public function testIndexDatesEqualAfterRecords(): void
+    {
+        $this->assertIndexEmpty('fromDate=' . Carbon::tomorrow()->addDays(1) . '&toDate=' . Carbon::tomorrow()->addDays(1));
+    }
+
+    public function testIndexFromDateLessThanToDateBeforeRecords(): void
+    {
+        $this->assertIndexEmpty('fromDate=' . Carbon::yesterday()->subDays(1) . '&toDate=' . Carbon::yesterday());
+    }
+
+    public function testIndexFromDateLessThanToDateAfterRecords(): void
+    {
+        $this->assertIndexEmpty('fromDate=' . Carbon::tomorrow()->addDays(1) . '&toDate=' . Carbon::tomorrow()->addDays(2));
+    }
+
+    public function testRecords(): void
+    {
+        $response = $this->get('ill-requests/records');
+
+        $response->assertStatus(200);
+        $response->assertViewIs('records');
     }
 
     public function testShow(): void
@@ -509,6 +930,150 @@ class ILLRequestsAPITest extends TestCase
                 null
             )
         );
+    }
+
+    private function setupIndex()
+    {
+        Artisan::call("migrate:fresh");
+
+        ILLRequest::create([
+            'request_date' => Carbon::today(),
+            'fulfilled' => true,
+            'unfulfilled_reason' => null,
+            'resource' => ILLRequest::RESOURCES['book'],
+            'action' => ILLRequest::ACTIONS['borrow'],
+            'library_id' => 1,
+            'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+            'vcc_borrower_notes' => 'Notes',
+            'created_at' => Carbon::today()
+        ])->save();
+
+        ILLRequest::create([
+            'request_date' => Carbon::today(),
+            'fulfilled' => false,
+            'unfulfilled_reason' => ILLRequest::UNFULFILLED_REASONS['google-scholar'],
+            'resource' => ILLRequest::RESOURCES['book'],
+            'action' => ILLRequest::ACTIONS['borrow'],
+            'library_id' => 1,
+            'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+            'vcc_borrower_notes' => 'Notes',
+            'created_at' => Carbon::today()
+        ])->save();
+
+        ILLRequest::create([
+            'request_date' => Carbon::today(),
+            'fulfilled' => true,
+            'unfulfilled_reason' => null,
+            'resource' => ILLRequest::RESOURCES['book'],
+            'action' => ILLRequest::ACTIONS['lend'],
+            'library_id' => 1,
+            'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+            'vcc_borrower_notes' => 'Notes',
+            'created_at' => Carbon::today()
+        ])->save();
+
+        ILLRequest::create([
+            'request_date' => Carbon::today(),
+            'fulfilled' => true,
+            'unfulfilled_reason' => null,
+            'resource' => ILLRequest::RESOURCES['book'],
+            'action' => ILLRequest::ACTIONS['ship-to-me'],
+            'library_id' => 1,
+            'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+            'vcc_borrower_notes' => 'Notes',
+            'created_at' => Carbon::yesterday()
+        ])->save();
+
+        ILLRequest::create([
+            'request_date' => Carbon::today(),
+            'fulfilled' => true,
+            'unfulfilled_reason' => null,
+            'resource' => ILLRequest::RESOURCES['book'],
+            'action' => ILLRequest::ACTIONS['ship-to-me'],
+            'library_id' => 1,
+            'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+            'vcc_borrower_notes' => 'New Notes',
+            'created_at' => Carbon::tomorrow()
+        ])->save();
+
+        ILLRequest::create([
+            'request_date' => Carbon::today(),
+            'fulfilled' => false,
+            'unfulfilled_reason' => 'REASON',
+            'resource' => ILLRequest::RESOURCES['book'],
+            'action' => ILLRequest::ACTIONS['ship-to-me'],
+            'library_id' => 1,
+            'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+            'vcc_borrower_notes' => 'New Notes',
+            'created_at' => Carbon::yesterday()->subDays(5)
+        ])->save();
+
+        ILLRequest::create([
+            'request_date' => Carbon::today(),
+            'fulfilled' => false,
+            'unfulfilled_reason' => 'REASON',
+            'resource' => ILLRequest::RESOURCES['book'],
+            'action' => ILLRequest::ACTIONS['ship-to-me'],
+            'library_id' => 1,
+            'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+            'vcc_borrower_notes' => 'New Notes',
+            'created_at' => Carbon::yesterday()->subDays(6)
+        ])->save();
+
+        ILLRequest::create([
+            'request_date' => Carbon::today(),
+            'fulfilled' => false,
+            'unfulfilled_reason' => 'REASON',
+            'resource' => ILLRequest::RESOURCES['book'],
+            'action' => ILLRequest::ACTIONS['lend'],
+            'library_id' => 1,
+            'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
+            'vcc_borrower_notes' => 'New Notes',
+            'created_at' => Carbon::tomorrow()->addDays(9)
+        ])->save();
+
+        ILLRequest::create([
+            'request_date' => Carbon::today(),
+            'fulfilled' => false,
+            'unfulfilled_reason' => 'REASON',
+            'resource' => ILLRequest::RESOURCES['book'],
+            'action' => ILLRequest::ACTIONS['lend'],
+            'library_id' => 1,
+            'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
+            'vcc_borrower_notes' => 'New Notes',
+            'created_at' => Carbon::tomorrow()->addDays(9)
+        ])->save();
+
+        ILLRequest::create([
+            'request_date' => Carbon::today(),
+            'fulfilled' => false,
+            'unfulfilled_reason' => 'REASON',
+            'resource' => ILLRequest::RESOURCES['book'],
+            'action' => ILLRequest::ACTIONS['lend'],
+            'library_id' => 4,
+            'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
+            'vcc_borrower_notes' => 'New Notes',
+            'created_at' => Carbon::tomorrow()->addDays(10)
+        ])->save();
+    }
+
+    private function assertIndex(string $params, array $expectedResponse)
+    {
+        $response = $this->get('ill-requests?' . $params);
+
+        $response->assertStatus(200);
+        $response->assertSimilarJson($expectedResponse);
+    }
+
+    private function assertIndexMissingParameters(string $params)
+    {
+        $response = $this->get('ill-requests?' . $params);
+        $response->assertStatus(422);
+    }
+
+    private function assertIndexEmpty(string $params)
+    {
+        $this->assertIndex($params, []);
     }
 
     private function assertPostSuccessful(MockILLRequest $illRequest)
