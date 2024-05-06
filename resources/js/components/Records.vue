@@ -1,17 +1,17 @@
 <template>
     <div class="horizontal-container">
         <div class="horizontal-container">
-            <div>Multiple Dates?</div>
+            <label>Multiple Dates?</label>
             <input name="fulfilled" type="checkbox" dusk="multiple_checkbox" :value="isDateRange" @input="onToggleMultiple">
         </div>
 
         <div class="horizontal-container">
-            <div dusk="from_date_header">{{ isDateRange ? "From" : "Date" }}</div>
+            <label dusk="from_date_header">{{ isDateRange ? "From" : "Date" }}</label>
             <input name="from-date" type="date" dusk="from_date" :value="fromDate" @input="onFromDateSelection">
         </div>
 
         <div v-if="isDateRange" class="horizontal-container">
-            <div dusk="to_date_header">To</div>
+            <label dusk="to_date_header">To</label>
             <input name="to-date" type="date" dusk="to_date" :value="toDate" @input="onToDateSelection">
         </div>
     </div>

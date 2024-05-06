@@ -21177,7 +21177,7 @@ var _hoisted_1 = {
 var _hoisted_2 = {
   "class": "horizontal-container"
 };
-var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, "Multiple Dates?", -1 /* HOISTED */);
+var _hoisted_3 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", null, "Multiple Dates?", -1 /* HOISTED */);
 var _hoisted_4 = ["value"];
 var _hoisted_5 = {
   "class": "horizontal-container"
@@ -21190,7 +21190,7 @@ var _hoisted_8 = {
   key: 0,
   "class": "horizontal-container"
 };
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   dusk: "to_date_header"
 }, "To", -1 /* HOISTED */);
 var _hoisted_10 = ["value"];
@@ -21220,7 +21220,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onInput: _cache[0] || (_cache[0] = function () {
       return $options.onToggleMultiple && $options.onToggleMultiple.apply($options, arguments);
     })
-  }, null, 40 /* PROPS, NEED_HYDRATION */, _hoisted_4)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.isDateRange ? "From" : "Date"), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, null, 40 /* PROPS, NEED_HYDRATION */, _hoisted_4)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.isDateRange ? "From" : "Date"), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     name: "from-date",
     type: "date",
     dusk: "from_date",

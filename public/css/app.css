@@ -85,12 +85,13 @@ textarea, input[type="text"] {
 }
 
 .field-header {
-    margin-top: 30px;
+    margin-top: 20px;
     margin-bottom: 5px;
 }
 
 .horizontal-container {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
 }
 
@@ -100,6 +101,7 @@ textarea, input[type="text"] {
 
 .horizontal-container > div {
     margin-right: 10px;
+    margin-bottom: 10px;
 }
 
 .centered-elements-container, .centered-elements-container > form {
