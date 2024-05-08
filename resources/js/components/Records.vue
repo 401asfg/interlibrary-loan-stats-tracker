@@ -70,7 +70,7 @@
 
                 if (toDate === '') return;
 
-                axios.get('/ill-requests', {
+                axios.get(this.root_url + '/ill-requests', {
                     params: {
                         fromDate: this.fromDate,
                         toDate: toDate
