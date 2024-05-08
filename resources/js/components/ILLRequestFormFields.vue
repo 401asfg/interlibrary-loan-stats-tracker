@@ -44,7 +44,7 @@
         <div>
             <div v-if="isLendingOrBorrowing()">
                 <div class="field-header">{{ getLibraryHeader() }}</div>
-                <SearchableSelect :databaseRoute="libraries_url" @input="onLibraryInput" :initSelection="form.library" />
+                <SearchableSelect :databaseRoute="root_url + '/libraries'" @input="onLibraryInput" :initSelection="form.library" />
                 <input v-if="hasLibrary()" type="hidden" name="library_id" v-model="form.library.id">
             </div>
 
@@ -61,7 +61,7 @@
 
     <div class="centered-elements-container bottom-buttons-container">
         <button type="submit" class="submit-button" dusk="submit">Submit</button>
-        <button onclick="window.location.href='/'" dusk='cancel' class="cancel-button">Cancel</button>
+        <button :onclick=goToRoot dusk='cancel' class="cancel-button">Cancel</button>
     </div>
 </template>
 
@@ -79,7 +79,7 @@
             'resources',
             'ill_request',
             'library_name',
-            'libraries_url'
+            'root_url'
         ],
         data() {
             if (this.ill_request) {
@@ -114,6 +114,9 @@
             }
         },
         methods: {
+            goToRoot() {
+                window.location.href = this.root_url
+            },
             onActionInput(event) {
                 this.form.action = event.target.value;
             },

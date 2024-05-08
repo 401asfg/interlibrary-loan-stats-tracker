@@ -25,6 +25,6 @@
         :resources='{{ json_encode($resources) }}'
         :ill_request='{{ json_encode($illRequest) }}'
         :library_name='{{ json_encode($libraryName) }}'
-        libraries_url='{{ url("/libraries") }}' />
+        root_url='{{ url("/") }}' />
 </form>
 @endsection

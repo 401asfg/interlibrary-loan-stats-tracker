@@ -32,7 +32,7 @@
     </div>
 
     <div class="centered-elements-container bottom-buttons-container">
-        <button onclick="window.location.href='/'" dusk='back' class="cancel-button">Back</button>
+        <button :onclick=goToRoot dusk='back' class="cancel-button">Back</button>
     </div>
 </template>
 
@@ -41,6 +41,9 @@
 
     export default {
         name: 'Records',
+        props: [
+            'root_url'
+        ],
         data() {
             return {
                 isDateRange: false,
@@ -50,6 +53,9 @@
             }
         },
         methods: {
+            goToRoot() {
+                window.location.href = this.root_url;
+            },
             numRecords() {
                 return this.records.length;
             },

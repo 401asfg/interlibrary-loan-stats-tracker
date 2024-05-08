@@ -12,6 +12,6 @@
 
 <h1 dusk="records_title">Records</h1>
 
-<records />
+<records root_url='{{ url("/") }}' />
 
 @endsection
