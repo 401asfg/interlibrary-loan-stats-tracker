@@ -20729,18 +20729,27 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       if (isFulfilled === "true" && isFulfilled === true) this.form.unfulfilled_reason = null;
       return isFulfilled !== "true" && isFulfilled !== true;
     },
-    isLendingOrBorrowing: function isLendingOrBorrowing() {
-      var neither = this.form.action !== this.actions['lend'] && this.form.action != this.actions['borrow'];
-      if (neither) this.form.library = null;
-      return !neither;
+    isNotShipToMe: function isNotShipToMe() {
+      var isShipToMe = this.form.action === this.actions['ship-to-me'];
+      if (isShipToMe) this.form.library = null;
+      return !isShipToMe;
     },
-    isBorrowingOrShipping: function isBorrowingOrShipping() {
-      var neither = this.form.action !== this.actions['borrow'] && this.form.action !== this.actions['ship-to-me'];
-      if (neither) this.form.vcc_borrower_type = this.vcc_borrower_types['library'];
-      return !neither;
+    isNotLending: function isNotLending() {
+      var isLending = this.form.action === this.actions['lend'];
+      if (isLending) this.form.vcc_borrower_type = this.vcc_borrower_types['library'];
+      return !isLending;
     },
     getLibraryHeader: function getLibraryHeader() {
-      return (this.form.action === this.actions['borrow'] ? "Lending" : "Borrowing") + " Library";
+      var libraryType = "";
+      switch (this.form.action) {
+        case this.actions['borrow']:
+          libraryType = "Lending ";
+          break;
+        case this.actions['lend']:
+          libraryType = "Borrowing ";
+          break;
+      }
+      return libraryType + "Library";
     },
     getHiddenActionSlugs: function getHiddenActionSlugs() {
       return this.form.resource !== this.resources['ea'] && this.form.resource !== this.resources['book-chapter'] ? [] : ['ship-to-me'];
@@ -21123,7 +21132,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     placeholder: "Notes...",
     dusk: "requestor_notes"
-  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.requestor_notes]])]), $options.isLendingOrBorrowing() ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getLibraryHeader()), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_SearchableSelect, {
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.requestor_notes]])]), $options.isNotShipToMe() ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.getLibraryHeader()), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_SearchableSelect, {
     databaseRoute: $props.root_url + '/libraries',
     onInput: $options.onLibraryInput,
     initSelection: $data.form.library
@@ -21134,7 +21143,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
       return $data.form.library.id = $event;
     })
-  }, null, 512 /* NEED_PATCH */)), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.library.id]]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $options.isBorrowingOrShipping() ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_13, [_hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DynamicSelector, {
+  }, null, 512 /* NEED_PATCH */)), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.library.id]]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $options.isNotLending() ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_13, [_hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_DynamicSelector, {
     choices: $options.getSelectableBorrowerTypes(),
     selectorName: "vcc_borrower_type",
     onInput: $options.onBorrowerTypeInput,
@@ -21147,6 +21156,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.form.vcc_borrower_type = $event;
     })
   }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.vcc_borrower_type]]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [_hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
     onclick: $options.goToRoot,
     dusk: "cancel",
     "class": "cancel-button"

@@ -27,6 +27,14 @@ class ILLRequestController extends Controller
         $fromDate = new DateTime($request->input('fromDate'));
         $toDate = (new DateTime($request->input('toDate')))->modify("+1 day");
 
+        $validator = Validator::make(['from_date' => $fromDate, 'to_date' => $toDate], [
+            'from_date' => 'required|date',
+            'to_date' => 'required|date'
+        ]);
+
+        if ($validator->fails())
+            return response()->json($validator->errors(), 422);
+
         $records = ILLRequest::select(
             DB::raw('created_at AS "Created At"'),
             DB::raw('request_date AS "Request Date"'),
@@ -39,8 +47,8 @@ class ILLRequestController extends Controller
             DB::raw('libraries.name AS "Library Name"')
         )
             ->leftJoin('libraries', 'ill_requests.library_id', '=', 'libraries.id')
-            ->where('created_at', '>=', $fromDate)
-            ->where('created_at', '<', $toDate)
+            ->where('created_at', '>=', $validator->validated()['from_date'])
+            ->where('created_at', '<', $validator->validated()['to_date'])
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -71,7 +79,12 @@ class ILLRequestController extends Controller
 
     public function show(string $id)
     {
-        $illRequest = ILLRequest::findOrFail($id);
+        $validator = ILLRequestController::makeIdValidator($id);
+
+        if ($validator->fails())
+            return response()->json($validator->errors(), 422);
+
+        $illRequest = ILLRequest::findOrFail($validator->validated()['id']);
         $libraryName = $illRequest->getLibraryName();
 
         return view('submission')->with('illRequest', $illRequest)
@@ -80,14 +93,24 @@ class ILLRequestController extends Controller
 
     public function destroy(string $id)
     {
-        $illRequest = ILLRequest::findOrFail($id);
+        $validator = ILLRequestController::makeIdValidator($id);
+
+        if ($validator->fails())
+            return response()->json($validator->errors(), 422);
+
+        $illRequest = ILLRequest::findOrFail($validator->validated()['id']);
         $illRequest->delete();
         return redirect('ill-requests/create')->with('status', 'Last submission deleted!');
     }
 
     public function edit(string $id)
     {
-        $illRequest = ILLRequest::findOrFail($id);
+        $validator = ILLRequestController::makeIdValidator($id);
+
+        if ($validator->fails())
+            return response()->json($validator->errors(), 422);
+
+        $illRequest = ILLRequest::findOrFail($validator->validated()['id']);
         $libraryName = $illRequest->getLibraryName();
         return ILLRequestController::getFormView($illRequest, $libraryName);
     }
@@ -99,9 +122,14 @@ class ILLRequestController extends Controller
         if ($validator->fails())
             return response()->json($validator->errors(), 422);
 
-        $illRequest = ILLRequest::findOrFail($id);
+        $idValidator = ILLRequestController::makeIdValidator($id);
+
+        if ($idValidator->fails())
+            return response()->json($idValidator->errors(), 422);
+
+        $illRequest = ILLRequest::findOrFail($idValidator->validated()['id']);
         $illRequest->update($validator->validated());
-        return redirect('ill-requests/' . $id);
+        return redirect('ill-requests/' . $idValidator->validated()['id']);
     }
 
     private static function getFormView(ILLRequest $illRequest = null, string $libraryName = null)
@@ -112,6 +140,13 @@ class ILLRequestController extends Controller
             ->with('resources', ILLRequest::RESOURCES)
             ->with('illRequest', $illRequest)
             ->with('libraryName', $libraryName);
+    }
+
+    private static function makeIdValidator($id)
+    {
+        return Validator::make(['id' => $id], [
+            'id' => 'required|numeric'
+        ]);
     }
 
     private static function makeILLRequestFieldsValidator($fields)

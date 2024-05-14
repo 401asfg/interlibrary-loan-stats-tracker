@@ -47,13 +47,13 @@
                 <textarea name="requestor_notes" v-model="form.requestor_notes" placeholder="Notes..." dusk="requestor_notes"></textarea>
             </div>
 
-            <div v-if="isLendingOrBorrowing()">
+            <div v-if="isNotShipToMe()">
                 <div class="field-header">{{ getLibraryHeader() }}</div>
                 <SearchableSelect :databaseRoute="root_url + '/libraries'" @input="onLibraryInput" :initSelection="form.library" />
                 <input v-if="hasLibrary()" type="hidden" name="library_id" v-model="form.library.id">
             </div>
 
-            <div v-if="isBorrowingOrShipping()">
+            <div v-if="isNotLending()">
                 <div class="field-header">VCC Borrower</div>
                 <DynamicSelector :choices="getSelectableBorrowerTypes()" selectorName="vcc_borrower_type" @input="onBorrowerTypeInput" :initSelection="form.vcc_borrower_type" dusk="vcc_borrower_type" />
             </div>
@@ -64,7 +64,7 @@
 
     <div class="centered-elements-container bottom-buttons-container">
         <button type="submit" class="submit-button" dusk="submit">Submit</button>
-        <button :onclick=goToRoot dusk='cancel' class="cancel-button">Cancel</button>
+        <button type="button" :onclick=goToRoot dusk='cancel' class="cancel-button">Cancel</button>
     </div>
 </template>
 
@@ -141,18 +141,30 @@
                 if (isFulfilled === "true" && isFulfilled === true) this.form.unfulfilled_reason = null;
                 return isFulfilled !== "true" && isFulfilled !== true;
             },
-            isLendingOrBorrowing() {
-                const neither = this.form.action !== this.actions['lend'] && this.form.action != this.actions['borrow'];
-                if (neither) this.form.library = null;
-                return !neither;
+            isNotShipToMe() {
+                const isShipToMe = this.form.action === this.actions['ship-to-me'];
+                if (isShipToMe) this.form.library = null;
+                return !isShipToMe;
             },
-            isBorrowingOrShipping() {
-                const neither = this.form.action !== this.actions['borrow'] && this.form.action !== this.actions['ship-to-me'];
-                if (neither) this.form.vcc_borrower_type = this.vcc_borrower_types['library'];
-                return !neither;
+            isNotLending() {
+                const isLending = this.form.action === this.actions['lend'];
+                if (isLending) this.form.vcc_borrower_type = this.vcc_borrower_types['library'];
+                return !isLending;
             },
             getLibraryHeader() {
-                return (this.form.action === this.actions['borrow'] ? "Lending" : "Borrowing") + " Library";
+                let libraryType = "";
+
+                switch(this.form.action) {
+                    case this.actions['borrow']:
+                        libraryType = "Lending ";
+                        break;
+
+                    case this.actions['lend']:
+                        libraryType = "Borrowing ";
+                        break;
+                }
+
+                return libraryType + "Library";
             },
             getHiddenActionSlugs() {
                 return (this.form.resource !== this.resources['ea'] && this.form.resource !== this.resources['book-chapter']) ? [] : ['ship-to-me'];
