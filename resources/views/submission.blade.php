@@ -50,10 +50,10 @@
             <div>{{ $illRequest->vcc_borrower_type }}</div>
         </div>
 
-        @if (!is_null($illRequest->vcc_borrower_notes))
+        @if (!is_null($illRequest->requestor_notes))
         <div>
-            <div class="field-header" dusk="vcc_borrower_notes"><strong>VCC Borrower Notes:</strong></div>
-            <div>{{ $illRequest->vcc_borrower_notes }}</div>
+            <div class="field-header" dusk="requestor_notes"><strong>Requestor Number/Notes:</strong></div>
+            <div>{{ $illRequest->requestor_notes }}</div>
         </div>
         @endif
     </div>

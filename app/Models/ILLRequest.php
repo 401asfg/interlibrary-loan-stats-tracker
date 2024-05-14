@@ -51,7 +51,7 @@ class ILLRequest extends Model
         'action',
         'library_id',
         'vcc_borrower_type',
-        'vcc_borrower_notes',
+        'requestor_notes',
         'created_at'
     ];
 

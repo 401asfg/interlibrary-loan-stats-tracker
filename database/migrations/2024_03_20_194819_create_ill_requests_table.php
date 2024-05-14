@@ -25,7 +25,7 @@ return new class extends Migration {
             $table->enum('action', array_values(ILLRequest::ACTIONS));
             $table->foreignId('library_id')->nullable()->constrained('libraries')->onDelete('set null');
             $table->enum('vcc_borrower_type', array_values(ILLRequest::VCC_BORROWER_TYPES));
-            $table->string('vcc_borrower_notes')->nullable();
+            $table->string('requestor_notes')->nullable();
         });
     }
 

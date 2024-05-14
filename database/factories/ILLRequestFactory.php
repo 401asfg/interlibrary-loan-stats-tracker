@@ -30,7 +30,7 @@ class ILLRequestFactory extends Factory
             'action' => self::randomSetValue(ILLRequest::ACTIONS),
             'library_id' => self::randomNullableForeignKey(Library::count()),
             'vcc_borrower_type' => self::randomSetValue(ILLRequest::VCC_BORROWER_TYPES),
-            'vcc_borrower_notes' => self::randomNullableString()
+            'requestor_notes' => self::randomNullableString()
         ];
     }
 

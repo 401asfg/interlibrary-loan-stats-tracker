@@ -182,7 +182,7 @@ class RecordsTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['borrow'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'Notes',
+            'requestor_notes' => 'Notes',
             'created_at' => Carbon::today()
         ])->save();
 
@@ -194,7 +194,7 @@ class RecordsTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['borrow'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'Notes',
+            'requestor_notes' => 'Notes',
             'created_at' => Carbon::today()
         ])->save();
 
@@ -206,7 +206,7 @@ class RecordsTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['lend'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'Notes',
+            'requestor_notes' => 'Notes',
             'created_at' => Carbon::today()
         ])->save();
 
@@ -218,7 +218,7 @@ class RecordsTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['ship-to-me'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'Notes',
+            'requestor_notes' => 'Notes',
             'created_at' => Carbon::yesterday()
         ])->save();
 
@@ -230,7 +230,7 @@ class RecordsTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['ship-to-me'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'New Notes',
+            'requestor_notes' => 'New Notes',
             'created_at' => Carbon::tomorrow()
         ])->save();
 
@@ -242,7 +242,7 @@ class RecordsTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['ship-to-me'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'New Notes',
+            'requestor_notes' => 'New Notes',
             'created_at' => Carbon::yesterday()->subDays(5)
         ])->save();
 
@@ -254,7 +254,7 @@ class RecordsTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['ship-to-me'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'New Notes',
+            'requestor_notes' => 'New Notes',
             'created_at' => Carbon::yesterday()->subDays(6)
         ])->save();
 
@@ -266,7 +266,7 @@ class RecordsTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['lend'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'New Notes',
+            'requestor_notes' => 'New Notes',
             'created_at' => Carbon::tomorrow()->addDays(9)
         ])->save();
 
@@ -278,7 +278,7 @@ class RecordsTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['lend'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
-            'vcc_borrower_notes' => 'New Notes',
+            'requestor_notes' => 'New Notes',
             'created_at' => Carbon::tomorrow()->addDays(9)
         ])->save();
 
@@ -290,7 +290,7 @@ class RecordsTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['lend'],
             'library_id' => 4,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
-            'vcc_borrower_notes' => 'New Notes',
+            'requestor_notes' => 'New Notes',
             'created_at' => Carbon::tomorrow()->addDays(10)
         ])->save();
 
@@ -888,7 +888,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['borrow'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $todayForAssertion
                     ],
                     [
@@ -899,7 +899,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['borrow'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $todayForAssertion
                     ],
                     [
@@ -910,7 +910,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['lend'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $todayForAssertion
                     ]
                 ]
@@ -936,7 +936,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['ship-to-me'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'New Notes',
+                        'Requestor Notes' => 'New Notes',
                         'Created At' => $tomorrowForAssertion
                     ]
                 ]
@@ -964,7 +964,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['borrow'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $todayForAssertion
                     ],
                     [
@@ -975,7 +975,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['borrow'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $todayForAssertion
                     ],
                     [
@@ -986,7 +986,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['lend'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $todayForAssertion
                     ],
                     [
@@ -997,7 +997,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['ship-to-me'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $yesterdayForAssertion
                     ],
                     [
@@ -1008,7 +1008,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['ship-to-me'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'New Notes',
+                        'Requestor Notes' => 'New Notes',
                         'Created At' => $yesterdaySubFiveForAssertion
                     ],
                     [
@@ -1019,7 +1019,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['ship-to-me'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'New Notes',
+                        'Requestor Notes' => 'New Notes',
                         'Created At' => $yesterdaySubSixForAssertion
                     ]
                 ]
@@ -1046,7 +1046,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['lend'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'New Notes',
+                        'Requestor Notes' => 'New Notes',
                         'Created At' => $tomorrowAddNineForAssertion
                     ],
                     [
@@ -1057,7 +1057,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['lend'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
-                        'VCC Borrower Notes' => 'New Notes',
+                        'Requestor Notes' => 'New Notes',
                         'Created At' => $tomorrowAddNineForAssertion
                     ],
                     [
@@ -1068,7 +1068,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['ship-to-me'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'New Notes',
+                        'Requestor Notes' => 'New Notes',
                         'Created At' => $tomorrowForAssertion
                     ],
                     [
@@ -1079,7 +1079,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['borrow'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $todayForAssertion
                     ],
                     [
@@ -1090,7 +1090,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['borrow'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $todayForAssertion
                     ],
                     [
@@ -1101,7 +1101,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['lend'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $todayForAssertion
                     ]
                 ]
@@ -1153,7 +1153,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['lend'],
                         'Library Name' => 'B.C. Cancer Agency',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
-                        'VCC Borrower Notes' => 'New Notes',
+                        'Requestor Notes' => 'New Notes',
                         'Created At' => $tomorrowAddTen
                     ],
                     [
@@ -1164,7 +1164,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['lend'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'New Notes',
+                        'Requestor Notes' => 'New Notes',
                         'Created At' => $tomorrowAddNine
                     ],
                     [
@@ -1175,7 +1175,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['lend'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
-                        'VCC Borrower Notes' => 'New Notes',
+                        'Requestor Notes' => 'New Notes',
                         'Created At' => $tomorrowAddNine
                     ],
                     [
@@ -1186,7 +1186,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['ship-to-me'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'New Notes',
+                        'Requestor Notes' => 'New Notes',
                         'Created At' => $tomorrow
                     ],
                     [
@@ -1197,7 +1197,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['borrow'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $today
                     ],
                     [
@@ -1208,7 +1208,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['borrow'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $today
                     ],
                     [
@@ -1219,7 +1219,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['lend'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $today
                     ],
                     [
@@ -1230,7 +1230,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['ship-to-me'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'Notes',
+                        'Requestor Notes' => 'Notes',
                         'Created At' => $yesterday
                     ],
                     [
@@ -1241,7 +1241,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['ship-to-me'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'New Notes',
+                        'Requestor Notes' => 'New Notes',
                         'Created At' => $yesterdaySubFive
                     ],
                     [
@@ -1252,7 +1252,7 @@ class RecordsTest extends DuskTestCase
                         'Action' => ILLRequest::ACTIONS['ship-to-me'],
                         'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                         'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                        'VCC Borrower Notes' => 'New Notes',
+                        'Requestor Notes' => 'New Notes',
                         'Created At' => $yesterdaySubSix
                     ]
                 ]

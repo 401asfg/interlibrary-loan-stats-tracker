@@ -12,7 +12,7 @@ use Laravel\Dusk\Browser;
 
 const UNFULFILLED_REASON_DESCRIPTION = 'unfulfilled reason description';
 const RESOURCE_DESCRIPTION = 'resource description';
-const VCC_BORROWER_NOTES = 'borrower notes';
+const REQUESTOR_NOTES = 'requestor notes';
 const LIBRARY_NAME = 'University of British Columbia';
 const LIBRARY_ID = 58;
 
@@ -51,9 +51,9 @@ class FormDataSubmissionBrowser extends Browser
             ->type('@unfulfilled_reason_description', UNFULFILLED_REASON_DESCRIPTION);
     }
 
-    public function typeVCCBorrowerNotes()
+    public function typeRequestorNotes()
     {
-        return $this->type('@vcc_borrower_notes', VCC_BORROWER_NOTES);
+        return $this->type('@requestor_notes', REQUESTOR_NOTES);
     }
 
     public function selectOtherResource()
@@ -78,13 +78,13 @@ class FormDataSubmissionBrowser extends Browser
             ->assertSee($borrowerType);
     }
 
-    public function assertStatus($fulfilled, $unfulfilledReason, $resource, $action, $vccBorrowerType, $vccBorrowerNotes, $libraryName)
+    public function assertStatus($fulfilled, $unfulfilledReason, $resource, $action, $vccBorrowerType, $requestorNotes, $libraryName)
     {
         $browser = $fulfilled ? $this->assertVisible('@fulfilled') : $this->assertVisible('@unfulfilled');
         $browser = $unfulfilledReason ? $browser->assertVisible('@unfulfilled_reason') : $browser->assertMissing('@unfulfilled_reason');
         $browser = $browser->assertResourcActionBorrowerType($resource, $action, $vccBorrowerType);
         $browser = $libraryName ? $browser->assertSee($libraryName) : $browser->assertDontSee($libraryName);
-        $browser = $vccBorrowerNotes ? $browser->assertVisible('@vcc_borrower_notes') : $browser->assertMissing('@vcc_borrower_notes');
+        $browser = $requestorNotes ? $browser->assertVisible('@requestor_notes') : $browser->assertMissing('@requestor_notes');
         return $browser;
     }
 }
@@ -127,14 +127,14 @@ class FormDataSubmissionTest extends DuskTestCase
     {
         $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
-                $browser->typeVCCBorrowerNotes()
+                $browser->typeRequestorNotes()
                     ->submit(),
                 true,
                 null,
                 'book',
                 'borrow',
                 'student',
-                VCC_BORROWER_NOTES,
+                REQUESTOR_NOTES,
                 LIBRARY_ID,
                 LIBRARY_NAME
             );
@@ -164,21 +164,21 @@ class FormDataSubmissionTest extends DuskTestCase
         $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->selectOtherResource()
-                    ->typeVCCBorrowerNotes()
+                    ->typeRequestorNotes()
                     ->submit(),
                 true,
                 null,
                 RESOURCE_DESCRIPTION,
                 'borrow',
                 'student',
-                VCC_BORROWER_NOTES,
+                REQUESTOR_NOTES,
                 LIBRARY_ID,
                 LIBRARY_NAME
             );
         });
     }
 
-    public function testFulfilledLendBook()
+    public function testFulfilledLendBookWithNoNotes()
     {
         $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
@@ -196,7 +196,7 @@ class FormDataSubmissionTest extends DuskTestCase
         });
     }
 
-    public function testFulfilledLendOther()
+    public function testFulfilledLendOtherWithNoNotes()
     {
         $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
@@ -209,6 +209,45 @@ class FormDataSubmissionTest extends DuskTestCase
                 'lend',
                 'library',
                 null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testFulfilledLendBookWithNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectLendAction()
+                    ->typeRequestorNotes()
+                    ->submit(),
+                true,
+                null,
+                'book',
+                'lend',
+                'library',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testFulfilledLendOtherWithNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectLendAction()
+                    ->selectOtherResource()
+                    ->typeRequestorNotes()
+                    ->submit(),
+                true,
+                null,
+                RESOURCE_DESCRIPTION,
+                'lend',
+                'library',
+                REQUESTOR_NOTES,
                 LIBRARY_ID,
                 LIBRARY_NAME
             );
@@ -238,14 +277,14 @@ class FormDataSubmissionTest extends DuskTestCase
         $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->selectShipToMeAction()
-                    ->typeVCCBorrowerNotes()
+                    ->typeRequestorNotes()
                     ->submit(),
                 true,
                 null,
                 'book',
                 'ship-to-me',
                 'student',
-                VCC_BORROWER_NOTES,
+                REQUESTOR_NOTES,
                 null,
                 null
             );
@@ -277,14 +316,14 @@ class FormDataSubmissionTest extends DuskTestCase
             $this->assertStatus(
                 $browser->selectShipToMeAction()
                     ->selectOtherResource()
-                    ->typeVCCBorrowerNotes()
+                    ->typeRequestorNotes()
                     ->submit(),
                 true,
                 null,
                 RESOURCE_DESCRIPTION,
                 'ship-to-me',
                 'student',
-                VCC_BORROWER_NOTES,
+                REQUESTOR_NOTES,
                 null,
                 null
             );
@@ -314,14 +353,14 @@ class FormDataSubmissionTest extends DuskTestCase
         $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
-                    ->typeVCCBorrowerNotes()
+                    ->typeRequestorNotes()
                     ->submit(),
                 false,
                 'unavailable',
                 'book',
                 'borrow',
                 'student',
-                VCC_BORROWER_NOTES,
+                REQUESTOR_NOTES,
                 LIBRARY_ID,
                 LIBRARY_NAME
             );
@@ -353,14 +392,14 @@ class FormDataSubmissionTest extends DuskTestCase
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->selectOtherResource()
-                    ->typeVCCBorrowerNotes()
+                    ->typeRequestorNotes()
                     ->submit(),
                 false,
                 'unavailable',
                 RESOURCE_DESCRIPTION,
                 'borrow',
                 'student',
-                VCC_BORROWER_NOTES,
+                REQUESTOR_NOTES,
                 LIBRARY_ID,
                 LIBRARY_NAME
             );
@@ -431,14 +470,14 @@ class FormDataSubmissionTest extends DuskTestCase
             $this->assertStatus(
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->selectShipToMeAction()
-                    ->typeVCCBorrowerNotes()
+                    ->typeRequestorNotes()
                     ->submit(),
                 false,
                 'unavailable',
                 'book',
                 'ship-to-me',
                 'student',
-                VCC_BORROWER_NOTES,
+                REQUESTOR_NOTES,
                 null,
                 null
             );
@@ -472,14 +511,14 @@ class FormDataSubmissionTest extends DuskTestCase
                 $browser->clickUnfulfilledReasonUnavailable()
                     ->selectShipToMeAction()
                     ->selectOtherResource()
-                    ->typeVCCBorrowerNotes()
+                    ->typeRequestorNotes()
                     ->submit(),
                 false,
                 'unavailable',
                 RESOURCE_DESCRIPTION,
                 'ship-to-me',
                 'student',
-                VCC_BORROWER_NOTES,
+                REQUESTOR_NOTES,
                 null,
                 null
             );
@@ -509,14 +548,14 @@ class FormDataSubmissionTest extends DuskTestCase
         $this->browse(function (FormDataSubmissionBrowser $browser) {
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
-                    ->typeVCCBorrowerNotes()
+                    ->typeRequestorNotes()
                     ->submit(),
                 false,
                 UNFULFILLED_REASON_DESCRIPTION,
                 'book',
                 'borrow',
                 'student',
-                VCC_BORROWER_NOTES,
+                REQUESTOR_NOTES,
                 LIBRARY_ID,
                 LIBRARY_NAME
             );
@@ -548,14 +587,14 @@ class FormDataSubmissionTest extends DuskTestCase
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
                     ->selectOtherResource()
-                    ->typeVCCBorrowerNotes()
+                    ->typeRequestorNotes()
                     ->submit(),
                 false,
                 UNFULFILLED_REASON_DESCRIPTION,
                 RESOURCE_DESCRIPTION,
                 'borrow',
                 'student',
-                VCC_BORROWER_NOTES,
+                REQUESTOR_NOTES,
                 LIBRARY_ID,
                 LIBRARY_NAME
             );
@@ -626,14 +665,14 @@ class FormDataSubmissionTest extends DuskTestCase
             $this->assertStatus(
                 $browser->typeUnfulfilledReasonOther()
                     ->selectShipToMeAction()
-                    ->typeVCCBorrowerNotes()
+                    ->typeRequestorNotes()
                     ->submit(),
                 false,
                 UNFULFILLED_REASON_DESCRIPTION,
                 'book',
                 'ship-to-me',
                 'student',
-                VCC_BORROWER_NOTES,
+                REQUESTOR_NOTES,
                 null,
                 null
             );
@@ -667,21 +706,21 @@ class FormDataSubmissionTest extends DuskTestCase
                 $browser->typeUnfulfilledReasonOther()
                     ->selectShipToMeAction()
                     ->selectOtherResource()
-                    ->typeVCCBorrowerNotes()
+                    ->typeRequestorNotes()
                     ->submit(),
                 false,
                 UNFULFILLED_REASON_DESCRIPTION,
                 RESOURCE_DESCRIPTION,
                 'ship-to-me',
                 'student',
-                VCC_BORROWER_NOTES,
+                REQUESTOR_NOTES,
                 null,
                 null
             );
         });
     }
 
-    private function assertDatabaseRow($fulfilled, $unfulfilledReason, $resource, $action, $vccBorrowerType, $vccBorrowerNotes, $libraryId)
+    private function assertDatabaseRow($fulfilled, $unfulfilledReason, $resource, $action, $vccBorrowerType, $requestorNotes, $libraryId)
     {
         $illRequest = ILLRequest::find(1);
 
@@ -691,17 +730,17 @@ class FormDataSubmissionTest extends DuskTestCase
         $this->assertEquals($action, $illRequest->action);
         $this->assertEquals($libraryId, $illRequest->library_id);
         $this->assertEquals($vccBorrowerType, $illRequest->vcc_borrower_type);
-        $this->assertEquals($vccBorrowerNotes, $illRequest->vcc_borrower_notes);
+        $this->assertEquals($requestorNotes, $illRequest->requestor_notes);
     }
 
-    private function assertStatus($browser, $fulfilled, $unfulfilledReasonSlug, $resourceSlug, $actionSlug, $vccBorrowerTypeSlug, $vccBorrowerNotes, $libraryId, $libraryName)
+    private function assertStatus($browser, $fulfilled, $unfulfilledReasonSlug, $resourceSlug, $actionSlug, $vccBorrowerTypeSlug, $requestorNotes, $libraryId, $libraryName)
     {
         $unfulfilledReason = array_key_exists($unfulfilledReasonSlug, ILLRequest::UNFULFILLED_REASONS) ? ILLRequest::UNFULFILLED_REASONS[$unfulfilledReasonSlug] : $unfulfilledReasonSlug;
         $resource = array_key_exists($resourceSlug, ILLRequest::RESOURCES) ? ILLRequest::RESOURCES[$resourceSlug] : $resourceSlug;
         $action = ILLRequest::ACTIONS[$actionSlug];
         $vccBorrowerType = ILLRequest::VCC_BORROWER_TYPES[$vccBorrowerTypeSlug];
 
-        $browser->assertStatus($fulfilled, $unfulfilledReason, $resource, $action, $vccBorrowerType, $vccBorrowerNotes, $libraryName);
-        $this->assertDatabaseRow($fulfilled, $unfulfilledReason, $resource, $action, $vccBorrowerType, $vccBorrowerNotes, $libraryId);
+        $browser->assertStatus($fulfilled, $unfulfilledReason, $resource, $action, $vccBorrowerType, $requestorNotes, $libraryName);
+        $this->assertDatabaseRow($fulfilled, $unfulfilledReason, $resource, $action, $vccBorrowerType, $requestorNotes, $libraryId);
     }
 }

@@ -41,7 +41,7 @@ class ILLRequestTest extends TestCase
             'action' => ILLRequest::ACTIONS['lend'],
             'library_id' => $libraryId,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['library'],
-            'vcc_borrower_notes' => null
+            'requestor_notes' => null
         ]);
     }
 }

@@ -30,8 +30,10 @@ class FormFieldStatesBrowser extends Browser
             ->assertRadioNotSelected('action', ILLRequest::ACTIONS['borrow'])
             ->assertRadioNotSelected('action', ILLRequest::ACTIONS['lend'])
             ->assertRadioNotSelected('action', ILLRequest::ACTIONS['ship-to-me'])
-            ->assertMissing('@action_description')
-            ->assertMissing('Parties Involved');
+            ->assertValue('@requestor_notes', '')
+            ->assertMissing('@searchable_select_input')
+            ->assertMissing('@vcc_borrower_types')
+            ->assertMissing('@action_description');
     }
 
     public function assertDefaultPage()
@@ -161,6 +163,7 @@ class FormFieldStatesTest extends DuskTestCase
         $this->browse(function (FormFieldStatesBrowser $browser) {
             $browser->click('@action_borrow')
                 ->assertSee('Parties Involved')
+                ->assertValue('@requestor_notes', '')
                 ->assertSee('Lending Library')
                 ->assertMissing('Borrowing Library')
                 ->assertValue('@searchable_select_input', '')
@@ -175,6 +178,7 @@ class FormFieldStatesTest extends DuskTestCase
         $this->browse(function (FormFieldStatesBrowser $browser) {
             $browser->click('@action_lend')
                 ->assertSee('Parties Involved')
+                ->assertValue('@requestor_notes', '')
                 ->assertMissing('Lending Library')
                 ->assertSee('Borrowing Library')
                 ->assertValue('@searchable_select_input', '')
@@ -189,6 +193,7 @@ class FormFieldStatesTest extends DuskTestCase
         $this->browse(function (FormFieldStatesBrowser $browser) {
             $browser->click('@action_ship-to-me')
                 ->assertMissing('Parties Involved')
+                ->assertValue('@requestor_notes', '')
                 ->assertMissing('Lending Library')
                 ->assertMissing('Borrowing Library')
                 ->assertMissing('@searchable_select_input')

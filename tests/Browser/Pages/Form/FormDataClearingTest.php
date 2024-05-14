@@ -20,7 +20,7 @@ class FormDataClearingBrowser extends Browser
             ->waitFor('@searchable_select_result_0', 10)
             ->click('@searchable_select_result_0')
             ->click('@vcc_borrower_type_student')
-            ->type('@vcc_borrower_notes', 'test notes');
+            ->type('@requestor_notes', 'test notes');
     }
 
     public function assertHasStatusOnHidding($clearingSelector, $clearedSelector, $assertStatus)
@@ -100,7 +100,7 @@ class FormDataClearingTest extends DuskTestCase
 
         $this->browse(function (FormDataClearingBrowser $browser) {
             $browser->visit('ill-requests/create')
-            ->fillOutForm();
+                ->fillOutForm();
         });
     }
 

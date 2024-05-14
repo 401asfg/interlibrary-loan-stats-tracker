@@ -33,7 +33,7 @@ class FormCancelTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['borrow'],
             'library_id' => 58,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'notes'
+            'requestor_notes' => 'notes'
         ]);
 
         $illRequest->save();
@@ -57,7 +57,7 @@ class FormCancelTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['borrow'],
             'library_id' => 58,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'notes'
+            'requestor_notes' => 'notes'
         ]);
 
         $illRequest->save();
@@ -81,7 +81,7 @@ class FormCancelTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['borrow'],
             'library_id' => 58,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'notes'
+            'requestor_notes' => 'notes'
         ]);
 
         $illRequest->save();

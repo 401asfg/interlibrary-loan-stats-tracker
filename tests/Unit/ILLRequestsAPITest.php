@@ -22,7 +22,7 @@ class MockILLRequest
     private $fulfilled;
     private $unfulfilledReason;
     private $libraryId;
-    private $vccBorrowerNotes;
+    private $requestorNotes;
     private $requestDate;
 
     function __construct(
@@ -32,7 +32,7 @@ class MockILLRequest
         ?string $fulfilled = 'false',
         ?string $unfulfilledReason = 'test reason',
         bool $libraryIdIsNull = false,
-        ?string $vccBorrowerNotes = 'test notes',
+        ?string $requestorNotes = 'test notes',
         bool $requestDateIsNull = false
     ) {
         $this->requestDate = null;
@@ -49,7 +49,7 @@ class MockILLRequest
         $this->resource = $resource;
         $this->fulfilled = $fulfilled;
         $this->unfulfilledReason = $unfulfilledReason;
-        $this->vccBorrowerNotes = $vccBorrowerNotes;
+        $this->requestorNotes = $requestorNotes;
     }
 
     public function getAttributes()
@@ -62,7 +62,7 @@ class MockILLRequest
             'resource' => $this->resource,
             'library_id' => $this->libraryId,
             'vcc_borrower_type' => $this->vccBorrowerType,
-            'vcc_borrower_notes' => $this->vccBorrowerNotes
+            'requestor_notes' => $this->requestorNotes
         ];
     }
 
@@ -75,7 +75,7 @@ class MockILLRequest
             && $this->resource === $illRequest->resource
             && $this->libraryId == $illRequest->library_id
             && $this->vccBorrowerType === $illRequest->vcc_borrower_type
-            && $this->vccBorrowerNotes === $illRequest->vcc_borrower_notes;
+            && $this->requestorNotes === $illRequest->requestor_notes;
     }
 }
 
@@ -138,7 +138,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['borrow'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $today
                 ],
                 [
@@ -149,7 +149,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['borrow'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $today
                 ],
                 [
@@ -160,7 +160,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['lend'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $today
                 ]
             ]
@@ -190,7 +190,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['ship-to-me'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'New Notes',
+                    'Requestor Notes' => 'New Notes',
                     'Created At' => $tomorrow
                 ]
             ]
@@ -217,7 +217,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['borrow'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $today
                 ],
                 [
@@ -228,7 +228,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['borrow'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $today
                 ],
                 [
@@ -239,7 +239,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['lend'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $today
                 ],
                 [
@@ -250,7 +250,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['ship-to-me'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $yesterday
                 ],
                 [
@@ -261,7 +261,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['ship-to-me'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'New Notes',
+                    'Requestor Notes' => 'New Notes',
                     'Created At' => $yesterdaySubFive
                 ],
                 [
@@ -272,7 +272,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['ship-to-me'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'New Notes',
+                    'Requestor Notes' => 'New Notes',
                     'Created At' => $yesterdaySubSix
                 ]
             ]
@@ -298,7 +298,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['borrow'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $today
                 ],
                 [
@@ -309,7 +309,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['borrow'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $today
                 ],
                 [
@@ -320,7 +320,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['lend'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $today
                 ],
                 [
@@ -331,7 +331,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['ship-to-me'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'New Notes',
+                    'Requestor Notes' => 'New Notes',
                     'Created At' => $tomorrow
                 ],
                 [
@@ -342,7 +342,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['lend'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'New Notes',
+                    'Requestor Notes' => 'New Notes',
                     'Created At' => $tomorrowAddNine
                 ],
                 [
@@ -353,7 +353,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['lend'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
-                    'VCC Borrower Notes' => 'New Notes',
+                    'Requestor Notes' => 'New Notes',
                     'Created At' => $tomorrowAddNine
                 ]
             ]
@@ -396,7 +396,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['borrow'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $today
                 ],
                 [
@@ -407,7 +407,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['borrow'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $today
                 ],
                 [
@@ -418,7 +418,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['lend'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $today
                 ],
                 [
@@ -429,7 +429,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['ship-to-me'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'New Notes',
+                    'Requestor Notes' => 'New Notes',
                     'Created At' => $tomorrow
                 ],
                 [
@@ -440,7 +440,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['lend'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'New Notes',
+                    'Requestor Notes' => 'New Notes',
                     'Created At' => $tomorrowAddNine
                 ],
                 [
@@ -451,7 +451,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['lend'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
-                    'VCC Borrower Notes' => 'New Notes',
+                    'Requestor Notes' => 'New Notes',
                     'Created At' => $tomorrowAddNine
                 ],
                 [
@@ -462,7 +462,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['lend'],
                     'Library Name' => 'B.C. Cancer Agency',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
-                    'VCC Borrower Notes' => 'New Notes',
+                    'Requestor Notes' => 'New Notes',
                     'Created At' => $tomorrowAddTen
                 ],
                 [
@@ -473,7 +473,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['ship-to-me'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'Notes',
+                    'Requestor Notes' => 'Notes',
                     'Created At' => $yesterday
                 ],
                 [
@@ -484,7 +484,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['ship-to-me'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'New Notes',
+                    'Requestor Notes' => 'New Notes',
                     'Created At' => $yesterdaySubFive
                 ],
                 [
@@ -495,7 +495,7 @@ class ILLRequestsAPITest extends TestCase
                     'Action' => ILLRequest::ACTIONS['ship-to-me'],
                     'Library Name' => 'Environment Canada, Pacific & Yukon Region, Environmental Protection Library',
                     'VCC Borrower Type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-                    'VCC Borrower Notes' => 'New Notes',
+                    'Requestor Notes' => 'New Notes',
                     'Created At' => $yesterdaySubSix
                 ]
             ]
@@ -706,7 +706,7 @@ class ILLRequestsAPITest extends TestCase
         );
     }
 
-    public function testStoreNullVccBorrowerNotes(): void
+    public function testStoreNullRequestorNotes(): void
     {
         $this->assertPostSuccessful(
             new MockILLRequest(
@@ -917,7 +917,7 @@ class ILLRequestsAPITest extends TestCase
         );
     }
 
-    public function testUpdateNullVccBorrowerNotes(): void
+    public function testUpdateNullRequestorNotes(): void
     {
         $this->assertPutSuccessful(
             new MockILLRequest(
@@ -944,7 +944,7 @@ class ILLRequestsAPITest extends TestCase
             'action' => ILLRequest::ACTIONS['borrow'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'Notes',
+            'requestor_notes' => 'Notes',
             'created_at' => Carbon::today()
         ])->save();
 
@@ -956,7 +956,7 @@ class ILLRequestsAPITest extends TestCase
             'action' => ILLRequest::ACTIONS['borrow'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'Notes',
+            'requestor_notes' => 'Notes',
             'created_at' => Carbon::today()
         ])->save();
 
@@ -968,7 +968,7 @@ class ILLRequestsAPITest extends TestCase
             'action' => ILLRequest::ACTIONS['lend'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'Notes',
+            'requestor_notes' => 'Notes',
             'created_at' => Carbon::today()
         ])->save();
 
@@ -980,7 +980,7 @@ class ILLRequestsAPITest extends TestCase
             'action' => ILLRequest::ACTIONS['ship-to-me'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'Notes',
+            'requestor_notes' => 'Notes',
             'created_at' => Carbon::yesterday()
         ])->save();
 
@@ -992,7 +992,7 @@ class ILLRequestsAPITest extends TestCase
             'action' => ILLRequest::ACTIONS['ship-to-me'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'New Notes',
+            'requestor_notes' => 'New Notes',
             'created_at' => Carbon::tomorrow()
         ])->save();
 
@@ -1004,7 +1004,7 @@ class ILLRequestsAPITest extends TestCase
             'action' => ILLRequest::ACTIONS['ship-to-me'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'New Notes',
+            'requestor_notes' => 'New Notes',
             'created_at' => Carbon::yesterday()->subDays(5)
         ])->save();
 
@@ -1016,7 +1016,7 @@ class ILLRequestsAPITest extends TestCase
             'action' => ILLRequest::ACTIONS['ship-to-me'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'New Notes',
+            'requestor_notes' => 'New Notes',
             'created_at' => Carbon::yesterday()->subDays(6)
         ])->save();
 
@@ -1028,7 +1028,7 @@ class ILLRequestsAPITest extends TestCase
             'action' => ILLRequest::ACTIONS['lend'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => 'New Notes',
+            'requestor_notes' => 'New Notes',
             'created_at' => Carbon::tomorrow()->addDays(9)
         ])->save();
 
@@ -1040,7 +1040,7 @@ class ILLRequestsAPITest extends TestCase
             'action' => ILLRequest::ACTIONS['lend'],
             'library_id' => 1,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
-            'vcc_borrower_notes' => 'New Notes',
+            'requestor_notes' => 'New Notes',
             'created_at' => Carbon::tomorrow()->addDays(9)
         ])->save();
 
@@ -1052,7 +1052,7 @@ class ILLRequestsAPITest extends TestCase
             'action' => ILLRequest::ACTIONS['lend'],
             'library_id' => 4,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['employee'],
-            'vcc_borrower_notes' => 'New Notes',
+            'requestor_notes' => 'New Notes',
             'created_at' => Carbon::tomorrow()->addDays(10)
         ])->save();
     }

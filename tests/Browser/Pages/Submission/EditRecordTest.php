@@ -15,7 +15,7 @@ const LIBRARY_NAME = 'University of British Columbia';
 const LIBRARY_ID = 58;
 const UNFULFILLED_REASON_DESCRIPTION = 'reason';
 const RESOURCE_DESCRIPTION = 'resource';
-const VCC_BORROWER_NOTES = 'notes';
+const REQUESTOR_NOTES = 'notes';
 
 class EditRecordTest extends DuskTestCase
 {
@@ -31,7 +31,7 @@ class EditRecordTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['borrow'],
             'library_id' => LIBRARY_ID,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => VCC_BORROWER_NOTES
+            'requestor_notes' => REQUESTOR_NOTES
         ]);
 
         $illRequest->save();
@@ -48,7 +48,7 @@ class EditRecordTest extends DuskTestCase
                 ->assertChecked('@action_borrow')
                 ->assertValue('@searchable_select_input', LIBRARY_NAME)
                 ->assertChecked('@vcc_borrower_type_student')
-                ->assertValue('@vcc_borrower_notes', VCC_BORROWER_NOTES)
+                ->assertValue('@requestor_notes', REQUESTOR_NOTES)
                 ->click('@fulfilled')
                 ->click('@resource_book')
                 ->click('@submit')
@@ -59,7 +59,7 @@ class EditRecordTest extends DuskTestCase
                 ->assertSee(ILLRequest::ACTIONS['borrow'])
                 ->assertSee(LIBRARY_NAME)
                 ->assertSee(ILLRequest::VCC_BORROWER_TYPES['student'])
-                ->assertSee(VCC_BORROWER_NOTES);
+                ->assertSee(REQUESTOR_NOTES);
         });
 
         $illRequest = ILLRequest::find(1);
@@ -71,7 +71,7 @@ class EditRecordTest extends DuskTestCase
         $this->assertEquals(ILLRequest::ACTIONS['borrow'], $illRequest->action);
         $this->assertEquals(LIBRARY_ID, $illRequest->library_id);
         $this->assertEquals(ILLRequest::VCC_BORROWER_TYPES['student'], $illRequest->vcc_borrower_type);
-        $this->assertEquals(VCC_BORROWER_NOTES, $illRequest->vcc_borrower_notes);
+        $this->assertEquals(REQUESTOR_NOTES, $illRequest->requestor_notes);
     }
 
     public function testEditOverwritesLibrary(): void
@@ -84,7 +84,7 @@ class EditRecordTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['borrow'],
             'library_id' => LIBRARY_ID,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => VCC_BORROWER_NOTES
+            'requestor_notes' => REQUESTOR_NOTES
         ]);
 
         $illRequest->save();
@@ -101,7 +101,7 @@ class EditRecordTest extends DuskTestCase
                 ->assertChecked('@action_borrow')
                 ->assertValue('@searchable_select_input', LIBRARY_NAME)
                 ->assertChecked('@vcc_borrower_type_student')
-                ->assertValue('@vcc_borrower_notes', VCC_BORROWER_NOTES)
+                ->assertValue('@requestor_notes', REQUESTOR_NOTES)
                 ->click('@resource_book')
                 ->click('@action_ship-to-me')
                 ->click('@submit')
@@ -112,7 +112,7 @@ class EditRecordTest extends DuskTestCase
                 ->assertSee(ILLRequest::ACTIONS['ship-to-me'])
                 ->assertMissing(LIBRARY_NAME)
                 ->assertSee(ILLRequest::VCC_BORROWER_TYPES['student'])
-                ->assertSee(VCC_BORROWER_NOTES);
+                ->assertSee(REQUESTOR_NOTES);
         });
 
         $illRequest = ILLRequest::find(1);
@@ -124,10 +124,10 @@ class EditRecordTest extends DuskTestCase
         $this->assertEquals(ILLRequest::ACTIONS['ship-to-me'], $illRequest->action);
         $this->assertEquals(LIBRARY_ID, $illRequest->library_id);
         $this->assertEquals(ILLRequest::VCC_BORROWER_TYPES['student'], $illRequest->vcc_borrower_type);
-        $this->assertEquals(VCC_BORROWER_NOTES, $illRequest->vcc_borrower_notes);
+        $this->assertEquals(REQUESTOR_NOTES, $illRequest->requestor_notes);
     }
 
-    public function testEditOverwritesVccBorrowerNotes(): void
+    public function testEditOverwritesRequestorNotes(): void
     {
         $illRequest = ILLRequest::create([
             'request_date' => Carbon::today()->toDateString(),
@@ -137,7 +137,7 @@ class EditRecordTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['borrow'],
             'library_id' => LIBRARY_ID,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => VCC_BORROWER_NOTES
+            'requestor_notes' => REQUESTOR_NOTES
         ]);
 
         $illRequest->save();
@@ -154,7 +154,7 @@ class EditRecordTest extends DuskTestCase
                 ->assertChecked('@action_borrow')
                 ->assertValue('@searchable_select_input', LIBRARY_NAME)
                 ->assertChecked('@vcc_borrower_type_student')
-                ->assertValue('@vcc_borrower_notes', VCC_BORROWER_NOTES)
+                ->assertValue('@requestor_notes', REQUESTOR_NOTES)
                 ->click('@resource_book')
                 ->click('@action_lend')
                 ->click('@submit')
@@ -165,7 +165,7 @@ class EditRecordTest extends DuskTestCase
                 ->assertSee(ILLRequest::ACTIONS['lend'])
                 ->assertSee(LIBRARY_NAME)
                 ->assertSee(ILLRequest::VCC_BORROWER_TYPES['library'])
-                ->assertMissing(VCC_BORROWER_NOTES);
+                ->assertMissing(REQUESTOR_NOTES);
         });
 
         $illRequest = ILLRequest::find(1);
@@ -177,7 +177,7 @@ class EditRecordTest extends DuskTestCase
         $this->assertEquals(ILLRequest::ACTIONS['lend'], $illRequest->action);
         $this->assertEquals(LIBRARY_ID, $illRequest->library_id);
         $this->assertEquals(ILLRequest::VCC_BORROWER_TYPES['library'], $illRequest->vcc_borrower_type);
-        $this->assertEquals(VCC_BORROWER_NOTES, $illRequest->vcc_borrower_notes);
+        $this->assertEquals(REQUESTOR_NOTES, $illRequest->requestor_notes);
     }
 
     public function testUnfulfilledReasonOtherDescriptionDoesntContainNonOther(): void
@@ -190,7 +190,7 @@ class EditRecordTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['borrow'],
             'library_id' => LIBRARY_ID,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => VCC_BORROWER_NOTES
+            'requestor_notes' => REQUESTOR_NOTES
         ]);
 
         $illRequest->save();
@@ -212,7 +212,7 @@ class EditRecordTest extends DuskTestCase
                 ->assertChecked('@action_borrow')
                 ->assertValue('@searchable_select_input', LIBRARY_NAME)
                 ->assertChecked('@vcc_borrower_type_student')
-                ->assertValue('@vcc_borrower_notes', VCC_BORROWER_NOTES)
+                ->assertValue('@requestor_notes', REQUESTOR_NOTES)
                 ->click('@submit')
                 ->waitFor('@submission_title')
                 ->assertSee('Request was not Fulfilled')
@@ -221,7 +221,7 @@ class EditRecordTest extends DuskTestCase
                 ->assertSee(ILLRequest::ACTIONS['borrow'])
                 ->assertSee(LIBRARY_NAME)
                 ->assertSee(ILLRequest::VCC_BORROWER_TYPES['student'])
-                ->assertSee(VCC_BORROWER_NOTES);
+                ->assertSee(REQUESTOR_NOTES);
         });
 
         $illRequest = ILLRequest::find(1);
@@ -233,7 +233,7 @@ class EditRecordTest extends DuskTestCase
         $this->assertEquals(ILLRequest::ACTIONS['borrow'], $illRequest->action);
         $this->assertEquals(LIBRARY_ID, $illRequest->library_id);
         $this->assertEquals(ILLRequest::VCC_BORROWER_TYPES['student'], $illRequest->vcc_borrower_type);
-        $this->assertEquals(VCC_BORROWER_NOTES, $illRequest->vcc_borrower_notes);
+        $this->assertEquals(REQUESTOR_NOTES, $illRequest->requestor_notes);
     }
 
     public function testResourceOtherDescriptionDoesntContainNonOther(): void
@@ -246,7 +246,7 @@ class EditRecordTest extends DuskTestCase
             'action' => ILLRequest::ACTIONS['borrow'],
             'library_id' => LIBRARY_ID,
             'vcc_borrower_type' => ILLRequest::VCC_BORROWER_TYPES['student'],
-            'vcc_borrower_notes' => VCC_BORROWER_NOTES
+            'requestor_notes' => REQUESTOR_NOTES
         ]);
 
         $illRequest->save();
@@ -267,7 +267,7 @@ class EditRecordTest extends DuskTestCase
                 ->assertChecked('@action_borrow')
                 ->assertValue('@searchable_select_input', LIBRARY_NAME)
                 ->assertChecked('@vcc_borrower_type_student')
-                ->assertValue('@vcc_borrower_notes', VCC_BORROWER_NOTES)
+                ->assertValue('@requestor_notes', REQUESTOR_NOTES)
                 ->click('@submit')
                 ->waitFor('@submission_title')
                 ->assertSee('Request was not Fulfilled')
@@ -276,7 +276,7 @@ class EditRecordTest extends DuskTestCase
                 ->assertSee(ILLRequest::ACTIONS['borrow'])
                 ->assertSee(LIBRARY_NAME)
                 ->assertSee(ILLRequest::VCC_BORROWER_TYPES['student'])
-                ->assertSee(VCC_BORROWER_NOTES);
+                ->assertSee(REQUESTOR_NOTES);
         });
 
         $illRequest = ILLRequest::find(1);
@@ -288,6 +288,6 @@ class EditRecordTest extends DuskTestCase
         $this->assertEquals(ILLRequest::ACTIONS['borrow'], $illRequest->action);
         $this->assertEquals(LIBRARY_ID, $illRequest->library_id);
         $this->assertEquals(ILLRequest::VCC_BORROWER_TYPES['student'], $illRequest->vcc_borrower_type);
-        $this->assertEquals(VCC_BORROWER_NOTES, $illRequest->vcc_borrower_notes);
+        $this->assertEquals(REQUESTOR_NOTES, $illRequest->requestor_notes);
     }
 }

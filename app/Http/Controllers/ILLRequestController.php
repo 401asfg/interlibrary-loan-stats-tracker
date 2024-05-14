@@ -35,7 +35,7 @@ class ILLRequestController extends Controller
             DB::raw('resource AS "Resource"'),
             DB::raw('action AS "Action"'),
             DB::raw('vcc_borrower_type AS "VCC Borrower Type"'),
-            DB::raw('vcc_borrower_notes AS "VCC Borrower Notes"'),
+            DB::raw('requestor_notes AS "Requestor Notes"'),
             DB::raw('libraries.name AS "Library Name"')
         )
             ->leftJoin('libraries', 'ill_requests.library_id', '=', 'libraries.id')
@@ -124,7 +124,7 @@ class ILLRequestController extends Controller
             'action' => 'required|in:' . implode(',', ILLRequest::ACTIONS),
             'library_id' => 'nullable|exists:libraries,id',
             'vcc_borrower_type' => 'required|in:' . implode(',', ILLRequest::VCC_BORROWER_TYPES),
-            'vcc_borrower_notes' => 'nullable|string'
+            'requestor_notes' => 'nullable|string'
         ]);
     }
 }

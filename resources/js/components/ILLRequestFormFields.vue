@@ -39,9 +39,14 @@
         </div>
     </div>
 
-    <div v-if="hasAction()">
+    <div>
         <h2>Parties Involved</h2>
         <div>
+            <div>
+                <div class="field-header">Requestor Number/Notes</div>
+                <textarea name="requestor_notes" v-model="form.requestor_notes" placeholder="Notes..." dusk="requestor_notes"></textarea>
+            </div>
+
             <div v-if="isLendingOrBorrowing()">
                 <div class="field-header">{{ getLibraryHeader() }}</div>
                 <SearchableSelect :databaseRoute="root_url + '/libraries'" @input="onLibraryInput" :initSelection="form.library" />
@@ -50,9 +55,7 @@
 
             <div v-if="isBorrowingOrShipping()">
                 <div class="field-header">VCC Borrower</div>
-
                 <DynamicSelector :choices="getSelectableBorrowerTypes()" selectorName="vcc_borrower_type" @input="onBorrowerTypeInput" :initSelection="form.vcc_borrower_type" dusk="vcc_borrower_type" />
-                <textarea name="vcc_borrower_notes" v-model="form.vcc_borrower_notes" placeholder="Notes..." dusk="vcc_borrower_notes"></textarea>
             </div>
         </div>
     </div>
@@ -109,7 +112,7 @@
                     action: null,
                     library: null,
                     vcc_borrower_type: this.vcc_borrower_types['library'],
-                    vcc_borrower_notes: null,
+                    requestor_notes: null,
                 }
             }
         },
@@ -145,16 +148,8 @@
             },
             isBorrowingOrShipping() {
                 const neither = this.form.action !== this.actions['borrow'] && this.form.action !== this.actions['ship-to-me'];
-
-                if (neither) {
-                    this.form.vcc_borrower_type = this.vcc_borrower_types['library'];
-                    this.form.vcc_borrower_notes = null;
-                }
-
+                if (neither) this.form.vcc_borrower_type = this.vcc_borrower_types['library'];
                 return !neither;
-            },
-            hasAction() {
-                return this.isLendingOrBorrowing() || this.isBorrowingOrShipping();
             },
             getLibraryHeader() {
                 return (this.form.action === this.actions['borrow'] ? "Lending" : "Borrowing") + " Library";
