@@ -568,6 +568,30 @@ class ILLRequestsAPITest extends TestCase
         );
     }
 
+    public function testStoreFulfilledRenewing(): void
+    {
+        $this->assertPostSuccessful(
+            new MockILLRequest(
+                ILLRequest::VCC_BORROWER_TYPES['student'],
+                ILLRequest::ACTIONS['renewal'],
+                ILLRequest::RESOURCES['ea'],
+                'true',
+                null
+            )
+        );
+    }
+
+    public function testStoreUnfulfilledRenewing(): void
+    {
+        $this->assertPostSuccessful(
+            new MockILLRequest(
+                ILLRequest::VCC_BORROWER_TYPES['employee'],
+                ILLRequest::ACTIONS['renewal'],
+                ILLRequest::RESOURCES['ea']
+            )
+        );
+    }
+
     public function testStoreFulfilledLending(): void
     {
         $this->assertPostSuccessful(
@@ -774,6 +798,30 @@ class ILLRequestsAPITest extends TestCase
             new MockILLRequest(
                 ILLRequest::VCC_BORROWER_TYPES['employee'],
                 ILLRequest::ACTIONS['borrow'],
+                ILLRequest::RESOURCES['ea']
+            )
+        );
+    }
+
+    public function testUpdateFulfilledRenewing(): void
+    {
+        $this->assertPutSuccessful(
+            new MockILLRequest(
+                ILLRequest::VCC_BORROWER_TYPES['student'],
+                ILLRequest::ACTIONS['renewal'],
+                ILLRequest::RESOURCES['ea'],
+                'true',
+                null
+            )
+        );
+    }
+
+    public function testUpdateUnfulfilledRenewing(): void
+    {
+        $this->assertPutSuccessful(
+            new MockILLRequest(
+                ILLRequest::VCC_BORROWER_TYPES['employee'],
+                ILLRequest::ACTIONS['renewal'],
                 ILLRequest::RESOURCES['ea']
             )
         );

@@ -17,17 +17,13 @@ class LibrariesAPITest extends TestCase
     public function testIndexNoQuery(): void
     {
         $response = $this->get('libraries');
-
-        $response->assertStatus(200);
-        $response->assertJsonCount(0);
+        $response->assertStatus(422);
     }
 
     public function testIndexEmptyQuery(): void
     {
         $response = $this->get('libraries?query=');
-
-        $response->assertStatus(200);
-        $response->assertJsonCount(345);
+        $response->assertStatus(422);
     }
 
     public function testIndexSingleLetterQuery(): void

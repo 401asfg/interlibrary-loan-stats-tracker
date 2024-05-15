@@ -134,14 +134,24 @@ class FormDataClearingTest extends DuskTestCase
         });
     }
 
-    public function testLibraryIdClearsOnShipToMeAction(): void
+    public function testLibraryIdClearsOnShipToMeActionFromBorrow(): void
     {
         $this->assertHasStatusOnHidding('@action_ship-to-me', '@library', null, 'library_id', 'assertShowPageSelectorMissing');
     }
 
-    public function testVccBorrowerFieldsChangesToLibraryOnLendAction(): void
+    public function testVccBorrowerFieldsChangesToLibraryOnLendActionFromBorrow(): void
     {
         $this->assertHasStatusOnHidding('@action_lend', '@vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['library'], 'vcc_borrower_type', 'assertShowPageHasLibraryVCCBorrowerType');
+    }
+
+    public function testLibraryIdClearsOnShipToMeActionFromRenewal(): void
+    {
+        $this->assertHasStatusOnHiddingFromRenewal('@action_ship-to-me', '@library', null, 'library_id', 'assertShowPageSelectorMissing');
+    }
+
+    public function testVccBorrowerFieldsChangesToLibraryOnLendActionFromRenewal(): void
+    {
+        $this->assertHasStatusOnHiddingFromRenewal('@action_lend', '@vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['library'], 'vcc_borrower_type', 'assertShowPageHasLibraryVCCBorrowerType');
     }
 
     private function assertNewDBEntryPropertyHas($expectedValue, $propertyName)
@@ -180,6 +190,16 @@ class FormDataClearingTest extends DuskTestCase
     {
         $this->browse(function (FormDataClearingBrowser $browser) use ($clearingSelector, $clearedSelector, $assertStatus) {
             $browser->assertHasStatusOnHidding($clearingSelector, $clearedSelector, $assertStatus);
+        });
+
+        $this->assertNewDBEntryPropertyHas($dbExpectedValue, $dbPropertyName);
+    }
+
+    private function assertHasStatusOnHiddingFromRenewal($clearingSelector, $clearedSelector, $dbExpectedValue, $dbPropertyName, $assertStatus)
+    {
+        $this->browse(function (FormDataClearingBrowser $browser) use ($clearingSelector, $clearedSelector, $assertStatus) {
+            $browser->click('@action_renewal')
+                ->assertHasStatusOnHidding($clearingSelector, $clearedSelector, $assertStatus);
         });
 
         $this->assertNewDBEntryPropertyHas($dbExpectedValue, $dbPropertyName);

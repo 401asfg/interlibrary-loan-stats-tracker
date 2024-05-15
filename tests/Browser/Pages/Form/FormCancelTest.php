@@ -27,9 +27,14 @@ class FormCancelTestBrowser extends Browser
 
 class FormCancelTest extends DuskTestCase
 {
+    protected function newBrowser($driver)
+    {
+        return new FormCancelTestBrowser($driver);
+    }
+
     public function testCancelFromIndex()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormCancelTestBrowser $browser) {
             $browser->click('@submit')
                 ->waitFor('@form_title')
                 ->click('@cancel')
@@ -39,11 +44,12 @@ class FormCancelTest extends DuskTestCase
 
     public function testCancelFromIndexFilledOut()
     {
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormCancelTestBrowser $browser) {
             $browser->click('@submit')
                 ->waitFor('@form_title')
-                ->fillout()
-                ->click('@cancel')
+                ->fillout();
+
+            $browser->click('@cancel')
                 ->assertVisible('@index_title');
         });
     }
@@ -63,7 +69,7 @@ class FormCancelTest extends DuskTestCase
 
         $illRequest->save();
 
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormCancelTestBrowser $browser) {
             $browser->visit('ill-requests/1')
                 ->click('@submit')
                 ->waitFor('@form_title')
@@ -87,12 +93,13 @@ class FormCancelTest extends DuskTestCase
 
         $illRequest->save();
 
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormCancelTestBrowser $browser) {
             $browser->visit('ill-requests/1')
                 ->click('@submit')
                 ->waitFor('@form_title')
-                ->fillout()
-                ->click('@cancel')
+                ->fillout();
+
+            $browser->click('@cancel')
                 ->assertVisible('@index_title');
         });
     }
@@ -112,12 +119,12 @@ class FormCancelTest extends DuskTestCase
 
         $illRequest->save();
 
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormCancelTestBrowser $browser) {
             $browser->visit('ill-requests/1')
                 ->click('@edit')
                 ->waitFor('@form_title')
                 ->click('@cancel')
-                ->assertVisible('@submission_title');
+                ->assertVisible('@index_title');
         });
     }
 
@@ -136,13 +143,14 @@ class FormCancelTest extends DuskTestCase
 
         $illRequest->save();
 
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormCancelTestBrowser $browser) {
             $browser->visit('ill-requests/1')
                 ->click('@edit')
                 ->waitFor('@form_title')
-                ->fillout()
-                ->click('@cancel')
-                ->assertVisible('@submission_title');
+                ->fillout();
+
+            $browser->click('@cancel')
+                ->assertVisible('@index_title');
         });
     }
 
@@ -161,7 +169,7 @@ class FormCancelTest extends DuskTestCase
 
         $illRequest->save();
 
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormCancelTestBrowser $browser) {
             $browser->visit('ill-requests/1')
                 ->click('@delete')
                 ->waitFor('@form_title')
@@ -185,12 +193,13 @@ class FormCancelTest extends DuskTestCase
 
         $illRequest->save();
 
-        $this->browse(function (Browser $browser) {
+        $this->browse(function (FormCancelTestBrowser $browser) {
             $browser->visit('ill-requests/1')
                 ->click('@delete')
                 ->waitFor('@form_title')
-                ->fillout()
-                ->click('@cancel')
+                ->fillout();
+
+            $browser->click('@cancel')
                 ->assertVisible('@index_title');
         });
     }

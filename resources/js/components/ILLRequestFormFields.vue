@@ -47,15 +47,17 @@
                 <textarea name="requestor_notes" v-model="form.requestor_notes" placeholder="Notes..." dusk="requestor_notes"></textarea>
             </div>
 
-            <div v-if="isNotShipToMe()">
-                <div class="field-header">{{ getLibraryHeader() }}</div>
-                <SearchableSelect :databaseRoute="root_url + '/libraries'" @input="onLibraryInput" :initSelection="form.library" />
-                <input v-if="hasLibrary()" type="hidden" name="library_id" v-model="form.library.id">
-            </div>
+            <div v-if="actionIsSelected()">
+                <div v-if="isNotShipToMe()">
+                    <div class="field-header">{{ getLibraryHeader() }}</div>
+                    <SearchableSelect :databaseRoute="root_url + '/libraries'" @input="onLibraryInput" :initSelection="form.library" />
+                    <input v-if="hasLibrary()" type="hidden" name="library_id" v-model="form.library.id">
+                </div>
 
-            <div v-if="isNotLending()">
-                <div class="field-header">VCC Borrower</div>
-                <DynamicSelector :choices="getSelectableBorrowerTypes()" selectorName="vcc_borrower_type" @input="onBorrowerTypeInput" :initSelection="form.vcc_borrower_type" dusk="vcc_borrower_type" />
+                <div v-if="isNotLending()">
+                    <div class="field-header">VCC Borrower</div>
+                    <DynamicSelector :choices="getSelectableBorrowerTypes()" selectorName="vcc_borrower_type" @input="onBorrowerTypeInput" :initSelection="form.vcc_borrower_type" dusk="vcc_borrower_type" />
+                </div>
             </div>
         </div>
     </div>
@@ -140,6 +142,9 @@
                 const isFulfilled = this.form.fulfilled;
                 if (isFulfilled === "true" && isFulfilled === true) this.form.unfulfilled_reason = null;
                 return isFulfilled !== "true" && isFulfilled !== true;
+            },
+            actionIsSelected() {
+                return this.form.action !== null;
             },
             isNotShipToMe() {
                 const isShipToMe = this.form.action === this.actions['ship-to-me'];

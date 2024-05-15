@@ -71,6 +71,11 @@ class FormDataSubmissionBrowser extends Browser
         return $this->click('@action_ship-to-me');
     }
 
+    public function selectRenewalAction()
+    {
+        return $this->click('@action_renewal');
+    }
+
     public function assertResourcActionBorrowerType($resource, $action, $borrowerType)
     {
         return $this->assertSee($resource)
@@ -170,6 +175,82 @@ class FormDataSubmissionTest extends DuskTestCase
                 null,
                 RESOURCE_DESCRIPTION,
                 'borrow',
+                'student',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testFulfilledRenewalBookNoNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->submit(),
+                true,
+                null,
+                'book',
+                'renewal',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testFulfilledRenewalBookWithNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->typeRequestorNotes()
+                    ->submit(),
+                true,
+                null,
+                'book',
+                'renewal',
+                'student',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testFulfilledRenewalOtherNoNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->selectOtherResource()
+                    ->submit(),
+                true,
+                null,
+                RESOURCE_DESCRIPTION,
+                'renewal',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testFulfilledRenewalOtherWithNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->selectOtherResource()
+                    ->typeRequestorNotes()
+                    ->submit(),
+                true,
+                null,
+                RESOURCE_DESCRIPTION,
+                'renewal',
                 'student',
                 REQUESTOR_NOTES,
                 LIBRARY_ID,
@@ -406,6 +487,86 @@ class FormDataSubmissionTest extends DuskTestCase
         });
     }
 
+    public function testUnfulfilledUnavailableRenewalBookNoNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->clickUnfulfilledReasonUnavailable()
+                    ->submit(),
+                false,
+                'unavailable',
+                'book',
+                'renewal',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledUnavailableRenewalBookWithNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->clickUnfulfilledReasonUnavailable()
+                    ->typeRequestorNotes()
+                    ->submit(),
+                false,
+                'unavailable',
+                'book',
+                'renewal',
+                'student',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledUnavailableRenewalOtherNoNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->clickUnfulfilledReasonUnavailable()
+                    ->selectOtherResource()
+                    ->submit(),
+                false,
+                'unavailable',
+                RESOURCE_DESCRIPTION,
+                'renewal',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledUnavailableRenewalOtherWithNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->clickUnfulfilledReasonUnavailable()
+                    ->selectOtherResource()
+                    ->typeRequestorNotes()
+                    ->submit(),
+                false,
+                'unavailable',
+                RESOURCE_DESCRIPTION,
+                'renewal',
+                'student',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
     public function testUnfulfilledUnavailableLendBook()
     {
         $this->browse(function (FormDataSubmissionBrowser $browser) {
@@ -593,6 +754,86 @@ class FormDataSubmissionTest extends DuskTestCase
                 UNFULFILLED_REASON_DESCRIPTION,
                 RESOURCE_DESCRIPTION,
                 'borrow',
+                'student',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledOtherRenewalBookNoNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->typeUnfulfilledReasonOther()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                'book',
+                'renewal',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledOtherRenewalBookWithNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->typeUnfulfilledReasonOther()
+                    ->typeRequestorNotes()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                'book',
+                'renewal',
+                'student',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledOtherRenewalOtherNoNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->typeUnfulfilledReasonOther()
+                    ->selectOtherResource()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                RESOURCE_DESCRIPTION,
+                'renewal',
+                'student',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledOtherRenewalOtherWithNotes()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->typeUnfulfilledReasonOther()
+                    ->selectOtherResource()
+                    ->typeRequestorNotes()
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                RESOURCE_DESCRIPTION,
+                'renewal',
                 'student',
                 REQUESTOR_NOTES,
                 LIBRARY_ID,

@@ -30,10 +30,11 @@ class FormFieldStatesBrowser extends Browser
             ->assertRadioNotSelected('action', ILLRequest::ACTIONS['borrow'])
             ->assertRadioNotSelected('action', ILLRequest::ACTIONS['lend'])
             ->assertRadioNotSelected('action', ILLRequest::ACTIONS['ship-to-me'])
+            ->assertRadioNotSelected('action', ILLRequest::ACTIONS['renewal'])
+            ->assertSee('Parties Involved')
             ->assertValue('@requestor_notes', '')
             ->assertMissing('@searchable_select_input')
-            ->assertMissing('@vcc_borrower_types')
-            ->assertMissing('@action_description');
+            ->assertMissing('@vcc_borrower_types');
     }
 
     public function assertDefaultPage()
@@ -154,6 +155,19 @@ class FormFieldStatesTest extends DuskTestCase
                 ->assertRadioNotSelected('resource', 'Other')
                 ->assertRadioNotSelected('action', ILLRequest::ACTIONS['borrow'])
                 ->assertRadioNotSelected('action', ILLRequest::ACTIONS['lend'])
+                ->assertRadioNotSelected('action', ILLRequest::ACTIONS['renewal'])
+                ->assertMissing('@action_ship-to-me');
+        });
+
+        $this->browse(function (FormFieldStatesBrowser $browser) {
+            $browser->click('@resource_book-chapter')
+                ->assertRadioNotSelected('resource', ILLRequest::RESOURCES['book'])
+                ->assertRadioNotSelected('resource', ILLRequest::RESOURCES['ea'])
+                ->assertRadioSelected('resource', ILLRequest::RESOURCES['book-chapter'])
+                ->assertRadioNotSelected('resource', 'Other')
+                ->assertRadioNotSelected('action', ILLRequest::ACTIONS['borrow'])
+                ->assertRadioNotSelected('action', ILLRequest::ACTIONS['lend'])
+                ->assertRadioNotSelected('action', ILLRequest::ACTIONS['renewal'])
                 ->assertMissing('@action_ship-to-me');
         });
     }
@@ -165,6 +179,22 @@ class FormFieldStatesTest extends DuskTestCase
                 ->assertSee('Parties Involved')
                 ->assertValue('@requestor_notes', '')
                 ->assertSee('Lending Library')
+                ->assertMissing('Borrowing Library')
+                ->assertValue('@searchable_select_input', '')
+                ->assertSee('VCC Borrower')
+                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['student'])
+                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['employee']);
+        });
+    }
+
+    public function testRenewalAction(): void
+    {
+        $this->browse(function (FormFieldStatesBrowser $browser) {
+            $browser->click('@action_renewal')
+                ->assertSee('Parties Involved')
+                ->assertValue('@requestor_notes', '')
+                ->assertSee('Library')
+                ->assertMissing('Lending Library')
                 ->assertMissing('Borrowing Library')
                 ->assertValue('@searchable_select_input', '')
                 ->assertSee('VCC Borrower')
