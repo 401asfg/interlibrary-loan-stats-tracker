@@ -14,16 +14,22 @@ use Tests\TestCase;
 
 class LibrariesAPITest extends TestCase
 {
+    const NO_QUERY = ["query" => ["The query field is required."]];
+    const NON_NUMERIC_ID = ["id" => ["The id must be a number."]];
+
     public function testIndexNoQuery(): void
     {
         $response = $this->get('libraries');
+
         $response->assertStatus(422);
+        $response->assertSimilarJson(LibrariesAPITest::NO_QUERY);
     }
 
     public function testIndexEmptyQuery(): void
     {
         $response = $this->get('libraries?query=');
         $response->assertStatus(422);
+        $response->assertSimilarJson(LibrariesAPITest::NO_QUERY);
     }
 
     public function testIndexSingleLetterQuery(): void
@@ -146,6 +152,13 @@ class LibrariesAPITest extends TestCase
         $this->assertShowIsInvalid('346');
         $this->assertShowIsInvalid('347');
         $this->assertShowIsInvalid('400');
+    }
+
+    public function testShowNonNumericId(): void
+    {
+        $response = $this->get('libraries/xxxx');
+        $response->assertStatus(422);
+        $response->assertSimilarJson(LibrariesAPITest::NON_NUMERIC_ID);
     }
 
     private function assertShow($id, $expectedName): void

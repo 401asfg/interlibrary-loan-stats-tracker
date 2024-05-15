@@ -16,24 +16,19 @@ class ILLRequestController extends Controller
 {
     public function index(Request $request)
     {
-        if (
-            !$request->has('fromDate')
-            || !$request->has('toDate')
-            || !$request->filled('fromDate')
-            || !$request->filled('toDate')
-        )
+        if (!$request->has('fromDate') || !$request->has('toDate'))
             return response('', 422);
 
-        $fromDate = new DateTime($request->input('fromDate'));
-        $toDate = (new DateTime($request->input('toDate')))->modify("+1 day");
-
-        $validator = Validator::make(['from_date' => $fromDate, 'to_date' => $toDate], [
+        $validator = Validator::make(['from_date' => $request->input('fromDate'), 'to_date' => $request->input('toDate')], [
             'from_date' => 'required|date',
             'to_date' => 'required|date'
         ]);
 
         if ($validator->fails())
             return response()->json($validator->errors(), 422);
+
+        $fromDate = new DateTime($validator->validated()['from_date']);
+        $toDate = (new DateTime($validator->validated()['to_date']))->modify("+1 day");
 
         $records = ILLRequest::select(
             DB::raw('created_at AS "Created At"'),
@@ -47,8 +42,8 @@ class ILLRequestController extends Controller
             DB::raw('libraries.name AS "Library Name"')
         )
             ->leftJoin('libraries', 'ill_requests.library_id', '=', 'libraries.id')
-            ->where('created_at', '>=', $validator->validated()['from_date'])
-            ->where('created_at', '<', $validator->validated()['to_date'])
+            ->where('created_at', '>=', $fromDate)
+            ->where('created_at', '<', $toDate)
             ->orderBy('created_at', 'desc')
             ->get();
 

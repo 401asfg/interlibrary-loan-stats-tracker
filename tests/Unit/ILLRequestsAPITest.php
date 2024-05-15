@@ -522,6 +522,21 @@ class ILLRequestsAPITest extends TestCase
         $this->assertIndexEmpty('fromDate=' . Carbon::tomorrow()->addDays(1) . '&toDate=' . Carbon::tomorrow()->addDays(2));
     }
 
+    public function testIndexNonDateFromDate(): void
+    {
+        $this->assertIndexMissingParameters('fromDate=x&toDate=' . Carbon::today());
+    }
+
+    public function testIndexNonDateToDate(): void
+    {
+        $this->assertIndexMissingParameters('fromDate=' . Carbon::today() . '&toDate=date');
+    }
+
+    public function testIndexNonDateFromAndToDate(): void
+    {
+        $this->assertIndexMissingParameters('fromDate=20240101&toDate=53531');
+    }
+
     public function testRecords(): void
     {
         $response = $this->get('ill-requests/records');
@@ -542,6 +557,24 @@ class ILLRequestsAPITest extends TestCase
             'illRequest' => $firstILLRequest,
             'libraryName' => $firstILLRequest->getLibraryName()
         ]);
+    }
+
+    public function testShowNoId(): void
+    {
+        $response = $this->get('ill-requests');
+        $response->assertStatus(422);
+    }
+
+    public function testShowInvalidId(): void
+    {
+        $response = $this->get('ill-requests/3i');
+        $response->assertStatus(422);
+    }
+
+    public function testShowOutOfBoundsId(): void
+    {
+        $response = $this->get('ill-requests/-6');
+        $response->assertStatus(404);
     }
 
     public function testStoreFulfilledBorrowing(): void
@@ -761,6 +794,24 @@ class ILLRequestsAPITest extends TestCase
         $this->assertNull($deletedILLRequest);
     }
 
+    public function testDestroyNoId(): void
+    {
+        $response = $this->delete('ill-requests');
+        $response->assertStatus(405);
+    }
+
+    public function testDestroyInvalidId(): void
+    {
+        $response = $this->delete('ill-requests/x');
+        $response->assertStatus(422);
+    }
+
+    public function testDestroyOutOfBoundsId(): void
+    {
+        $response = $this->delete('ill-requests/-1');
+        $response->assertStatus(404);
+    }
+
     public function testEdit(): void
     {
         $firstILLRequest = ILLRequest::first();
@@ -777,6 +828,24 @@ class ILLRequestsAPITest extends TestCase
             'illRequest' => $firstILLRequest,
             'libraryName' => $firstILLRequest->getLibraryName()
         ]);
+    }
+
+    public function testEditNoId(): void
+    {
+        $response = $this->get('ill-requests//edit');
+        $response->assertStatus(404);
+    }
+
+    public function testEditInvalidId(): void
+    {
+        $response = $this->get('ill-requests/x/edit');
+        $response->assertStatus(422);
+    }
+
+    public function testEditOutOfBoundsId(): void
+    {
+        $response = $this->get('ill-requests/-7/edit');
+        $response->assertStatus(404);
     }
 
     public function testUpdateFulfilledBorrowing(): void
@@ -978,6 +1047,24 @@ class ILLRequestsAPITest extends TestCase
                 null
             )
         );
+    }
+
+    public function testUpdateNoId(): void
+    {
+        $response = $this->put('ill-requests');
+        $response->assertStatus(405);
+    }
+
+    public function testUpdateInvalidId(): void
+    {
+        $response = $this->put('ill-requests/x');
+        $response->assertStatus(422);
+    }
+
+    public function testUpdateOutOfBoundsId(): void
+    {
+        $response = $this->put('ill-requests/-7');
+        $response->assertStatus(422);
     }
 
     private function setupIndex()
