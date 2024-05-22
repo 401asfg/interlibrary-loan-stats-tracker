@@ -605,7 +605,7 @@ class ILLRequestsAPITest extends TestCase
     {
         $this->assertPostSuccessful(
             new MockILLRequest(
-                ILLRequest::VCC_BORROWER_TYPES['student'],
+                ILLRequest::VCC_BORROWER_TYPES['external'],
                 ILLRequest::ACTIONS['renewal'],
                 ILLRequest::RESOURCES['ea'],
                 'true',
@@ -889,7 +889,7 @@ class ILLRequestsAPITest extends TestCase
     {
         $this->assertPutSuccessful(
             new MockILLRequest(
-                ILLRequest::VCC_BORROWER_TYPES['employee'],
+                ILLRequest::VCC_BORROWER_TYPES['external'],
                 ILLRequest::ACTIONS['renewal'],
                 ILLRequest::RESOURCES['ea']
             )

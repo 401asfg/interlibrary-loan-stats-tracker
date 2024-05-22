@@ -183,7 +183,8 @@ class FormFieldStatesTest extends DuskTestCase
                 ->assertValue('@searchable_select_input', '')
                 ->assertSee('VCC Borrower')
                 ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['student'])
-                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['employee']);
+                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['employee'])
+                ->assertMissing('@vcc_borrower_type_external');
         });
     }
 
@@ -199,7 +200,8 @@ class FormFieldStatesTest extends DuskTestCase
                 ->assertValue('@searchable_select_input', '')
                 ->assertSee('VCC Borrower')
                 ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['student'])
-                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['employee']);
+                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['employee'])
+                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['external']);
         });
     }
 
@@ -214,7 +216,8 @@ class FormFieldStatesTest extends DuskTestCase
                 ->assertValue('@searchable_select_input', '')
                 ->assertMissing('VCC Borrower')
                 ->assertMissing('@vcc_borrower_type_student')
-                ->assertMissing('@vcc_borrower_type_employee');
+                ->assertMissing('@vcc_borrower_type_employee')
+                ->assertMissing('@vcc_borrower_type_external');
         });
     }
 
@@ -229,7 +232,8 @@ class FormFieldStatesTest extends DuskTestCase
                 ->assertMissing('@searchable_select_input')
                 ->assertSee('VCC Borrower')
                 ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['student'])
-                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['employee']);
+                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['employee'])
+                ->assertMissing('@vcc_borrower_type_external');
         });
     }
 }

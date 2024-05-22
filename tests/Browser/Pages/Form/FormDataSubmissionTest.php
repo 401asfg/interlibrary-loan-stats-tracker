@@ -259,6 +259,86 @@ class FormDataSubmissionTest extends DuskTestCase
         });
     }
 
+    public function testFulfilledRenewalBookNoNotesExternal()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->click('@vcc_borrower_type_external')
+                    ->submit(),
+                true,
+                null,
+                'book',
+                'renewal',
+                'external',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testFulfilledRenewalBookWithNotesExternal()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->typeRequestorNotes()
+                    ->click('@vcc_borrower_type_external')
+                    ->submit(),
+                true,
+                null,
+                'book',
+                'renewal',
+                'external',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testFulfilledRenewalOtherNoNotesExternal()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->selectOtherResource()
+                    ->click('@vcc_borrower_type_external')
+                    ->submit(),
+                true,
+                null,
+                RESOURCE_DESCRIPTION,
+                'renewal',
+                'external',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testFulfilledRenewalOtherWithNotesExternal()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->selectOtherResource()
+                    ->typeRequestorNotes()
+                    ->click('@vcc_borrower_type_external')
+                    ->submit(),
+                true,
+                null,
+                RESOURCE_DESCRIPTION,
+                'renewal',
+                'external',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
     public function testFulfilledLendBookWithNoNotes()
     {
         $this->browse(function (FormDataSubmissionBrowser $browser) {
@@ -567,6 +647,90 @@ class FormDataSubmissionTest extends DuskTestCase
         });
     }
 
+    public function testUnfulfilledUnavailableRenewalBookNoNotesExternal()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->clickUnfulfilledReasonUnavailable()
+                    ->click('@vcc_borrower_type_external')
+                    ->submit(),
+                false,
+                'unavailable',
+                'book',
+                'renewal',
+                'external',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledUnavailableRenewalBookWithNotesExternal()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->clickUnfulfilledReasonUnavailable()
+                    ->typeRequestorNotes()
+                    ->click('@vcc_borrower_type_external')
+                    ->submit(),
+                false,
+                'unavailable',
+                'book',
+                'renewal',
+                'external',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledUnavailableRenewalOtherNoNotesExternal()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->clickUnfulfilledReasonUnavailable()
+                    ->selectOtherResource()
+                    ->click('@vcc_borrower_type_external')
+                    ->submit(),
+                false,
+                'unavailable',
+                RESOURCE_DESCRIPTION,
+                'renewal',
+                'external',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledUnavailableRenewalOtherWithNotesExternal()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->clickUnfulfilledReasonUnavailable()
+                    ->selectOtherResource()
+                    ->typeRequestorNotes()
+                    ->click('@vcc_borrower_type_external')
+                    ->submit(),
+                false,
+                'unavailable',
+                RESOURCE_DESCRIPTION,
+                'renewal',
+                'external',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
     public function testUnfulfilledUnavailableLendBook()
     {
         $this->browse(function (FormDataSubmissionBrowser $browser) {
@@ -835,6 +999,90 @@ class FormDataSubmissionTest extends DuskTestCase
                 RESOURCE_DESCRIPTION,
                 'renewal',
                 'student',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledOtherRenewalBookNoNotesExternal()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->typeUnfulfilledReasonOther()
+                    ->click('@vcc_borrower_type_external')
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                'book',
+                'renewal',
+                'external',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledOtherRenewalBookWithNotesExternal()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->typeUnfulfilledReasonOther()
+                    ->typeRequestorNotes()
+                    ->click('@vcc_borrower_type_external')
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                'book',
+                'renewal',
+                'external',
+                REQUESTOR_NOTES,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledOtherRenewalOtherNoNotesExternal()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->typeUnfulfilledReasonOther()
+                    ->selectOtherResource()
+                    ->click('@vcc_borrower_type_external')
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                RESOURCE_DESCRIPTION,
+                'renewal',
+                'external',
+                null,
+                LIBRARY_ID,
+                LIBRARY_NAME
+            );
+        });
+    }
+
+    public function testUnfulfilledOtherRenewalOtherWithNotesExternal()
+    {
+        $this->browse(function (FormDataSubmissionBrowser $browser) {
+            $this->assertStatus(
+                $browser->selectRenewalAction()
+                    ->typeUnfulfilledReasonOther()
+                    ->selectOtherResource()
+                    ->typeRequestorNotes()
+                    ->click('@vcc_borrower_type_external')
+                    ->submit(),
+                false,
+                UNFULFILLED_REASON_DESCRIPTION,
+                RESOURCE_DESCRIPTION,
+                'renewal',
+                'external',
                 REQUESTOR_NOTES,
                 LIBRARY_ID,
                 LIBRARY_NAME

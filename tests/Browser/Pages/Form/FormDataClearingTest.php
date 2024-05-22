@@ -149,9 +149,109 @@ class FormDataClearingTest extends DuskTestCase
         $this->assertHasStatusOnHiddingFromRenewal('@action_ship-to-me', '@library', null, 'library_id', 'assertShowPageSelectorMissing');
     }
 
+    public function testExternalClearsOnShipToMeActionFromRenewal(): void
+    {
+        $this->browse(function (FormDataClearingBrowser $browser) {
+            $browser->fillOutForm()
+                ->click('@action_renewal')
+                ->click('@vcc_borrower_type_external')
+                ->click('@action_ship-to-me')
+                ->click('@submit')
+                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['student'])
+                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['employee'])
+                ->assertMissing('@vcc_borrower_type_external')
+                ->click('@vcc_borrower_type_employee')
+                ->click('@submit')
+                ->waitForShowPage()
+                ->assertSee('Employee')
+                ->assertDontSee('External');
+        });
+
+        $this->assertNewDBEntryPropertyHas('Employee', 'vcc_borrower_type');
+    }
+
+    public function testExternalReselectedOnReturnToRenewalActionFromBorrowAction(): void
+    {
+        $this->browse(function (FormDataClearingBrowser $browser) {
+            $browser->fillOutForm()
+                ->click('@action_renewal')
+                ->click('@vcc_borrower_type_external')
+                ->click('@action_borrow')
+                ->click('@submit')
+                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['student'])
+                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['employee'])
+                ->assertMissing('@vcc_borrower_type_external')
+                ->click('@action_renewal')
+                ->click('@submit')
+                ->waitForShowPage()
+                ->assertDontSee('Employee')
+                ->assertSee('External');
+        });
+
+        $this->assertNewDBEntryPropertyHas('External', 'vcc_borrower_type');
+    }
+
+    public function testExternalStillClearOnReturnToRenewalActionFromBorrowActionAndEmployeeClick(): void
+    {
+        $this->browse(function (FormDataClearingBrowser $browser) {
+            $browser->fillOutForm()
+                ->click('@action_renewal')
+                ->click('@vcc_borrower_type_external')
+                ->click('@action_borrow')
+                ->click('@vcc_borrower_type_employee')
+                ->click('@action_renewal')
+                ->click('@submit')
+                ->waitForShowPage()
+                ->assertSee('Employee')
+                ->assertDontSee('External');
+        });
+
+        $this->assertNewDBEntryPropertyHas('Employee', 'vcc_borrower_type');
+    }
+
     public function testVccBorrowerFieldsChangesToLibraryOnLendActionFromRenewal(): void
     {
         $this->assertHasStatusOnHiddingFromRenewal('@action_lend', '@vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['library'], 'vcc_borrower_type', 'assertShowPageHasLibraryVCCBorrowerType');
+    }
+
+    public function testExternalClearsOnLendActionFromRenewal(): void
+    {
+        $this->browse(function (FormDataClearingBrowser $browser) {
+            $browser->fillOutForm()
+                ->click('@action_renewal')
+                ->click('@vcc_borrower_type_external')
+                ->click('@action_lend')
+                ->assertMissing('@vcc_borrower_type_student')
+                ->assertMissing('@vcc_borrower_type_employee')
+                ->assertMissing('@vcc_borrower_type_external')
+                ->click('@submit')
+                ->waitForShowPage()
+                ->assertSee('Library')
+                ->assertDontSee('External');
+        });
+
+        $this->assertNewDBEntryPropertyHas('Library', 'vcc_borrower_type');
+    }
+
+    public function testExternalStillClearOnReturnToRenewalActionFromLendAction(): void
+    {
+        $this->browse(function (FormDataClearingBrowser $browser) {
+            $browser->fillOutForm()
+                ->click('@action_renewal')
+                ->click('@vcc_borrower_type_external')
+                ->click('@action_lend')
+                ->assertMissing('@vcc_borrower_type_student')
+                ->assertMissing('@vcc_borrower_type_employee')
+                ->assertMissing('@vcc_borrower_type_external')
+                ->click('@action_renewal')
+                ->assertRadioNotSelected('vcc_borrower_type', ILLRequest::VCC_BORROWER_TYPES['external'])
+                ->click('@vcc_borrower_type_external')
+                ->click('@submit')
+                ->waitForShowPage()
+                ->assertSee('External');
+        });
+
+        $this->assertNewDBEntryPropertyHas('External', 'vcc_borrower_type');
     }
 
     private function assertNewDBEntryPropertyHas($expectedValue, $propertyName)

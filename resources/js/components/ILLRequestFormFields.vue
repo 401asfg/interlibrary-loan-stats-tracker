@@ -175,7 +175,12 @@
                 return (this.form.resource !== this.resources['ea'] && this.form.resource !== this.resources['book-chapter']) ? [] : ['ship-to-me'];
             },
             getSelectableBorrowerTypes() {
-                const {library, ...borrowerTypes} = this.vcc_borrower_types;
+                if (this.form.action === this.actions['renewal']) {
+                    const {library, ...borrowerTypes} = this.vcc_borrower_types;
+                    return borrowerTypes;
+                }
+
+                const {library, external, ...borrowerTypes} = this.vcc_borrower_types;
                 return borrowerTypes;
             },
             hasLibrary() {
