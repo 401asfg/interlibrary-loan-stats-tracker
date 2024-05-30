@@ -69,10 +69,10 @@ class ILLRequestController extends Controller
 
         $illRequest = ILLRequest::create($validator->validated());
         $illRequest->save();
-        return redirect('ill-requests/' . $illRequest->id);
+        return redirect('ill-requests/' . $illRequest->id . '?status=Submission+Successful!');
     }
 
-    public function show(string $id)
+    public function show(string $id, Request $request)
     {
         $validator = ILLRequestController::makeIdValidator($id);
 
@@ -82,8 +82,14 @@ class ILLRequestController extends Controller
         $illRequest = ILLRequest::findOrFail($validator->validated()['id']);
         $libraryName = $illRequest->getLibraryName();
 
+        $status = null;
+
+        if ($request->has('status'))
+            $status = $request->all()['status'];
+
         return view('submission')->with('illRequest', $illRequest)
-            ->with('libraryName', $libraryName);
+            ->with('libraryName', $libraryName)
+            ->with('status', $status);
     }
 
     public function destroy(string $id)

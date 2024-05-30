@@ -5,7 +5,9 @@
 @section('title', 'Submission')
 
 @section('content')
-<h1 class="success-title" dusk="submission_title">Submission Successful!</h1>
+@if ($status)
+<h1 class="success-banner" dusk="submission_title">{{ $status }}</h1>
+@endif
 
 <div class="report-container">
     <h2>Summary</h2>

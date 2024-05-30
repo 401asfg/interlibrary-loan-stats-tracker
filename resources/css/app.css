@@ -147,10 +147,6 @@ textarea, input[type="text"] {
     background-color: lightcoral;
 }
 
-.success-title {
-    color: green;
-}
-
 .success-banner {
     background-color: lightgreen;
     padding: 10px;

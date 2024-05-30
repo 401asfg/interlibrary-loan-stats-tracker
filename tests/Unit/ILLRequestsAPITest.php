@@ -559,6 +559,28 @@ class ILLRequestsAPITest extends TestCase
         ]);
     }
 
+    public function testShowNoStatus(): void
+    {
+        $firstILLRequest = ILLRequest::first();
+
+        $response = $this->get('ill-requests/' . $firstILLRequest->id);
+        $response->assertStatus(200);
+        $response->assertViewIs('submission');
+
+        $this->assertStringNotContainsString('Submission Successful!', $response->content());
+    }
+
+    public function testShowWithSuccessStatus(): void
+    {
+        $firstILLRequest = ILLRequest::first();
+
+        $response = $this->get('ill-requests/' . $firstILLRequest->id . '?status=Submission+Successful!');
+        $response->assertStatus(200);
+        $response->assertViewIs('submission');
+
+        $this->assertStringContainsString('Submission Successful!', $response->content());
+    }
+
     public function testShowNoId(): void
     {
         $response = $this->get('ill-requests');
@@ -1228,7 +1250,7 @@ class ILLRequestsAPITest extends TestCase
 
         $this->assertEquals($beforePostMaxId + 1, $afterPostMaxId);
         $this->assertTrue($illRequest->isEqual($afterPostLatestILLRequest));
-        $response->assertRedirect('ill-requests/' . $afterPostMaxId);
+        $response->assertRedirect('ill-requests/' . $afterPostMaxId . '?status=Submission+Successful!');
     }
 
     private function assertPostFailed(MockILLRequest $illRequest)
