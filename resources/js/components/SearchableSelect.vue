@@ -20,7 +20,7 @@
 <script>
     import axios from 'axios';
 
-    const FOCUSED_DROPDOWN_ITEM_CLASS = 'focused-dropdown-item';
+    const FOCUSED_ITEM_CLASS = 'focused-item';
 
     export default {
         name: 'SearchableSelect',
@@ -66,7 +66,7 @@
                 this.hoverIndex = index;
             },
             getDropdownItemClass(index) {
-                return index === this.hoverIndex ? FOCUSED_DROPDOWN_ITEM_CLASS : '';
+                return index === this.hoverIndex ? FOCUSED_ITEM_CLASS : '';
             },
             chooseSelection(index) {
                 if (this.results.length === 0) return;

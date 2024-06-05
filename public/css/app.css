@@ -1,1 +1,195 @@
-body{background-color:#f8fafc;font-family:Source Sans Pro,EdmondSans,Helvetica Neue,Helvetica,Arial,sans-serif,Open Sans,Ubuntu,Roboto;margin-left:auto;margin-right:auto;max-width:1140px;padding-left:30px;padding-right:30px}h1{text-align:center}h2{margin-bottom:10px}.bottom-buttons-container,h2{margin-top:70px}button,div,input,label,select,textarea{font-size:20px}th{background-color:#d3d3d3;position:sticky;top:0;z-index:2}td,th{padding:5px 10px;text-align:center}button{background-color:#87cefa;border:none;border-radius:10px;padding:10px 30px}button:hover{filter:brightness(110%);transition:.4s}button:active{filter:brightness(100%);transition:0s}label{margin-right:20px}input[type=date]{padding:4px 10px}input[type=checkbox],input[type=radio]{transform:scale(1.5)}input[type=radio]{margin-right:10px}textarea{font-family:Source Sans Pro,EdmondSans,Helvetica Neue,Helvetica,Arial,sans-serif,Open Sans,Ubuntu,Roboto;padding-bottom:50px}input[type=text],textarea{margin-top:10px;padding-left:8px;width:100%}.field-header{margin-bottom:5px;margin-top:20px}.horizontal-container{align-items:center;display:flex;flex-wrap:wrap}.horizontal-container>input[type=checkbox],.horizontal-container>input[type=date]{margin-right:40px}.horizontal-container>div{margin-bottom:10px;margin-right:10px}.centered-elements-container,.centered-elements-container>form{margin:30px auto;text-align:center}.centered-elements-container,.report-container{word-wrap:break-word;max-width:500px}.report-container{margin:auto auto 40px}.report-container>h2{text-align:center}.bottom-buttons-container,.bottom-buttons-container>form{display:grid;margin-bottom:80px}.bottom-buttons-container>button,.bottom-buttons-container>form{margin:0 15px 15px}.index-page-body{margin-top:125px}.index-page-body>button,.index-page-body>form{margin-bottom:50px}.submit-button{background-color:#90ee90}.cancel-button{background-color:#f08080}.success-banner{background-color:#90ee90;padding:10px}.record-table-container{margin:50px auto;max-height:500px;overflow-x:auto}.options-dropdown,.record-table-container,td,th{border:1px solid grey}.options-dropdown,.record-table-container{background-color:#fff;overflow-y:auto}.options-dropdown{box-shadow:10px 10px 10px 0 rgba(0,0,0,.5);max-height:200px;position:absolute;z-index:1}.options-dropdown>ul{margin:0;padding:0}.options-dropdown>ul>li{border:solid rgba(0,0,0,.25);border-width:0 0 1px;list-style-type:none;padding:5px 15px}.focused-dropdown-item{background-color:#add8e6}
+/*
+ * Author: Michael Allan
+ */
+
+body {
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-family: Source Sans Pro, EdmondSans, Helvetica Neue, Helvetica, Arial, sans-serif, Open Sans, Ubuntu, Roboto;
+    background-color: #f8fafc;
+}
+
+h1 {
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+h2, .bottom-buttons-container {
+    margin-top: 70px;
+}
+
+div, button, label, textarea, input, select {
+    font-size: 20px;
+}
+
+th {
+    background-color: lightgrey;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+th, td {
+    text-align: center;
+    padding: 5px 10px;
+}
+
+button {
+    background-color: lightskyblue;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 30px;
+}
+
+button:hover {
+    filter: brightness(110%);
+    transition: 0.4s;
+}
+
+button:active {
+    filter: brightness(100%);
+    transition: 0.0s;
+}
+
+label {
+    margin-right: 20px;
+}
+
+input[type="date"] {
+    padding: 4px 10px;
+}
+
+input[type="checkbox"], input[type="radio"] {
+    transform: scale(1.5);
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+textarea {
+    padding-bottom: 50px;
+    font-family: Source Sans Pro, EdmondSans, Helvetica Neue, Helvetica, Arial, sans-serif, Open Sans, Ubuntu, Roboto;
+}
+
+textarea, input[type="text"] {
+    width: 100%;
+    margin-top: 10px;
+    padding-left: 8px;
+}
+
+.field-header {
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
+.horizontal-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.horizontal-container > input[type="checkbox"], .horizontal-container > input[type="date"] {
+    margin-right: 40px;
+}
+
+.horizontal-container > div {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.centered-elements-container, .centered-elements-container > form {
+    text-align: center;
+    margin: 30px auto;
+}
+
+.report-container, .centered-elements-container {
+    max-width: 500px;
+    word-wrap: break-word;
+}
+
+.report-container {
+    margin: auto auto 40px;
+}
+
+.report-container > h2 {
+    text-align: center;
+}
+
+.bottom-buttons-container, .bottom-buttons-container > form {
+    display: grid;
+    margin-bottom: 80px;
+}
+
+.bottom-buttons-container > button, .bottom-buttons-container > form {
+    margin: 0px 15px 15px;
+}
+
+.index-page-body {
+    margin-top: 125px;
+}
+
+.index-page-body > button, .index-page-body > form {
+    margin-bottom: 50px;
+}
+
+.submit-button {
+    background-color: lightgreen;
+}
+
+.cancel-button {
+    background-color: lightcoral;
+}
+
+.success-banner {
+    background-color: lightgreen;
+    padding: 10px;
+}
+
+.record-table-container {
+    margin: 50px auto;
+    overflow-x: auto;
+    max-height: 500px;
+}
+
+.options-dropdown, .record-table-container, th, td {
+    border-style: solid;
+    border-width: 1px;
+    border-color: grey;
+}
+
+.options-dropdown, .record-table-container {
+    background-color: white;
+    overflow-y: auto;
+}
+
+.options-dropdown {
+    max-height: 200px;
+    box-shadow: 10px 10px 10px 0px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    z-index: 1;
+}
+
+.options-dropdown > ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+.options-dropdown > ul > li {
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
+    border-color: rgba(0, 0, 0, 0.25);
+    list-style-type: none;
+    padding: 5px 15px;
+}
+
+.focused-item {
+    background-color: lightblue;
+}
+

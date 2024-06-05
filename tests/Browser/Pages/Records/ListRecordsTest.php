@@ -12,7 +12,7 @@ use App\Models\ILLRequest;
 use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 
-class RecordsBrowser extends Browser
+class ListRecordsBrowser extends Browser
 {
     public function formatDateForAssertion($expectedDate)
     {
@@ -162,11 +162,11 @@ class RecordsBrowser extends Browser
     }
 }
 
-class RecordsTest extends DuskTestCase
+class ListRecordsTest extends DuskTestCase
 {
     protected function newBrowser($driver)
     {
-        $browser = new RecordsBrowser($driver);
+        $browser = new ListRecordsBrowser($driver);
         return $browser;
     }
 
@@ -294,7 +294,7 @@ class RecordsTest extends DuskTestCase
             'created_at' => Carbon::tomorrow()->addDays(10)
         ])->save();
 
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->visit('ill-requests/records')
                 ->waitFor('@records_title');
         });
@@ -302,14 +302,14 @@ class RecordsTest extends DuskTestCase
 
     public function testInitState(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->assertMultipleDatesOffNoRecords('');
         });
     }
 
     public function testBackAndReturn(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->backAndReturn()
                 ->assertMultipleDatesOffNoRecords('');
         });
@@ -317,7 +317,7 @@ class RecordsTest extends DuskTestCase
 
     public function testFilloutEverythingThenBackAndReturn(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this->today())
                 ->typeToDate($this->today())
@@ -329,7 +329,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOffFromClearThenFromRecordlessDate(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->typeFromDate($this::tooOldDate())
                 ->assertMultipleDatesOffNoRecords($this::tooOldDate());
         });
@@ -337,7 +337,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOffFromClearThenFromRecordsDate(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->typeFromDate($this::today())
                 ->assertMultipleDatesOffHasRecords($this::today(), 3);
         });
@@ -345,7 +345,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOffFromClearThenMultOn(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->assertMultipleDatesOnNoRecords('', '');
         });
@@ -353,7 +353,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOffFromRecordlessDateThenFromClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->typeFromDate($this::tooOldDate())
                 ->typeFromDate('')
                 ->assertMultipleDatesOffNoRecords('');
@@ -362,7 +362,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOffFromRecordlessDateThenFromRecordsDate(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->typeFromDate($this::tooOldDate())
                 ->typeFromDate($this::today())
                 ->assertMultipleDatesOffHasRecords($this::today(), 3);
@@ -371,7 +371,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOffFromRecordlessDateThenMultOn(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->typeFromDate($this::tooOldDate())
                 ->clickMultDates()
                 ->assertMultipleDatesOnNoRecords($this::tooOldDate(), '');
@@ -380,7 +380,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOffFromRecordsDateThenFromClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->typeFromDate($this::today())
                 ->typeFromDate('')
                 ->assertMultipleDatesOffHasRecords('', 3);
@@ -389,7 +389,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOffFromRecordsDateThenFromRecordlessDate(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->typeFromDate($this::today())
                 ->typeFromDate($this::tooOldDate())
                 ->assertMultipleDatesOffNoRecords($this::tooOldDate());
@@ -398,7 +398,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOffFromRecordsDateThenMultOn(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->typeFromDate($this::today())
                 ->clickMultDates()
                 ->assertMultipleDatesOnHasRecords($this::today(), '', 3);
@@ -407,7 +407,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToClearThenFromRecordless(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->assertMultipleDatesOnNoRecords($this::tooOldDate(), '');
@@ -416,7 +416,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToClearThenFromRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->assertMultipleDatesOnNoRecords($this::today(), '');
@@ -425,7 +425,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToClearThenToRecordless(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeToDate($this::tooOldDate())
                 ->assertMultipleDatesOnNoRecords('', $this::tooOldDate());
@@ -434,7 +434,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToClearThenToRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeToDate($this::today())
                 ->assertMultipleDatesOnNoRecords('', $this::today());
@@ -443,7 +443,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToClearThenMultOff(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->clickMultDates()
                 ->assertMultipleDatesOffNoRecords('');
@@ -452,7 +452,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToClearThenFromClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeFromDate('')
@@ -462,7 +462,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToClearThenFromRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeFromDate($this::today())
@@ -472,7 +472,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToClearThenToRecordless(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeToDate($this::tooOldDate())
@@ -482,7 +482,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToClearThenToRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeToDate($this::today())
@@ -492,7 +492,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToClearThenMultOff(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->clickMultDates()
@@ -502,7 +502,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToClearThenFromClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeFromDate('')
@@ -512,7 +512,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToClearThenFromRecordlesss(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeFromDate($this::tooOldDate())
@@ -522,7 +522,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToClearThenToRecordless(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::tooOldDate())
@@ -532,7 +532,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToClearThenToRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::today())
@@ -542,7 +542,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToClearThenMultOff(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->clickMultDates()
@@ -552,7 +552,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToRecordsThenFromRecordless(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeToDate($this::today())
                 ->typeFromDate($this::tooOldDate())
@@ -562,7 +562,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToRecordsThenFromRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeToDate($this::today())
                 ->typeFromDate($this::today())
@@ -572,7 +572,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToRecordsThenToClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeToDate($this::today())
                 ->typeToDate('')
@@ -582,7 +582,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToRecordsThenToRecordless(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeToDate($this::today())
                 ->typeToDate($this::tooOldDate())
@@ -592,7 +592,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToRecordsThenMultOff(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeToDate($this::today())
                 ->clickMultDates()
@@ -602,7 +602,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToRecordsThenFromClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeToDate($this::today())
@@ -613,7 +613,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToRecordsThenFromRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeToDate($this::today())
@@ -624,7 +624,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToRecordsThenToClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeToDate($this::today())
@@ -635,7 +635,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToRecordsThenToRecordless(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeToDate($this::today())
@@ -646,7 +646,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToRecordsThenMultOff(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeToDate($this::today())
@@ -657,7 +657,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToRecordsThenFromClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::today())
@@ -668,7 +668,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToRecordsThenFromRecordlesss(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::today())
@@ -679,7 +679,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToRecordsThenToClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::today())
@@ -690,7 +690,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToRecordsThenToRecordless(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::today())
@@ -701,7 +701,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToRecordsThenMultOff(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::today())
@@ -712,7 +712,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToRecordlessThenFromRecordless(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::tooOldDate())
@@ -723,7 +723,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToRecordlessThenFromRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeToDate($this::tooOldDate())
                 ->typeFromDate($this::today())
@@ -733,7 +733,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToRecordlessThenToClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeToDate($this::tooOldDate())
                 ->typeToDate('')
@@ -743,7 +743,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToRecordlessThenToRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeToDate($this::tooOldDate())
                 ->typeToDate($this::today())
@@ -753,7 +753,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromClearToRecordlessThenMultOff(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeToDate($this::tooOldDate())
                 ->clickMultDates()
@@ -763,7 +763,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToRecordlessThenFromClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeToDate($this::tooOldDate())
@@ -774,7 +774,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToRecordlessThenFromRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeToDate($this::tooOldDate())
@@ -785,7 +785,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToRecordlessThenToClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeToDate($this::tooOldDate())
@@ -796,7 +796,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToRecordlessThenToRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeToDate($this::tooOldDate())
@@ -807,7 +807,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordlessToRecordlessThenMultOff(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tooOldDate())
                 ->typeToDate($this::tooOldDate())
@@ -818,7 +818,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToRecordlessThenFromClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::tooOldDate())
@@ -829,7 +829,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToRecordlessThenFromRecordlesss(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::tooOldDate())
@@ -840,7 +840,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToRecordlessThenToClear(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::tooOldDate())
@@ -851,7 +851,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToRecordlessThenToRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::tooOldDate())
@@ -862,7 +862,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMultOnFromRecordsToRecordlessThenMultOff(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::today())
                 ->typeToDate($this::tooOldDate())
@@ -873,7 +873,7 @@ class RecordsTest extends DuskTestCase
 
     public function testDatesEqual(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $todayForAssertion = $browser->formatDateForAssertion($this::today());
 
             $browser->assertSearch(
@@ -920,7 +920,7 @@ class RecordsTest extends DuskTestCase
 
     public function testFromDateLessThanToDate(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $todayForAssertion = $browser->formatDateForAssertion($this::today());
             $tomorrowForAssertion = $browser->formatDateForAssertion($this::tomorrow());
 
@@ -946,7 +946,7 @@ class RecordsTest extends DuskTestCase
 
     public function testEarlyFromDateTodayToDate(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $todayForAssertion = $browser->formatDateForAssertion($this::today());
             $yesterdayForAssertion = $browser->formatDateForAssertion($this::yesterday());
             $yesterdaySubFiveForAssertion = $browser->formatDateForAssertion($this::yesterday()->subDays(5));
@@ -1029,7 +1029,7 @@ class RecordsTest extends DuskTestCase
 
     public function testTodayFromDateLateToDate(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $todayForAssertion = $browser->formatDateForAssertion($this::today());
             $tomorrowForAssertion = $browser->formatDateForAssertion($this::tomorrow());
             $tomorrowAddNineForAssertion = $browser->formatDateForAssertion($this::tomorrowAddNine());
@@ -1111,7 +1111,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMissesEarlierRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::yesterdaySubEight())
                 ->typeToDate($this::yesterdaySubSeven())
@@ -1121,7 +1121,7 @@ class RecordsTest extends DuskTestCase
 
     public function testMissesLaterRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::tomorrowAddEleven())
                 ->typeToDate($this::tomorrowAddFifteen())
@@ -1131,7 +1131,7 @@ class RecordsTest extends DuskTestCase
 
     public function testCapturesWideRangeOfRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $today = $browser->formatDateForAssertion($this::today());
             $tomorrow = $browser->formatDateForAssertion($this::tomorrow());
             $tomorrowAddNine = $browser->formatDateForAssertion($this::tomorrowAddNine());
@@ -1262,7 +1262,7 @@ class RecordsTest extends DuskTestCase
 
     public function testDatesEqualBeforeRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::yesterdaySubOne())
                 ->typeToDate($this::yesterdaySubOne())
@@ -1272,7 +1272,7 @@ class RecordsTest extends DuskTestCase
 
     public function testDatesEqualAfterRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::dayAfterTomorrow())
                 ->typeToDate($this::dayAfterTomorrow())
@@ -1282,7 +1282,7 @@ class RecordsTest extends DuskTestCase
 
     public function testFromDateLessThanToDateBeforeRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::yesterday()->subDays(2))
                 ->typeToDate($this::yesterdaySubOne())
@@ -1292,7 +1292,7 @@ class RecordsTest extends DuskTestCase
 
     public function testFromDateLessThanToDateAfterRecords(): void
     {
-        $this->browse(function (RecordsBrowser $browser) {
+        $this->browse(function (ListRecordsBrowser $browser) {
             $browser->clickMultDates()
                 ->typeFromDate($this::dayAfterTomorrow())
                 ->typeToDate($this::tomorrowAddTwo())

@@ -189,6 +189,6 @@ textarea, input[type="text"] {
     padding: 5px 15px;
 }
 
-.focused-dropdown-item {
+.focused-item {
     background-color: lightblue;
 }

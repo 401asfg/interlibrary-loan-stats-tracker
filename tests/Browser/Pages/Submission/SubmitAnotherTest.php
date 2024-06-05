@@ -113,7 +113,7 @@ class SubmitAnotherTest extends DuskTestCase
                 ->edit()
                 ->click('@resource_ea')
                 ->submit('@edit')
-                ->assertDontSee('Submission Successful!')
+                ->assertSee('Edit Successful!')
                 ->assertSubmissionResourceStatus(ILLRequest::RESOURCES['ea']);
         });
 

@@ -47,7 +47,13 @@ class ILLRequestController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return response()->json($records);
+        $ids = ILLRequest::select(['id'])
+            ->where('created_at', '>=', $fromDate)
+            ->where('created_at', '<', $toDate)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json(['ids' => $ids, 'records' => $records]);
     }
 
     public function create()
@@ -130,7 +136,7 @@ class ILLRequestController extends Controller
 
         $illRequest = ILLRequest::findOrFail($idValidator->validated()['id']);
         $illRequest->update($validator->validated());
-        return redirect('ill-requests/' . $idValidator->validated()['id']);
+        return redirect('ill-requests/' . $idValidator->validated()['id'] . '?status=Edit+Successful!');
     }
 
     private static function getFormView(ILLRequest $illRequest = null, string $libraryName = null)
