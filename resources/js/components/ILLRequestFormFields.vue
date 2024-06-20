@@ -107,7 +107,7 @@
 
             return {
                 form: {
-                    request_date: new Date().toISOString().split('T')[0],
+                    request_date: new Date().toLocaleDateString(),
                     fulfilled: true,
                     unfulfilled_reason: null,
                     resource: null,
